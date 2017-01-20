@@ -1,0 +1,16 @@
+/*!
+ * \file  madnex.doxygen 
+ * \brief This file contains the main page of the doxygen
+ * documentation and the documentation of the `madnex` namespace.
+ */
+
+/*!
+ * \mainpage Madnex project
+ * \author   Curtit François
+ * \date     16/01/2016
+ */
+
+/*!
+ * \namespace madnex
+ * \brief the namespace `madnex` encloses all the Madnex project.
+ */
