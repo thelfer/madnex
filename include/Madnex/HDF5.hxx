@@ -521,23 +521,6 @@ namespace madnex
   void write(Group&,
 	     const std::string&,
 	     const char* const);
-  /*!
-   * \brief extract a member from a compound data set
-   * \param[in] d: data set
-   * \param[in] n: member name
-   */
-  template<typename T>
-  T extract(const DataSet&,
-	    const std::string&);
-  /*!
-   * \brief extract a std::string from a compound data set
-   * \param[in] d: data set
-   * \param[in] n: member name
-   */
-  template<>
-  std::string extract<std::string>(const DataSet&,
-				   const std::string&);
-  
   
 } // end of namespace madnex
 

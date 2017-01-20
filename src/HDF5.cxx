@@ -825,26 +825,5 @@ namespace madnex
   {
     return {H5::PredType::C_S1,H5T_VARIABLE};
   }
-
-  template<>
-  std::string extract<std::string>(const DataSet& d,
-				   const std::string& n)
-  {
-    auto alloc_if = [](const StrType& st) -> char* {
-      const auto s = st.getSize();
-      if(s!=H5T_VARIABLE){
-	const auto ptr = static_cast<char *>(std::malloc(s*sizeof(char)));
-	if(ptr==nullptr){
-	  throw(std::bad_alloc());
-	}
-	return ptr;
-      }
-      return nullptr;
-    };    
-    const auto c = H5::CompType(d);
-    value    = alloc_if(c.getMemberStrType(n));
-    
-  }
-
   
 } // end of namespace madnex
