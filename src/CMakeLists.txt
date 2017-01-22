@@ -1,6 +1,6 @@
 include_directories(${PROJECT_SOURCE_DIR}/include
   ${TFEL_INCLUDE_PATH}
-  ${HDF5_INCLUDE_DIRS})
+  SYSTEM ${HDF5_INCLUDE_DIRS})
 
 link_directories(
   ${TFEL_LIBRARY_PATH}
@@ -11,6 +11,7 @@ madnex_library(Madnex
   HDF5.cxx
   File.cxx
   Version.cxx
+  CompoundExtractor.cxx
   ExperimentalConditions.cxx
   Scripts.cxx
   MainResults.cxx
