@@ -21,6 +21,7 @@
 
 #include"Madnex/HDF5.hxx"
 #include"Madnex/File.hxx"
+#include"Madnex/Types.hxx"
 
 /*!
  * \brief structure in charge of testing read/write of the
