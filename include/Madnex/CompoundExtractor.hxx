@@ -12,6 +12,7 @@
 #include"H5Cpp.h"
 #include"Madnex/Config.hxx"
 #include"Madnex/HDF5.hxx"
+#include"Madnex/Types.hxx"
 
 namespace madnex{
 
@@ -40,27 +41,30 @@ namespace madnex{
      */
     template<typename T>
     T extract(const char *) const;
+
   private:
+    /*!
+     * \param[in] e: expected type
+     * \param[in] t: type contained in the the compound type
+     */
+    static void
+    checkMemberClass(const PredType&,
+		     const H5T_class_t);
     //! the description of the compound data type
     H5::CompType ctype;
     //! an intermediate storage for the compound data type
     std::vector<char> data;
   }; // end of CompoundExtractor
 
-  template<typename T>
-  T CompoundExtractor::extract(const char *n) const{
-    const auto i = this->ctype.getMemberIndex(n);
-    const auto o = this->ctype.getMemberOffset(i);
-    return *(reinterpret_cast<const T *>(this->data.data()+o));
-  } // end of CompoundExtractor::extract
-
-  template<typename T>
-  T CompoundExtractor::extract(const std::string& n) const{
-    const auto i = this->ctype.getMemberIndex(n);
-    const auto o = this->ctype.getMemberOffset(i);
-    return *(reinterpret_cast<const T *>(this->data.data()+o));
-  } // end of CompoundExtractor::extract
+  // partial specialisation for string's
+  template<>
+  std::string CompoundExtractor::extract(const std::string&) const;
+  // partial specialisation for string's
+  template<>
+  std::string CompoundExtractor::extract(const char*) const;
   
 } // end of namespace madnex
+
+#include"Madnex/CompoundExtractor.ixx"
 
 #endif /* LIB_MADNEX__COMPOUNDEXTRACTOR_H */
