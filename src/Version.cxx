@@ -7,6 +7,7 @@
 
 #include<cstdlib>
 #include<stdexcept>
+#include"Madnex/Types.hxx"
 #include"Madnex/Version.hxx"
 
 //! a C-structure mapping the Version structure

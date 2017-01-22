@@ -7,6 +7,7 @@ link_directories(
   ${HDF5_LIBRARY_DIRS})
 
 madnex_library(Madnex
+  Types.cxx
   HDF5.cxx
   File.cxx
   Version.cxx

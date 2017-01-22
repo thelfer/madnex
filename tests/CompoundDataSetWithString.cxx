@@ -17,6 +17,7 @@
 #include"TFEL/Tests/TestManager.hxx"
 
 #include"Madnex/HDF5.hxx"
+#include"Madnex/Types.hxx"
 #include"Madnex/File.hxx"
 
 //! a simple example of C-struct with a string

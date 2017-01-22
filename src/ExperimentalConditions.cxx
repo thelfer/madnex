@@ -7,6 +7,7 @@
 
 #include<cstdlib>
 #include<stdexcept>
+#include"Madnex/Types.hxx"
 #include"Madnex/ExperimentalConditions.hxx"
 
 //! a C-structure mapping the ExperimentalCondition structure

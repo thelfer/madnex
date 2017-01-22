@@ -7,6 +7,7 @@
 
 #include<cstdlib>
 #include<stdexcept>
+#include"Madnex/Types.hxx"
 #include"Madnex/Scripts.hxx"
 
 //! a C-structure mapping the Script structure
