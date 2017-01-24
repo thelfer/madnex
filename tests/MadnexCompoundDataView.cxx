@@ -1,11 +1,12 @@
 /*!
- * \file   tests/MadnexCompoundExtractor.cxx
+ * \file   tests/MadnexCompoundDataView.cxx
  * \brief    
  * \author Thomas Helfer
  * \date   17 janv. 2017
  */
 
-#include"Madnex/CompoundExtractor.hxx"
+#include<iostream>
+#include"Madnex/CompoundDataView.hxx"
 
 #ifdef NDEBUG
 #undef NDEBUG
@@ -27,14 +28,14 @@ std::string fileName;
 
 /*!
  * \brief structure in charge of testing read/write of the
- * `CompoundExtractor` data structures in HDF5 files
+ * `CompoundDataView` data structures in HDF5 files
  */
-struct MadnexCompoundExtractor final
+struct MadnexCompoundDataView final
   : public tfel::tests::TestCase
 {
-  MadnexCompoundExtractor()
-    : tfel::tests::TestCase("Madnex","CompoundExtractor")
-  {} // end of MadnexCompoundExtractor
+  MadnexCompoundDataView()
+    : tfel::tests::TestCase("Madnex","CompoundDataView")
+  {} // end of MadnexCompoundDataView
   virtual tfel::tests::TestResult
   execute() override
   {
@@ -46,7 +47,7 @@ struct MadnexCompoundExtractor final
  private:
   void write_file(){
     using namespace madnex;
-    auto f = File("MadnexCompoundExtractor.madnex",H5F_ACC_TRUNC);
+    auto f = File("MadnexCompoundDataView.madnex",H5F_ACC_TRUNC);
     auto r = f.getRoot();
     struct CompoundData{
       int   integer_value;
@@ -66,9 +67,9 @@ struct MadnexCompoundExtractor final
   void read_file(){
     using namespace madnex;
     TFEL_CONSTEXPR const auto eps = std::numeric_limits<float>::epsilon();
-    const auto f = File("MadnexCompoundExtractor.madnex",H5F_ACC_RDONLY);
+    const auto f = File("MadnexCompoundDataView.madnex",H5F_ACC_RDONLY);
     const auto r = f.getRoot();
-    CompoundExtractor e(openDataSet(r,"test"));
+    CompoundDataView e(openDataSet(r,"test"));
     TFEL_TESTS_ASSERT(e.extract<int>("integer_value")==12);
     TFEL_TESTS_ASSERT(std::abs(e.extract<float>("float_value")-3.14156f)<eps);
   }
@@ -76,27 +77,26 @@ struct MadnexCompoundExtractor final
     using namespace madnex;
     const auto f = File(fileName,H5F_ACC_RDONLY);
     const auto r = f.getRoot();
-    CompoundExtractor e(openDataSet(r,"version"));
-    const auto s = e.extract<std::string>("MAJ");
-    TFEL_TESTS_ASSERT(e.extract<std::string>("MAJ")[0]=='1');
-    TFEL_TESTS_ASSERT(e.extract<std::string>("MIN")[0]=='2');
-    TFEL_TESTS_ASSERT(e.extract<std::string>("REL")[0]=='1');
+    CompoundDataView e(openDataSet(r,"version"));
+    TFEL_TESTS_ASSERT(e.extract<std::string>("MAJ")=="1");
+    TFEL_TESTS_ASSERT(e.extract<std::string>("MIN")=="2");
+    TFEL_TESTS_ASSERT(e.extract<std::string>("REL")=="1");
   }
 };
 
-TFEL_TESTS_GENERATE_PROXY(MadnexCompoundExtractor,
-			  "MadnexCompoundExtractor");
+TFEL_TESTS_GENERATE_PROXY(MadnexCompoundDataView,
+			  "MadnexCompoundDataView");
 
 int main(const int argc, const char* const* argv)
 {
   if(argc!=2){
-    std::cerr << "MadnexReferenceFile: invalid number of arguments\n"
-	      << "usage: MadnexReferenceFile reference.madnex\n";
+    std::cerr << "MadnexCompoundDataView: invalid number of arguments\n"
+	      << "usage: MadnexCompoundDataView reference.madnex\n";
     return EXIT_FAILURE;
   }
   fileName = argv[1];
   auto& m = tfel::tests::TestManager::getTestManager();
   m.addTestOutput(std::cout);
-  m.addXMLTestOutput("MadnexCompoundExtractor.xml");
+  m.addXMLTestOutput("MadnexCompoundDataView.xml");
   return m.execute().success() ? EXIT_SUCCESS : EXIT_FAILURE;
 }

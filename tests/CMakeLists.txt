@@ -18,10 +18,10 @@ madnex_test(DataSetWithString)
 madnex_test(CompoundDataSetWithString)
 madnex_test(CompoundDataSetWithString2)
 madnex_test(MadnexPOD)
-madnex_test(MadnexCompoundExtractor)
+madnex_test(MadnexCompoundDataView ${PROJECT_SOURCE_DIR}/data/reference.madnex)
 madnex_test(MadnexReferenceFile ${PROJECT_SOURCE_DIR}/data/reference.madnex)
 madnex_test(MadnexExperimentalConditions)
 madnex_test(MadnexScripts)
 
 set_directory_properties(PROPERTIES
-  ADDITIONAL_MAKE_CLEAN_FILES "CompType.xml;DataSetWithString.xml;DataSetWithString.madnex;CompoundDataSetWithString.xml;CompoundDataSetWithString.madnex;CompoundDataSetWithString2.xml;CompoundDataSetWithString2.madnex;MadnexPOD.madnex;MadnexPOD.xml;MadnexCompoundExtractor.madnex;MadnexCompoundExtractor.xml;MadnexReferenceFile.xml;MadnexExperimentalConditions.xml;MadnexExperimentalConditions.madnex;MadnexScripts.xml;MadnexScripts.madnex")
+  ADDITIONAL_MAKE_CLEAN_FILES "CompType.xml;DataSetWithString.xml;DataSetWithString.madnex;CompoundDataSetWithString.xml;CompoundDataSetWithString.madnex;CompoundDataSetWithString2.xml;CompoundDataSetWithString2.madnex;MadnexPOD.madnex;MadnexPOD.xml;MadnexCompoundDataView.madnex;MadnexCompoundDataView.xml;MadnexReferenceFile.xml;MadnexExperimentalConditions.xml;MadnexExperimentalConditions.madnex;MadnexScripts.xml;MadnexScripts.madnex")

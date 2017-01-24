@@ -11,19 +11,21 @@
 namespace madnex{
 
   template<typename T>
-  T CompoundExtractor::extract(const char *n) const{
-    const auto i = this->ctype.getMemberIndex(n);
-    checkMemberClass(getNativeType<T>(),this->ctype.getMemberClass(i));
-    const auto o = this->ctype.getMemberOffset(i);
-    return *(reinterpret_cast<const T *>(this->data.data()+o));
+  T CompoundExtractor<T>::extract(const char *n) const{
+    return this->extract(this->cview.getMemberIndex(n));
   } // end of CompoundExtractor::extract
 
   template<typename T>
-  T CompoundExtractor::extract(const std::string& n) const{
-    const auto i = this->ctype.getMemberIndex(n);
-    checkMemberClass(getNativeType<T>(),this->ctype.getMemberClass(i));
-    const auto o = this->ctype.getMemberOffset(i);
-    return *(reinterpret_cast<const T *>(this->data.data()+o));
+  T CompoundExtractor<T>::extract(const std::string& n) const{
+    return this->extract(this->cview.getMemberIndex(n));
+  } // end of CompoundExtractor::extract
+
+  template<typename T>
+  T CompoundExtractor<T>::extract(const size_t i) const{
+    CompoundExtractorBase::checkMemberClass(getNativeType<T>(),
+					    this->cview.getMemberClass(i));
+    const auto o = this->cview.getMemberOffset(i);
+    return *(reinterpret_cast<const T *>(this->cview.data()+o));
   } // end of CompoundExtractor::extract
 
 } // end of namespace madnex

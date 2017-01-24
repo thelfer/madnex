@@ -55,8 +55,8 @@ TFEL_TESTS_GENERATE_PROXY(CompType,"CompType");
 int main(const int argc,const char* const * const argv)
 {
   if(argc!=2){
-    std::cerr << "MadnexReferenceFile: invalid number of arguments\n"
-	      << "usage: MadnexReferenceFile reference.madnex\n";
+    std::cerr << "CompType: invalid number of arguments\n"
+	      << "usage: CompType reference.madnex\n";
     return EXIT_FAILURE;
   }
   fileName = argv[1];

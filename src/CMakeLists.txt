@@ -11,6 +11,7 @@ madnex_library(Madnex
   HDF5.cxx
   File.cxx
   Version.cxx
+  CompoundDataView.cxx
   CompoundExtractor.cxx
   ExperimentalConditions.cxx
   Scripts.cxx
