@@ -20,6 +20,10 @@ madnex_test(CompoundDataSetWithString2)
 madnex_test(MadnexPOD)
 madnex_test(MadnexCompoundDataView ${PROJECT_SOURCE_DIR}/data/reference.madnex)
 madnex_test(MadnexReferenceFile ${PROJECT_SOURCE_DIR}/data/reference.madnex)
+madnex_test(MadnexTestAPI
+  ${PROJECT_SOURCE_DIR}/data/ref_test_api_macroResuWrite_00.madnex)
+madnex_test(MadnexCompoundDataArrayView
+  ${PROJECT_SOURCE_DIR}/data/ref_test_api_macroResuWrite_00.madnex)
 madnex_test(MadnexExperimentalConditions)
 madnex_test(MadnexScripts)
 

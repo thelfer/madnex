@@ -8,14 +8,12 @@
 #ifndef LIB_MADNEX_COMPOUNDEXTRACTOR_H
 #define LIB_MADNEX_COMPOUNDEXTRACTOR_H 
 
-#ifndef LIB_MADNEX_COMPOUNDDATAVIEW_H
+#ifndef LIB_MADNEX_COMPOUNDDATAVIEWBASE_H
 #error "This file shall not be included directly"
 #endif
-#ifndef LIB_MADNEX_COMPOUNDDATAVIEW_IXX
+#ifndef LIB_MADNEX_COMPOUNDDATAVIEWBASE_IXX
 #error "This file shall not be included directly"
 #endif
-
-#include"TFEL/Utilities/FCString.hxx"
 
 namespace madnex{
 
@@ -28,7 +26,7 @@ namespace madnex{
      * \brief constructor
      * \param[in] v: compound view
      */
-    CompoundExtractorBase(const CompoundDataView&);
+    CompoundExtractorBase(const CompoundDataViewBase&);
     /*!
      * \param[in] e: expected type
      * \param[in] t: type contained in the the compound type
@@ -37,7 +35,7 @@ namespace madnex{
     checkMemberClass(const PredType&,const H5T_class_t);
   protected:
     //! a compound data view
-    const CompoundDataView& cview;
+    const CompoundDataViewBase& cview;
   }; // end of struct CompoundExtractorBase
   
   /*!
@@ -53,19 +51,11 @@ namespace madnex{
     using CompoundExtractorBase::CompoundExtractorBase;
     /*!
      * \return a member of the compound of the given type
-     * \param[in] n: member name
-     */
-    T extract(const std::string&) const;
-    /*!
-     * \return a member of the compound of the given type
-     * \param[in] n: member name
-     */
-    T extract(const char *) const;
-    /*!
-     * \return a member of the compound of the given type
+     * \param[in] d: raw data
      * \param[in] i: member index
      */
-    T extract(const size_t) const;
+    T extract(const char* const d,
+	      const size_t) const;
   }; // end of CompoundExtractor
 
   /*!
@@ -80,19 +70,30 @@ namespace madnex{
     using CompoundExtractorBase::CompoundExtractorBase;
     /*!
      * \return a member of the compound of the given type
-     * \param[in] n: member name
-     */
-    std::string extract(const std::string&) const;
-    /*!
-     * \return a member of the compound of the given type
-     * \param[in] n: member name
-     */
-    std::string extract(const char *) const;
-    /*!
-     * \return a member of the compound of the given type
+     * \param[in] d: raw data
      * \param[in] i: member index
      */
-    std::string extract(const size_t) const;
+    std::string extract(const char* const d,
+			const size_t) const;
+  }; // end of CompoundExtractor
+
+  /*!
+   * An helper structure used to extract `tfel::utilities::fcstring`
+   * members of a compound data set.
+   */
+  template<std::size_t N>
+  struct MADNEX_VISIBILITY_EXPORT CompoundExtractor<tfel::utilities::fcstring<N>>
+    : public CompoundExtractorBase
+  {
+    // inheriting constructors
+    using CompoundExtractorBase::CompoundExtractorBase;
+    /*!
+     * \return a member of the compound of the given type
+     * \param[in] d: raw data
+     * \param[in] i: member index
+     */
+    tfel::utilities::fcstring<N> extract(const char* const d,
+					 const size_t) const;
   }; // end of CompoundExtractor
   
 } // end of namespace madnex

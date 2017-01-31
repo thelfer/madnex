@@ -9,25 +9,38 @@
 #define LIB_MADNEX_COMPOUNDDATAVIEW_H 
 
 #include<vector>
-#include"H5Cpp.h"
-#include"TFEL/Utilities/FCString.hxx"
+#include"TFEL/Utilities/GenTypeBase.hxx"
 #include"Madnex/Config.hxx"
+#include"Madnex/FCString.hxx"
 #include"Madnex/HDF5.hxx"
 #include"Madnex/Types.hxx"
+#include"Madnex/CompoundDataViewBase.hxx"
 
 namespace madnex{
 
+  // forward declaration
+  struct CompoundDataArrayView;
+  
   /*!
    * An helper structure used to extract members of a compound data
    * set.
    */
   struct MADNEX_VISIBILITY_EXPORT CompoundDataView
+    : public CompoundDataViewBase
   {
     /*!
      * \brief constructor
      * \param[in] d: data set
      */
     CompoundDataView(const DataSet&);
+    // move constructor
+    CompoundDataView(CompoundDataView&&);
+    // copy constructor
+    CompoundDataView(const CompoundDataView&);
+    // move assignement
+    CompoundDataView& operator=(CompoundDataView&&);
+    // copy assignement
+    CompoundDataView& operator=(const CompoundDataView&);
     //! destructor
     ~CompoundDataView();
     /*!
@@ -43,39 +56,24 @@ namespace madnex{
     template<typename T>
     T extract(const char *) const;
     /*!
-     * \return the index of the member
-     * \param[in] n: member name
-     */
-    size_t getMemberIndex(const char *) const;
-    /*!
-     * \return the index of the member
-     * \param[in] n: member name
-     */
-    size_t getMemberIndex(const std::string&) const;
-    /*!
-     * \return the class of the member
+     * \return a member of the compound of the given type
      * \param[in] i: member index
      */
-    H5T_class_t getMemberClass(const size_t) const;
-    /*!
-     * \return the offset of the member
-     * \param[in] i: member index
-     */
-    size_t getMemberOffset(const size_t) const;
-    /*!
-     * \return the string type of the member
-     * \param[in] i: member index
-     */
-    StrType getMemberStrType(const size_t) const;
-    /*!
-     * \return the raw buffer in which the HDF5
-     */
-    const char* data() const;
+    template<typename T>
+    T extract(const size_t) const;
   private:
-    //! the description of the compound data type
-    H5::CompType ctype;
+    //  CompoundDataArrayView is made friend to be able to access the
+    //  private constructor
+    friend class CompoundDataArrayView;
+    /*!
+     * \brief constructor
+     * \param[in] b: base class describing the compound data
+     * \param[in] rd: data
+     */
+    CompoundDataView(const CompoundDataViewBase&,
+		     const char* const);
     //! an intermediate storage for the compound data type
-    std::vector<char> rdata;
+    tfel::utilities::GenType<std::vector<char>,const char*> rdata;
   }; // end of CompoundDataView
 
 } // end of namespace madnex

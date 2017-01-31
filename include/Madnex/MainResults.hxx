@@ -11,6 +11,7 @@
 #include<vector>
 #include"Madnex/Config.hxx"
 #include"Madnex/HDF5.hxx"
+#include"Madnex/FCString.hxx"
 
 namespace madnex {
 
@@ -30,11 +31,11 @@ namespace madnex {
     //! standard assignement
     MainResult& operator=(const MainResult&);
     
-    std::string description;
-    std::string label;
-    std::string value;
-    std::string unit;
-    std::string type;
+    fcstring<32>  name;
+    fcstring<256> label;
+    fcstring<32> value;
+    fcstring<16> unit;
+    fcstring<16> type;
   }; // end of struct MainResult
 
   //! a simple alias

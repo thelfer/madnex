@@ -7,11 +7,11 @@
 
 #include<cstring>
 #include<stdexcept>
-#include"Madnex/CompoundDataView.hxx"
+#include"Madnex/CompoundDataViewBase.hxx"
 
 namespace madnex{
 
-  CompoundExtractorBase::CompoundExtractorBase(const CompoundDataView& v)
+  CompoundExtractorBase::CompoundExtractorBase(const CompoundDataViewBase& v)
     : cview(v)
   {} // end of CompoundExtractorBase::CompoundExtractorBase
 
@@ -25,17 +25,8 @@ namespace madnex{
   } // end of CompoundExtractorBase::checkMemberClass
   
   std::string
-  CompoundExtractor<std::string>::extract(const std::string& n) const{
-    return this->extract(this->cview.getMemberIndex(n));
-  } // end of CompoundExtractor::extract
-
-  std::string
-  CompoundExtractor<std::string>::extract(const char* n) const{
-    return this->extract(this->cview.getMemberIndex(n));
-  }
-
-  std::string
-  CompoundExtractor<std::string>::extract(const size_t i) const{
+  CompoundExtractor<std::string>::extract(const char * const d,
+					  const size_t i) const{
     auto strnlen = [](const char *s,const size_t m){
       auto r = size_t{};
       while((s[r]!='\0')&&(r<m)){
@@ -46,12 +37,11 @@ namespace madnex{
     const auto o   = this->cview.getMemberOffset(i);
     const auto t   = this->cview.getMemberStrType(i);
     const auto s   = t.getSize();
-    const auto ptr = this->cview.data()+o;
     std::string r;
     if(s==H5T_VARIABLE){
-      return {ptr};
+      return {d+o};
     }
-    return {ptr,strnlen(ptr,s)};
+    return {d+o,strnlen(d+o,s)};
   } // end of CompoundExtractor::extract
     
 } // end of namespace madnex

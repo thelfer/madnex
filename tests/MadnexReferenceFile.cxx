@@ -62,9 +62,9 @@ struct MadnexReferenceFile final
     // TFEL_TESTS_ASSERT(getAttributeValue<std::string>(r,"accessibilité").empty());
     TFEL_TESTS_ASSERT(getAttributeValue<int>(r,"droit_ecriture")==1);
     const auto v = read<Version>(r,"version");
-    TFEL_TESTS_ASSERT(v.major.empty());
-    // TFEL_TESTS_ASSERT(v.minor.empty());
-    // TFEL_TESTS_ASSERT(v.revision.empty());
+    TFEL_TESTS_ASSERT(v.major=="1");
+    TFEL_TESTS_ASSERT(v.minor=="2");
+    TFEL_TESTS_ASSERT(v.revision=="1");
     return this->result;
   }
 };

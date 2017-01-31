@@ -11,23 +11,28 @@
 namespace madnex{
 
   template<typename T>
-  T CompoundExtractor<T>::extract(const char *n) const{
-    return this->extract(this->cview.getMemberIndex(n));
-  } // end of CompoundExtractor::extract
-
-  template<typename T>
-  T CompoundExtractor<T>::extract(const std::string& n) const{
-    return this->extract(this->cview.getMemberIndex(n));
-  } // end of CompoundExtractor::extract
-
-  template<typename T>
-  T CompoundExtractor<T>::extract(const size_t i) const{
+  T CompoundExtractor<T>::extract(const char* const d,
+				  const size_t i) const{
     CompoundExtractorBase::checkMemberClass(getNativeType<T>(),
 					    this->cview.getMemberClass(i));
     const auto o = this->cview.getMemberOffset(i);
-    return *(reinterpret_cast<const T *>(this->cview.data()+o));
+    return *(reinterpret_cast<const T *>(d+o));
   } // end of CompoundExtractor::extract
 
+  template<std::size_t N>
+  tfel::utilities::fcstring<N>
+  CompoundExtractor<tfel::utilities::fcstring<N>>::extract(const char* const d,
+							   const size_t i) const{
+    const auto t = this->cview.getMemberStrType(i);
+    const auto s = t.getSize();
+    if(s!=N){
+      throw(std::length_error("CompoundExtractor<tfel::utilities::fcstring<N>>::extract: "
+			      "unmatched length"));
+    }
+    const auto o   = this->cview.getMemberOffset(i);
+    return {d+o};
+  } // end of CompoundExtractor
+  
 } // end of namespace madnex
   
 #endif /* LIB_MADNEX_COMPOUNDEXTRACTOR_IXX */

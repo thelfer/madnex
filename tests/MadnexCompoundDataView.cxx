@@ -27,8 +27,8 @@
 std::string fileName;
 
 /*!
- * \brief structure in charge of testing read/write of the
- * `CompoundDataView` data structures in HDF5 files
+ * \brief structure in charge of testing read/write of the compound
+ * dataset in HDF5 files.
  */
 struct MadnexCompoundDataView final
   : public tfel::tests::TestCase

@@ -9,6 +9,7 @@
 #define LIB_MADNEX_VERSION_HXX
 
 #include "Madnex/Config.hxx"
+#include "Madnex/FCString.hxx"
 #include "Madnex/HDF5.hxx"
 
 namespace madnex{
@@ -25,9 +26,12 @@ namespace madnex{
     Version& operator=(Version&&);
     //! standard assignement
     Version& operator=(const Version&);
-    std::string major;
-    std::string minor;
-    std::string revision;
+    //! major version
+    fcstring<5> major;
+    //! minor version
+    fcstring<5> minor;
+    //! revision
+    fcstring<5> revision;
   }; // end of struct Version
 
   /*!

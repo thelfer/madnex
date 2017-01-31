@@ -11,12 +11,15 @@ madnex_library(Madnex
   HDF5.cxx
   File.cxx
   Version.cxx
-  CompoundDataView.cxx
   CompoundExtractor.cxx
+  CompoundDataViewBase.cxx
+  CompoundDataView.cxx
+  CompoundDataArrayView.cxx
   ExperimentalConditions.cxx
   Scripts.cxx
   MainResults.cxx
   Exceptions.cxx)
 target_link_libraries(Madnex
   TFELException
+  TFELUtilities
   ${HDF5_LIBRARIES})
