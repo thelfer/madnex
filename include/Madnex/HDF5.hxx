@@ -73,7 +73,6 @@ namespace madnex
   using H5::Group;
   using H5::DataSet;
   using H5::Attribute;
-  using H5::Exception;
   using H5::StrType;
   using H5::DataSpace;
 
@@ -385,28 +384,13 @@ namespace madnex
   T read(const Group&,
 	 const std::string&);
   
-  MADNEX_HDF5_POD_DECLARATION(bool);
   MADNEX_HDF5_POD_DECLARATION(char);
-  MADNEX_HDF5_POD_DECLARATION(short);
-  MADNEX_HDF5_POD_DECLARATION(int);
-  MADNEX_HDF5_POD_DECLARATION(long);
-  MADNEX_HDF5_POD_DECLARATION(unsigned short);
-  MADNEX_HDF5_POD_DECLARATION(unsigned int);
-  MADNEX_HDF5_POD_DECLARATION(unsigned long);
+  MADNEX_HDF5_POD_DECLARATION(std::int32_t);
+  MADNEX_HDF5_POD_DECLARATION(std::int64_t);
   MADNEX_HDF5_POD_DECLARATION(float);
   MADNEX_HDF5_POD_DECLARATION(double);
   MADNEX_HDF5_POD_DECLARATION(long double);
 
-  /*!
-   * \brief write a string
-   * \param[out] g: group
-   * \param[in]  n: name of the data
-   * \param[in]  o: object to be written
-   */
-  MADNEX_VISIBILITY_EXPORT
-  void write(Group&,
-	     const std::string&,
-	     const std::string&);
   /*!
    * \brief read a string
    * \param[out] o: object to be read
@@ -418,6 +402,16 @@ namespace madnex
 	    const Group&,
 	    const std::string&);
   /*!
+   * \brief write a string
+   * \param[out] g: group
+   * \param[in]  n: name of the data
+   * \param[in]  o: object to be written
+   */
+  MADNEX_VISIBILITY_EXPORT
+  void write(Group&,
+	     const std::string&,
+	     const std::string&);
+  /*!
    * \brief write a C-string. It is stored and retrieved like a
    * `std::string`.
    * \param[out] g: group
@@ -428,6 +422,17 @@ namespace madnex
   void write(Group&,
 	     const std::string&,
 	     const char* const);
+  /*!
+   * \brief write a string
+   * \param[out] g: group
+   * \param[in]  n: name of the data
+   * \param[in]  o: object to be written
+   * \param[in]  a: object value and name
+   */
+  template<typename... Args>
+  void writeCompoundData(Group&,
+			 const std::string&,
+			 const Args&...);
   
 } // end of namespace madnex
 

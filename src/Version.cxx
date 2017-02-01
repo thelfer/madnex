@@ -35,15 +35,14 @@ namespace madnex{
   //   d.write(&r,c);
   // } // end of write
 
-  void read(Version& o,
-	     const Group& g,
+  void read(Version& o,const Group& g,
 	     const std::string& n)
   {
     const auto d = openDataSet(g,n);
     const auto v = CompoundDataView(d);
-    o.major    = v.extract<fcstring<5>>(std::size_t(0));
-    o.minor    = v.extract<fcstring<5>>(1);
-    o.revision = v.extract<fcstring<5>>(2);
+    extract(o.major   ,v,std::size_t(0));
+    extract(o.minor   ,v,1);
+    extract(o.revision,v,2);
   }
   
 } // end of namespace madnex

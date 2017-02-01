@@ -18,44 +18,44 @@ namespace madnex {
   /*!
    * \brief base class for all exception throw by the `Madnex` library
    */
-  struct MADNEX_VISIBILITY_EXPORT MadnexException
+  struct MADNEX_VISIBILITY_EXPORT Exception
     : public tfel::exception::TFELException
   {
     //! default constructor
-    MadnexException();
+    Exception();
     //! copy constructor
-    MadnexException(const MadnexException&);
+    Exception(const Exception&);
     //! move constructor
-    MadnexException(MadnexException&&);
+    Exception(Exception&&);
     //! destructor
-    virtual ~MadnexException();
-  }; // end of struct MadnexException
+    virtual ~Exception();
+  }; // end of struct Exception
 
   /*!
    * \brief a generic exception
    */
-  struct MADNEX_VISIBILITY_EXPORT MadnexRuntimeError
-    : public MadnexException
+  struct MADNEX_VISIBILITY_EXPORT RuntimeError
+    : public Exception
   {
     /*!
      * \brief constructor from std::string
      * \param[in] m: error message
      */
-    MadnexRuntimeError(const std::string&);
+    RuntimeError(const std::string&);
     /*!
      * \brief constructor from C-string
      * \param[in] m: error message
      */
-    MadnexRuntimeError(const char*);
+    RuntimeError(const char*);
     //! copy constructor
-    MadnexRuntimeError(MadnexRuntimeError&&);
+    RuntimeError(RuntimeError&&);
     //! move constructor
-    MadnexRuntimeError(const MadnexRuntimeError&);
+    RuntimeError(const RuntimeError&);
     //! destructor
-    virtual ~MadnexRuntimeError();
+    virtual ~RuntimeError();
   private:
     std::string msg;
-  }; // end of struct MadnexRuntimeError
+  }; // end of struct RuntimeError
   
 } // end of namespace madnex
 

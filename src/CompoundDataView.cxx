@@ -9,6 +9,11 @@
 
 namespace madnex{
 
+  CompoundDataView::CompoundDataView(const Group& g,
+				     const std::string& n)
+    : CompoundDataView(openDataSet(g,n))
+  {} // end of CompoundDataView
+  
   CompoundDataView::CompoundDataView(const DataSet& d)
     : CompoundDataViewBase(d)
   {

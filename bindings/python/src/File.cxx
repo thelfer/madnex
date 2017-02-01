@@ -6,8 +6,10 @@
  */
 
 #include<memory>
+#include<algorithm>
 #include<boost/python.hpp>
 #include"Madnex/File.hxx"
+#include"Madnex/Exceptions.hxx"
 #include"Madnex/MainResults.hxx"
 #include"Madnex/CompoundDataArrayView.hxx"
 
@@ -27,7 +29,7 @@ listMacroResultParam(const madnex::File& f)
   return v.extract<std::string>("intitule");
 }
 
-static void writeMacroResult(const madnex::File& f,
+static void writeMacroResult(madnex::File& f,
 			     const std::string& name,
 			     const std::string& label,
 			     const std::string& value,
@@ -35,23 +37,35 @@ static void writeMacroResult(const madnex::File& f,
 			     const std::string& type)
 {
   using namespace madnex;
-  MainResult r;
-  r.name  = name;
-  r.label = label;
-  r.value = value;
-  r.unit  = unit;
-  r.type  = type;
-  auto rs = read<MainResults>(f.getRoot(),
-			      "resultats/resultats_principaux");
-  rs.push_back(r);
-  write(f.getRoot(),"resultats/resultats_principaux",rs);
+  auto g = f.getRoot();
+  MainResult nr;
+  nr.name  = name;
+  nr.label = label;
+  nr.value = value;
+  nr.unit  = unit;
+  nr.type  = type;
+  auto rs = read<MainResults>(g,MainResults::path);
+  if(std::find_if(rs.begin(),rs.end(),[&name](const MainResult& r){
+	return r.name == name;
+      })!=rs.end()){
+    throw(RuntimeError("integral result '"+name+"' already defined"));
+  }
+  rs.push_back(nr);
+  write(g,MainResults::path,rs);
 } // end of writeMacroResult
 
 void declareFile(){
   
   boost::python::class_<madnex::File>("Pivot",boost::python::no_init)
     .def("__init__",boost::python::make_constructor(makeFile))
-    .def("listMacroResultParam",listMacroResultParam)
-    .def("writeMacroResult",writeMacroResult)
+    .def("listMacroResultParam",listMacroResultParam,
+	 "return the list of integral results")
+    .def("writeMacroResult",writeMacroResult,
+	 (boost::python::arg("name"),
+	  boost::python::arg("label"),
+	  boost::python::arg("value"),
+	  boost::python::arg("unit"),
+	  boost::python::arg("type")),
+	 "add an integral result")
     ;
 } // end of declareFile

@@ -27,7 +27,7 @@
 				     dataspace);		 \
       dataset.write(&o,getNativeType< X >());     		 \
       writeTypeAttribute< X >(dataset); 			 \
-    } catch (Exception& e){                                      \
+    } catch(H5::Exception& e){                                   \
       throw(std::runtime_error(e.getDetailMsg()));		 \
     }                                                            \
   }                                                              \
@@ -56,7 +56,7 @@
 			         "'#X' in '"+d+"'"));		 \
       }								 \
       dataset.read(&o,getNativeType< X >());			 \
-    } catch (Exception& e){                                      \
+    } catch(H5::Exception& e){                                   \
       throw(std::runtime_error(e.getDetailMsg()));		 \
     }                                                            \
   }								 \
@@ -92,7 +92,7 @@
 			         "'#X' in group '"+n+"'"));      \
       }								 \
       attr.read(getNativeType<X>(),&v);		                 \
-    } catch (Exception& e){					 \
+    } catch(H5::Exception& e){					 \
       string msg("madnex::getTypeAttributeValue: ");		 \
       msg += "can't get attribute '"+n+"' for group";		 \
       throw(runtime_error(msg));				 \
@@ -122,7 +122,7 @@
 			         "'#X' in data set'"+n+"'"));    \
       }								 \
       attr.read(getNativeType<X>(),&v);		                 \
-    } catch (Exception& e){					 \
+    } catch(H5::Exception& e){					 \
       string msg("madnex::getTypeAttributeValue: ");		 \
       msg += "can't get attribute '"+n+"' for group";		 \
       throw(runtime_error(msg));				 \
@@ -144,7 +144,7 @@ namespace madnex
       msg += "creation of group '"+n+"' failed (";
       msg += e.getDetailMsg()+")";
       throw(runtime_error(msg));
-    } catch (Exception& e){
+    } catch(H5::Exception& e){
       string msg("madnex::createGroup: ");
       msg += "creation of group '"+n+"' failed (";
       msg += e.getDetailMsg();
@@ -161,7 +161,7 @@ namespace madnex
     Group gr;
     try{
       gr =  g.openGroup(n);
-    } catch (Exception& e){
+    } catch(H5::Exception& e){
       string msg("madnex::openGroup: ");
       msg += "opening of group '"+n+"' failed (";
       msg += e.getDetailMsg();
@@ -178,7 +178,7 @@ namespace madnex
     DataSet d;
     try{
       d = g.openDataSet(n);
-    } catch (Exception& e){
+    } catch(H5::Exception& e){
       string msg("madnex::openDataSet: ");
       msg += "opening of data set '"+n+"' failed (";
       msg += e.getDetailMsg();
@@ -195,7 +195,7 @@ namespace madnex
     Attribute a;
     try{
       a = d.openAttribute(n);
-    } catch (Exception& e){
+    } catch(H5::Exception& e){
       string msg("madnex::openAttribute: ");
       msg += "opening of attribute '"+n+"' failed (";
       msg += e.getDetailMsg();
@@ -212,7 +212,7 @@ namespace madnex
     Attribute a;
     try{
       a = g.openAttribute(n);
-    } catch (Exception& e){
+    } catch(H5::Exception& e){
       string msg("madnex::openAttribute: ");
       msg += "opening of attribute '"+n+"' failed (";
       msg += e.getDetailMsg();
@@ -233,7 +233,7 @@ namespace madnex
 					 dataspace);
       const char* v = t.c_str();
       attr.write(type,&v);
-    } catch (Exception& e){
+    } catch(H5::Exception& e){
       string msg("madnex::writeTypeAttribute: ");
       msg += "operation failed ("+e.getDetailMsg()+")";
       throw(runtime_error(msg));
@@ -251,7 +251,7 @@ namespace madnex
 					 dataspace);
       const char *c = t.c_str();
       attr.write(type,&c);
-    } catch (Exception& e){
+    } catch(H5::Exception& e){
       string msg("madnex::writeTypeAttribute: ");
       msg += "operation failed ("+e.getDetailMsg()+")";
       throw(runtime_error(msg));
@@ -300,7 +300,7 @@ namespace madnex
 	  v.pop_back();
 	}
       }
-    } catch (Exception& e){
+    } catch(H5::Exception& e){
       string msg("madnex::getTypeAttributeValue: ");
       msg += "can't get attribute '"+n+"' for group";
       throw(runtime_error(msg));
@@ -342,7 +342,7 @@ namespace madnex
       attr.read(type,&pv);
       v = pv;
       std::free(pv);
-    } catch (Exception& e){
+    } catch(H5::Exception& e){
       string msg("madnex::getTypeAttributeValue: ");
       msg += "can't get attribute '"+n+"' for data set";
       throw(runtime_error(msg));
@@ -408,7 +408,7 @@ namespace madnex
 	  }
 	}
       }
-    } catch (Exception& e){
+    } catch(H5::Exception& e){
       string msg("madnex::getTypeAttribute: ");
       msg += "can't get type attribute";
       throw(runtime_error(msg));
@@ -449,77 +449,79 @@ namespace madnex
   } // end of checkTypeAttribute
   
   MADNEX_POD_IMPLEMENTATION(char)
-  MADNEX_POD_IMPLEMENTATION(short)
-  MADNEX_POD_IMPLEMENTATION(int)
-  MADNEX_POD_IMPLEMENTATION(long)
-  MADNEX_POD_IMPLEMENTATION(unsigned short)
-  MADNEX_POD_IMPLEMENTATION(unsigned int)
-  MADNEX_POD_IMPLEMENTATION(unsigned long)
+  MADNEX_POD_IMPLEMENTATION(std::int32_t)
+  MADNEX_POD_IMPLEMENTATION(std::int64_t)
   MADNEX_POD_IMPLEMENTATION(float)
   MADNEX_POD_IMPLEMENTATION(double)
   MADNEX_POD_IMPLEMENTATION(long double)
 
-  void write(Group& g,
-	     const std::string& d,
-	     const bool& o)
-  {
-    using namespace std;
-    try{
-      hsize_t  dimsf[1];
-      dimsf[0] = 1;
-      DataSpace dataspace(1, dimsf );
-      DataSet dataset = g.createDataSet(d,getNativeType<char>(),
-					dataspace);
-      char c(0);
-      if(o){
-	c = 1;
-      }
-      dataset.write(&c,getNativeType<char>());
-      writeTypeAttribute< bool >(dataset);
-    } catch (Exception& e){
-      throw(runtime_error(e.getDetailMsg()));
-    }
-  }
+  // MADNEX_POD_IMPLEMENTATION(int)
+  // MADNEX_POD_IMPLEMENTATION(long)
+  // MADNEX_POD_IMPLEMENTATION(unsigned short)
+  // MADNEX_POD_IMPLEMENTATION(unsigned int)
+  // MADNEX_POD_IMPLEMENTATION(unsigned long)
 
-  void read(bool& o,
-	    const Group& g,
-	    const std::string& d)
-  {
-    using namespace std;
-    try{
-      char c;
-      const auto dataset = openDataSet(g,d);
-      checkTypeAttribute<bool>(dataset);
-      const auto s = dataset.getSpace();
-      if(s.getSimpleExtentNdims()!=1){
-	throw(runtime_error("madnex::read: invalid type size\n"
-			    "error while retreiving boolean in '"+d+"'"));
-      }
-      hsize_t dims[1];
-      s.getSimpleExtentDims(dims);
-      if(dims[0]!=1){
-	throw(std::runtime_error("madnex::read: invalid type size\n"
-				 "error while retreiving boolean in '"+d+"'"));
-      }
-      dataset.read(&c,getNativeType<char>());
-      if(c==0){
-	o = false;
-      } else {
-	o = true;
-      }
-    } catch (Exception& e){
-      throw(std::runtime_error(e.getDetailMsg()));
-    }
-  }
+  // void write(Group& g,
+  // 	     const std::string& d,
+  // 	     const bool& o)
+  // {
+  //   using namespace std;
+  //   try{
+  //     hsize_t  dimsf[1];
+  //     dimsf[0] = 1;
+  //     DataSpace dataspace(1, dimsf );
+  //     DataSet dataset = g.createDataSet(d,getNativeType<char>(),
+  // 					dataspace);
+  //     char c(0);
+  //     if(o){
+  // 	c = 1;
+  //     }
+  //     dataset.write(&c,getNativeType<char>());
+  //     writeTypeAttribute< bool >(dataset);
+  //   } catch(H5::Exception& e){
+  //     throw(runtime_error(e.getDetailMsg()));
+  //   }
+  // }
 
-  template<>
-  bool read(const Group& g,
-	    const std::string& s)
-  {
-    bool v;
-    read(v,g,s);
-    return v;
-  } // end of bool read
+  // void read(bool& o,
+  // 	    const Group& g,
+  // 	    const std::string& d)
+  // {
+  //   using namespace std;
+  //   try{
+  //     char c;
+  //     const auto dataset = openDataSet(g,d);
+  //     checkTypeAttribute<bool>(dataset);
+  //     const auto s = dataset.getSpace();
+  //     if(s.getSimpleExtentNdims()!=1){
+  // 	throw(runtime_error("madnex::read: invalid type size\n"
+  // 			    "error while retreiving boolean in '"+d+"'"));
+  //     }
+  //     hsize_t dims[1];
+  //     s.getSimpleExtentDims(dims);
+  //     if(dims[0]!=1){
+  // 	throw(std::runtime_error("madnex::read: invalid type size\n"
+  // 				 "error while retreiving boolean in '"+d+"'"));
+  //     }
+  //     dataset.read(&c,getNativeType<char>());
+  //     if(c==0){
+  // 	o = false;
+  //     } else {
+  // 	o = true;
+  //     }
+  //   } catch(H5::Exception& e){
+  //     throw(std::runtime_error(e.getDetailMsg()));
+  //   }
+  // }
+
+  // template<>
+  // bool read(const Group& g,
+  // 	    const std::string& s)
+  // {
+  //   bool v;
+  //   read(v,g,s);
+  //   return v;
+  // } // end of bool read
   
   void write(Group& g,
 	     const std::string& d,
@@ -547,7 +549,7 @@ namespace madnex
 	// attribute
 	writeTypeAttribute<string>(dataset);
       }
-    } catch (Exception& e){
+    } catch(H5::Exception& e){
       throw(runtime_error(e.getDetailMsg()));
     }
   }
@@ -568,7 +570,7 @@ namespace madnex
       if(::strlen(o)==0){
 	writeEmptyObjectAttribute(data);
       }
-    } catch (Exception& e){
+    } catch(H5::Exception& e){
       throw(runtime_error(e.getDetailMsg()));
     }
   }
@@ -631,7 +633,7 @@ namespace madnex
       DataSpace dataspace(1,dimsf);
       auto attr = d.createAttribute(empty,type,dataspace);
       attr.write(type,&c);
-    } catch (Exception& e){
+    } catch(H5::Exception& e){
       throw(std::runtime_error(e.getDetailMsg()));
     }
   } // end of writeEmptyObjectAttribute
@@ -676,7 +678,7 @@ namespace madnex
 	  }
 	}
       }
-    } catch (Exception& e){
+    } catch(H5::Exception& e){
       throw(std::runtime_error(e.getDetailMsg()));
     }
   }
@@ -706,7 +708,7 @@ namespace madnex
 	  throw(runtime_error(msg));
 	}
       }
-    } catch (Exception& e){
+    } catch(H5::Exception& e){
       throw(runtime_error(e.getDetailMsg()));
     }
   } // end of getSubGroupNames
@@ -731,7 +733,7 @@ namespace madnex
 	  n.push_back(g.getObjnameByIdx(i));
 	}
       }
-    } catch (Exception& e){
+    } catch(H5::Exception& e){
       throw(runtime_error(e.getDetailMsg()));
     }
   } // end of getDataSetNames
@@ -749,7 +751,7 @@ namespace madnex
 	  found = true;
 	}
       }
-    } catch (Exception& e){
+    } catch(H5::Exception& e){
       throw(runtime_error(e.getDetailMsg()));
     }
     return found;

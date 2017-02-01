@@ -9,26 +9,26 @@
 
 namespace madnex{
 
-  MadnexException::MadnexException() = default;
+  Exception::Exception() = default;
 
-  MadnexException::MadnexException(const MadnexException&) = default;
+  Exception::Exception(const Exception&) = default;
 
-  MadnexException::MadnexException(MadnexException&&) = default;
+  Exception::Exception(Exception&&) = default;
 
-  MadnexException::MadnexException::~MadnexException() = default;
+  Exception::Exception::~Exception() = default;
 
-  MadnexRuntimeError::MadnexRuntimeError(const std::string& m)
+  RuntimeError::RuntimeError(const std::string& m)
     : msg(m)
-  {} // end of MadnexRuntimeError::MadnexRuntimeError
+  {} // end of RuntimeError::RuntimeError
 
-  MadnexRuntimeError::MadnexRuntimeError(const char* m)
+  RuntimeError::RuntimeError(const char* m)
     : msg(m)
-  {} // end of MadnexRuntimeError::MadnexRuntimeError
+  {} // end of RuntimeError::RuntimeError
   
-  MadnexRuntimeError::MadnexRuntimeError(const MadnexRuntimeError&) = default;
+  RuntimeError::RuntimeError(const RuntimeError&) = default;
 
-  MadnexRuntimeError::MadnexRuntimeError(MadnexRuntimeError&&) = default;
+  RuntimeError::RuntimeError(RuntimeError&&) = default;
 
-  MadnexRuntimeError::~MadnexRuntimeError() = default;
+  RuntimeError::~RuntimeError() = default;
 
 } // end of namespace madnex

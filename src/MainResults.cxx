@@ -45,8 +45,7 @@ namespace madnex{
   //   d.write(cecs.data(),c);
   // } // end of write
 
-  void read(MainResults& o,
-  	    const Group& g,
+  void read(MainResults& o,const Group& g,
   	    const std::string& n)
   {
     o.clear();
@@ -55,14 +54,14 @@ namespace madnex{
       for(decltype(a.size()) i=0;i!=a.size();++i){
 	const auto v = a[i];
 	MainResult r;
-  	r.name  = v.extract<fcstring<32>>(size_t(0));
-  	r.label = v.extract<fcstring<256>>(1);
-  	r.value = v.extract<fcstring<32>>(2);
-  	r.unit  = v.extract<fcstring<16>>(3);
-  	r.type  = v.extract<fcstring<16>>(4);
+  	extract(r.name ,v,size_t(0));
+  	extract(r.label,v,1);
+  	extract(r.value,v,2);
+  	extract(r.unit ,v,3);
+  	extract(r.type ,v,4);
   	o.emplace_back(std::move(r));
       }
-    } catch (Exception& e){
+    } catch (H5::Exception& e){
       throw(std::runtime_error(e.getDetailMsg()));
     }
   }

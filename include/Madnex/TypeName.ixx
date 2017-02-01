@@ -9,6 +9,7 @@
 #define LIB_MADNEX_TYPENAME_IXX
 
 #include<string>
+#include<cstdint>
 
 /*!
  * \brief macro used to specialize the `TypeName`
@@ -37,14 +38,9 @@ namespace madnex{
    * type declare in the std namespace begins with @
    */
 
-  MADNEX_TYPENAME_STDTYPE(bool,"@b");
   MADNEX_TYPENAME_STDTYPE(char,"@c");
-  MADNEX_TYPENAME_STDTYPE(short,"@s");
-  MADNEX_TYPENAME_STDTYPE(int,"@i");
-  MADNEX_TYPENAME_STDTYPE(long,"@l");
-  MADNEX_TYPENAME_STDTYPE(unsigned short,"@us");
-  MADNEX_TYPENAME_STDTYPE(unsigned int,"@ui");
-  MADNEX_TYPENAME_STDTYPE(unsigned long,"@ul");
+  MADNEX_TYPENAME_STDTYPE(std::int32_t,"@i32");
+  MADNEX_TYPENAME_STDTYPE(std::int64_t,"@i32");
   MADNEX_TYPENAME_STDTYPE(float,"@f");
   MADNEX_TYPENAME_STDTYPE(double,"@d");
   MADNEX_TYPENAME_STDTYPE(long double,"@ld");

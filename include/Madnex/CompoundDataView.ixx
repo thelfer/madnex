@@ -30,6 +30,21 @@ namespace madnex{
     return CompoundDataViewBase::template extract<T>(d,i);
   } // end of CompoundDataView::extract
 
+  template<typename T>
+  void extract(T& v,const CompoundDataView& d, const size_t i){
+    v = d.template extract<T>(i);
+  } // end of extract
+
+  template<typename T>
+  void extract(T& v,const CompoundDataView& d,const char* const n){
+    v = d.template extract<T>(n);
+  } // end of extract
+
+  template<typename T>
+  void extract(T& v,const CompoundDataView& d,const std::string& n){
+    v = d.template extract<T>(n);
+  } // end of extract
+  
 } // end of namespace madnex
   
 #endif /* LIB_MADNEX_COMPOUNDDATAVIEW_IXX */

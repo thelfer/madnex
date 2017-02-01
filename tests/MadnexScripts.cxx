@@ -5,8 +5,6 @@
  * \date   17 janv. 2017
  */
 
-#include"Madnex/Scripts.hxx"
-
 #ifdef NDEBUG
 #undef NDEBUG
 #endif
@@ -21,6 +19,7 @@
 
 #include"Madnex/HDF5.hxx"
 #include"Madnex/File.hxx"
+#include"Madnex/Scripts.hxx"
 
 /*!
  * \brief structure in charge of testing read/write of the

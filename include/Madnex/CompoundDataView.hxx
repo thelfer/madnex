@@ -30,6 +30,12 @@ namespace madnex{
   {
     /*!
      * \brief constructor
+     * \param[in] g: group
+     * \param[in] p: data set path
+     */
+    CompoundDataView(const Group&,const std::string&);
+    /*!
+     * \brief constructor
      * \param[in] d: data set
      */
     CompoundDataView(const DataSet&);
@@ -75,7 +81,34 @@ namespace madnex{
     //! an intermediate storage for the compound data type
     tfel::utilities::GenType<std::vector<char>,const char*> rdata;
   }; // end of CompoundDataView
-
+  /*!
+   * \brief extract a data from a CompoundDataView
+   * \tparam     T: type to be extracted
+   * \param[out] v: value
+   * \param[in]  d: data view
+   * \param[in]  i: data index
+   */
+  template<typename T>
+  void extract(T&,const CompoundDataView&,const size_t);
+  /*!
+   * \brief extract a data from a CompoundDataView
+   * \tparam     T: type to be extracted
+   * \param[out] v: value
+   * \param[in]  d: data view
+   * \param[in]  i: data name
+   */
+  template<typename T>
+  void extract(T&,const CompoundDataView&,const char* const);
+  /*!
+   * \brief extract a data from a CompoundDataView
+   * \tparam     T: type to be extracted
+   * \param[out] v: value
+   * \param[in]  d: data view
+   * \param[in]  i: data name
+   */
+  template<typename T>
+  void extract(T&,const CompoundDataView&,const std::string&);
+  
 } // end of namespace madnex
 
 #include"Madnex/CompoundDataView.ixx"

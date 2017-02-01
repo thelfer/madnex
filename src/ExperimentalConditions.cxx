@@ -94,7 +94,7 @@ namespace madnex{
 	std::free(cec.type);
 	o.emplace_back(std::move(ec));
       }
-    } catch (Exception& e){
+    } catch (H5::Exception& e){
       throw(std::runtime_error(e.getDetailMsg()));
     }
   }

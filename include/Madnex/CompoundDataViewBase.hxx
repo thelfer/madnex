@@ -61,8 +61,8 @@ namespace madnex{
      * \param[in] i: member index
      */
     template<typename T>
-      T extract(const char* const,
-		const size_t) const;
+     T extract(const char* const,
+	       const size_t) const;
     //! the description of the compound data type
     H5::CompType ctype;
   }; // end of CompoundDataViewBase

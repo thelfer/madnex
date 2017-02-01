@@ -50,13 +50,13 @@ struct MadnexCompoundDataView final
     auto f = File("MadnexCompoundDataView.madnex",H5F_ACC_TRUNC);
     auto r = f.getRoot();
     struct CompoundData{
-      int   integer_value;
-      float float_value;
+      std::int32_t integer_value;
+      float        float_value;
     };
     CompoundData cdata = {12,3.14156f};
     H5::CompType c(sizeof(CompoundData));
     c.insertMember("integer_value", HOFFSET(CompoundData,integer_value),
-		   getNativeType<int>());
+		   getNativeType<std::int32_t>());
     c.insertMember("float_value", HOFFSET(CompoundData,float_value),
 		   getNativeType<float>());
     hsize_t   dimsf[1] = {1u};
@@ -70,7 +70,7 @@ struct MadnexCompoundDataView final
     const auto f = File("MadnexCompoundDataView.madnex",H5F_ACC_RDONLY);
     const auto r = f.getRoot();
     CompoundDataView e(openDataSet(r,"test"));
-    TFEL_TESTS_ASSERT(e.extract<int>("integer_value")==12);
+    TFEL_TESTS_ASSERT(e.extract<std::int32_t>("integer_value")==12);
     TFEL_TESTS_ASSERT(std::abs(e.extract<float>("float_value")-3.14156f)<eps);
   }
   void read_file2(){

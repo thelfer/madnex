@@ -48,7 +48,7 @@ struct MadnexPOD final
     auto r = f.getRoot();
     write(r,"boolean_value",true);
     write(r,"char_value",'c');
-    write(r,"integer_value",static_cast<int>(12));
+    write(r,"integer_value",static_cast<std::int32_t>(12));
     write(r,"float_value",12.f);
     write(r,"double_value",12.);
     write(r,"long_double_value",static_cast<long double>(12));
@@ -62,9 +62,8 @@ struct MadnexPOD final
     using namespace madnex;
     const auto f = File("MadnexPOD.madnex",H5F_ACC_RDONLY);
     const auto r = f.getRoot();
-    TFEL_TESTS_ASSERT(read<bool>(r,"boolean_value"));
     TFEL_TESTS_ASSERT(read<char>(r,"char_value")=='c');
-    TFEL_TESTS_ASSERT(read<int>(r,"integer_value")==12);
+    TFEL_TESTS_ASSERT(read<std::int32_t>(r,"integer_value")==12);
     TFEL_TESTS_CHECK_THROW(read<double>(r,"boolean_value"),
 			   std::runtime_error);
     this->read_floatting_point_number<float>(r,"float_value",12.f);

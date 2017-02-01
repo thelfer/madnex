@@ -10,74 +10,44 @@
 namespace madnex
 {
 
-  template<>
-  HDF5TypeDescription<char> getNativeType<char>()
+  HDF5TypeDescriptionImplementation<char>::type
+  HDF5TypeDescriptionImplementation<char>::getNativeType()
   {
     return PredType::NATIVE_CHAR;
   }
 
-  template<>
-  HDF5TypeDescription<unsigned char> getNativeType<unsigned char>()
+  HDF5TypeDescriptionImplementation<std::int32_t>::type
+  HDF5TypeDescriptionImplementation<std::int32_t>::getNativeType()
   {
-    return PredType::NATIVE_UCHAR;
+    return PredType::NATIVE_INT32;
   }
 
-  template<>
-  HDF5TypeDescription<short> getNativeType<short>()
+  HDF5TypeDescriptionImplementation<std::int64_t>::type
+  HDF5TypeDescriptionImplementation<std::int64_t>::getNativeType()
   {
-    return PredType::NATIVE_SHORT;
+    return PredType::NATIVE_INT64;
   }
-
-  template<>
-  HDF5TypeDescription<unsigned short> getNativeType<unsigned short>()
-  {
-    return PredType::NATIVE_USHORT;
-  }
-
-  template<>
-  HDF5TypeDescription<int> getNativeType<int>()
-  {
-    return PredType::NATIVE_INT;
-  }
-
-  template<>
-  HDF5TypeDescription<unsigned int> getNativeType<unsigned int>()
-  {
-    return PredType::NATIVE_UINT;
-  }
-
-  template<>
-  HDF5TypeDescription<long> getNativeType<long>()
-  {
-    return PredType::NATIVE_LONG;
-  }
-
-  template<>
-  HDF5TypeDescription<unsigned long> getNativeType<unsigned long>()
-  {
-    return PredType::NATIVE_ULONG;
-  }
-
-  template<>
-  HDF5TypeDescription<float> getNativeType<float>()
+  
+  HDF5TypeDescriptionImplementation<float>::type
+  HDF5TypeDescriptionImplementation<float>::getNativeType()
   {
     return PredType::NATIVE_FLOAT;
   }
   
-  template<>
-  HDF5TypeDescription<double> getNativeType<double>()
+  HDF5TypeDescriptionImplementation<double>::type
+  HDF5TypeDescriptionImplementation<double>::getNativeType()
   {
     return PredType::NATIVE_DOUBLE;
   }
 
-  template<>
-  HDF5TypeDescription<long double> getNativeType<long double>()
+  HDF5TypeDescriptionImplementation<long double>::type
+  HDF5TypeDescriptionImplementation<long double>::getNativeType()
   {
     return PredType::NATIVE_LDOUBLE;
   }
 
-  template<>
-  HDF5TypeDescription<std::string> getNativeType<std::string>()
+  HDF5TypeDescriptionImplementation<std::string>::type
+  HDF5TypeDescriptionImplementation<std::string>::getNativeType()
   {
     return {H5::PredType::C_S1,H5T_VARIABLE};
   }

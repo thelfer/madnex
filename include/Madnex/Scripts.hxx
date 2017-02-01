@@ -10,6 +10,7 @@
 
 #include<vector>
 #include"Madnex/Config.hxx"
+#include"Madnex/FCString.hxx"
 #include"Madnex/HDF5.hxx"
 
 namespace madnex {
@@ -30,10 +31,10 @@ namespace madnex {
     //! standard assignement
     Script& operator=(const Script&);
     
-    std::string author;
-    std::string date;
-    std::string command_line;
-    std::string script_version;
+    fcstring<100> author;
+    fcstring<20> date;
+    fcstring<500> command_line;
+    fcstring<10> script_version;
   }; // end of struct Script
 
   //! a simple alias

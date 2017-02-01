@@ -38,8 +38,15 @@ namespace madnex {
     fcstring<16> type;
   }; // end of struct MainResult
 
-  //! a simple alias
-  using MainResults = std::vector<MainResult>;
+  //! a simple wrapper around `std::vector<MainResult>`
+  struct MainResults
+    : public std::vector<MainResult>
+  {
+    //! standard path of the main results in madnex 1.4
+    static constexpr const char* path = "resultats/resultats_principaux";
+    // inheriting std::vector constructors
+    using std::vector<MainResult>::vector;
+  }; // end of struct MainResults
   
   /*!
    * \brief read a set of main results in a group

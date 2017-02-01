@@ -63,6 +63,46 @@ namespace madnex
   {
     checkTypeAttribute(d,TypeName<T>::name);
   } // end of checkTypeAttribute
+
+  // template<typename... Args>
+  // struct CompoundDataHolder;
+
+  // template<typename Data,typename StringType,typename... Args>
+  // struct CompoundDataHolder<Data,StringType,Args...>
+  //   : CompoundDataHolder<Args...>
+  // {
+  //   using string = typename std::decay<StringType>::type;
+  //   // 
+  //   static_assert(std::is_same<string,char*>::value||
+  // 		  std::is_same<string,std::string>::value,
+  // 		  "ill form argument pack");
+  //   /*!
+  //    * \param[in] d: data 
+  //    * \param[in] n: member name 
+  //    */
+  //   CompoundDataHolder(const Data& d,const string&,Args&&... a)
+  //     : CompoundDataHolder<Args...>(a...),
+  //     data(d)
+  //   {} // end of CompoundDataHolder
+  //   //! holded data
+  //   const typename std::decay<Data>::type data;
+  // };
+    
+  // template<>
+  // struct CompoundDataHolder<>
+  // {
+  //   H5::CompType ctype;
+  // }; // end of struct CompoundDataHolder
+
+  
+  // template<typename... Args>
+  // void writeCompoundData(Group& o,
+  // 			 const std::string&,
+  // 			 Args&&... a)
+  // {
+  //   CompoundDataHolder<typename std::decay<Args>::type...> h(a...);
+    
+  // }
   
 } // end of namespace mandex
 

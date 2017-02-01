@@ -28,6 +28,12 @@ namespace madnex{
     using size_type = hsize_t;
     /*!
      * \brief constructor
+     * \param[in] g: group
+     * \param[in] p: data set path
+     */
+    CompoundDataArrayView(const Group&,const std::string&);
+    /*!
+     * \brief constructor
      * \param[in] d: data set
      */
     CompoundDataArrayView(const DataSet&);
