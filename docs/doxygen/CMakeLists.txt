@@ -1,0 +1,3 @@
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html
+   DESTINATION share/doc/${PACKAGE_NAME}-${VERSION}
+   COMPONENT doxygen)
