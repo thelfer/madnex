@@ -49,10 +49,11 @@ project.
 
 ## About material identifiers
 
-On Figure @fig:madnex:MFrontBehaviourStorage, material knowledge are
-sorted using a material identifier. This material identifier is optional
-and behaviours may be directly stored in a `Behaviours` group directly
-at the root of the `madnex` file.
+As depicted on Figure @fig:madnex:MFrontBehaviourStorage, `MFront`
+implementations are stored under the `MFront` group. Then the
+implementations are sorted using a material identifier. This material
+identifier is optional and behaviours may be directly stored in a
+`Behaviours` group directly at the root of the `madnex` file.
 
 Material identifiers must conform the restrictions imposed by `MFront`
 [^1].
@@ -60,9 +61,6 @@ Material identifiers must conform the restrictions imposed by `MFront`
 [^1]: See the documentation of the `@Material` keyword. Those
   restrictions mostly states that the material' name must be a valid
   `C++` identifier.
-
-For the exploration of a `madnex` files, the list of material
-identifiers shall be accessible as an attribute of the root directory.
 
 ## About behaviour identifiers
 
