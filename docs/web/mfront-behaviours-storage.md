@@ -1,6 +1,6 @@
 ---
 title: Storage of material knowledge implementation written in `MFront` in `MADNEX` files and its usage
-author: Thomas Helfer, François Curtit, Jean-François Rit, Shun Huang
+author: Thomas Helfer, François Curtit, Jean-François Rit, Shun Huang, Charles Toulemonde
 date: 2020
 lang: en-EN
 numbersections: true
@@ -53,21 +53,23 @@ As depicted on Figure @fig:madnex:MFrontBehaviourStorage, `MFront`
 implementations are stored under the `MFront` group. Then the
 implementations are sorted using a material identifier. This material
 identifier is optional and behaviours may be directly stored in a
-`Behaviours` group directly at the root of the `madnex` file.
+`Behaviours` group directly under the `MFront` group[^1].
 
 Material identifiers must conform the restrictions imposed by `MFront`
-[^1].
+[^2].
 
-[^1]: See the documentation of the `@Material` keyword. Those
+[^1]: This implies that `Behaviours`, `Material Properties` and `MOdels`
+  can't be used as material identifiers.
+[^2]: See the documentation of the `@Material` keyword. Those
   restrictions mostly states that the material' name must be a valid
   `C++` identifier.
 
 ## About behaviour identifiers
 
 Behaviour identifiers must be unique and follow the restrictions of the
-behaviour names imposed by `MFront`[^2].
+behaviour names imposed by `MFront`[^3].
 
-[^2]: See the documentation of the `@Behaviour` keyword. Those
+[^3]: See the documentation of the `@Behaviour` keyword. Those
   restrictions mostly states that the behaviour' name must be a valid
   `C++` identifier.
 
