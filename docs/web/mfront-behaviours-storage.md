@@ -170,3 +170,18 @@ import mfront
 dsl = mfront.getDSL("file.madnex",<behaviour_id>)
 dsl.analyseFile("file.madnex",<behaviour_id>)
 ~~~~
+
+# Discussion
+
+This document describes only the part of the data-model relating to the material behavior gathered in the first level group named "MFront".
+A second 1st level group named "Experimental data" will contain the experimenta test data used to identify or validate the constitutives laws. Each test will be structured according to the current data model of the CADEEX pivot format.
+A third one named "Identification Study" will be able to capitalize on the different identification scenarios carried out with the compostant CL_0D. (hypotheses, tests used, ...).
+
+The source code hosted in the "source" group can contain parameters with values ​​different from those capitalized in the "Parameters" group. In "stadard" use with MFront-materials or CL_0D, the compiled law will automatically integrate the values ​​from the "Parameters" group.
+It will however be necessary to think of a means to avoid any ambiguity in other case (for example, edition of the file with hdfView)
+
+This data model corresponds to MFront's needs and makes it possible to start the first phase of development.
+It may be extended in the future, in particular with context data:
+- Status of the law (under development, validated for industrial use, ...)
+- Workflow elements (validator, dates, ...)
+- ...
