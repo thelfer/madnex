@@ -1,0 +1,20 @@
+/*!
+ * \file   include/Madnex/GetInstallPath-defines.hxx.in
+ * \brief    
+ * \author Helfer Thomas 
+ * \date   30/05/2018
+ */
+
+#ifndef LIB_MADNEX_GETINSTALLPATH_DEFINES_HXX
+#define LIB_MADNEX_GETINSTALLPATH_DEFINES_HXX
+
+#define PREFIXDIR     "@prefix@"
+#define EXECPREFIXDIR "@exec_prefix@"
+#ifdef MADNEX_APPEND_SUFFIX
+#define INCLUDEDIR    "@includedir@/MADNEX-@MADNEX_SUFFIX@"
+#else  /* MADNEX_APPEND_SUFFIX */
+#define INCLUDEDIR    "@includedir@"
+#endif /* MADNEX_APPEND_SUFFIX */
+#define LIBDIR        "@libdir@"
+
+#endif /* LIB_MADNEX_GETINSTALLPATH_DEFINES_HXX */
