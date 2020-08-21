@@ -44,7 +44,7 @@ class TEST_api_local (unittest.TestCase):
 
         
 if __name__ == '__main__' :
-    print 'API unit test\n'
+    print('API unit test\n')
     suite = unittest.TestLoader().loadTestsFromTestCase(TEST_api_local)
     r = unittest.TextTestRunner().run(suite)
     sys.exit(not r.wasSuccessful())

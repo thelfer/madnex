@@ -1,6 +1,6 @@
 /*!
  * \file   Exceptions.hxx
- * \brief    
+ * \brief
  * \author THOMAS HELFER
  * \date   17 janv. 2017
  */
@@ -8,19 +8,16 @@
 #ifndef LIB_MADNEX_EXCEPTIONS_HXX
 #define LIB_MADNEX_EXCEPTIONS_HXX
 
-#include<string>
-#include<stdexcept>
-#include"TFEL/Exception/TFELException.hxx"
-#include"Madnex/Config.hxx"
+#include <string>
+#include <stdexcept>
+#include "Madnex/Config.hxx"
 
 namespace madnex {
 
   /*!
    * \brief base class for all exception throw by the `Madnex` library
    */
-  struct MADNEX_VISIBILITY_EXPORT Exception
-    : public tfel::exception::TFELException
-  {
+  struct MADNEX_VISIBILITY_EXPORT Exception : public std::exception {
     //! default constructor
     Exception();
     //! copy constructor
@@ -29,14 +26,12 @@ namespace madnex {
     Exception(Exception&&);
     //! destructor
     virtual ~Exception();
-  }; // end of struct Exception
+  };  // end of struct Exception
 
   /*!
    * \brief a generic exception
    */
-  struct MADNEX_VISIBILITY_EXPORT RuntimeError
-    : public Exception
-  {
+  struct MADNEX_VISIBILITY_EXPORT RuntimeError : public Exception {
     /*!
      * \brief constructor from std::string
      * \param[in] m: error message
@@ -53,10 +48,11 @@ namespace madnex {
     RuntimeError(const RuntimeError&);
     //! destructor
     virtual ~RuntimeError();
-  private:
+
+   private:
     std::string msg;
-  }; // end of struct RuntimeError
-  
-} // end of namespace madnex
+  };  // end of struct RuntimeError
+
+}  // end of namespace madnex
 
 #endif /* LIB_MADNEX_EXCEPTIONS_HXX */

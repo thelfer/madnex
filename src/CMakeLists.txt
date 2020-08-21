@@ -1,12 +1,5 @@
-include_directories(${PROJECT_SOURCE_DIR}/include
-  ${TFEL_INCLUDE_PATH}
-  SYSTEM ${HDF5_INCLUDE_DIRS})
-
-link_directories(
-  ${TFEL_LIBRARY_PATH}
-  ${HDF5_LIBRARY_DIRS})
-
 madnex_library(Madnex
+  GetInstallPath.cxx
   Types.cxx
   HDF5.cxx
   File.cxx
@@ -19,7 +12,14 @@ madnex_library(Madnex
   Scripts.cxx
   MainResults.cxx
   Exceptions.cxx)
+target_include_directories(Madnex
+   PUBLIC 
+   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+   $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
+   $<INSTALL_INTERFACE:include>)
+target_compile_definitions(Madnex
+   PUBLIC ${HDF5_DEFINITIONS})
+target_include_directories(Madnex
+   SYSTEM  PUBLIC ${HDF5_INCLUDE_DIRS})
 target_link_libraries(Madnex
-  TFELException
-  TFELUtilities
-  ${HDF5_LIBRARIES})
+   PUBLIC ${HDF5_LIBRARIES})

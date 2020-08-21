@@ -21,27 +21,36 @@ set(CPACK_COMPONENT_CORE_DESCRIPTION
 macro(install_header dir file)
   install(FILES ${dir}/${file}
           DESTINATION "include/${dir}"
-	  COMPONENT core)
+          COMPONENT core)
 endmacro(install_header)
 
 macro(install_data dir file)
   install(FILES ${file}
-          DESTINATION "share/madnex/${dir}")
+          DESTINATION "share/madnex/${dir}"
+          COMPONENT core)
 endmacro(install_data)
 
-macro(madnex_library_internal name component)
+macro(madnex_library name)
   if(${ARGC} LESS 2)
     message(FATAL_ERROR "madnex_library_internal : no source specified")
   endif(${ARGC} LESS 2)
   add_library(${name} SHARED ${ARGN})
   if(WIN32)
-    install(TARGETS ${name} DESTINATION bin
-      COMPONENT ${component})
+    install(TARGETS ${name} EXPORT ${name}
+            DESTINATION bin
+            COMPONENT core)
   else(WIN32)
-    install(TARGETS ${name}
-      DESTINATION lib${LIB_SUFFIX}
-      COMPONENT ${component})
+    install(TARGETS ${name} EXPORT ${name}
+            DESTINATION lib${LIB_SUFFIX}
+            COMPONENT core)
   endif(WIN32)
+  if(MADNEX_APPEND_SUFFIX)
+    set(export_install_path "share/madnex-${MADNEX_SUFFIX}/cmake")
+  else(MADNEX_APPEND_SUFFIX)
+    set(export_install_path "share/madnex/cmake")
+  endif(MADNEX_APPEND_SUFFIX)
+  install(EXPORT ${name} DESTINATION ${export_install_path}
+          NAMESPACE madnex:: FILE ${name}Config.cmake)
   if(enable-static)
     add_library(${name}-static STATIC ${ARGN})
     set_target_properties(${name}-static PROPERTIES OUTPUT_NAME "${name}")
@@ -62,18 +71,20 @@ macro(madnex_library_internal name component)
     else(WIN32)
       install(TARGETS ${name}-static DESTINATION lib${LIB_SUFFIX})
     endif(WIN32)
+    install(EXPORT ${name}-static DESTINATION ${export_install_path}
+            NAMESPACE madnex:: FILE ${name}Config.cmake)
   endif(enable-static)
-endmacro(madnex_library_internal)
-
-macro(madnex_library name)
-  madnex_library_internal(${name} core ${ARGN})
 endmacro(madnex_library)
 
 macro(python_module_base fullname name)
-    if(${ARGC} LESS 1)
+  if(${ARGC} LESS 1)
     message(FATAL_ERROR "python_lib_module : no source specified")
   endif(${ARGC} LESS 1)
   add_library(py_${fullname} MODULE ${ARGN})
+  target_include_directories(py_${fullname}
+    SYSTEM
+    PRIVATE "${Boost_INCLUDE_DIRS}"
+    PRIVATE "${PYTHON_INCLUDE_DIRS}")
   if(WIN32)
     set_target_properties(py_${fullname} PROPERTIES
       COMPILE_FLAGS "-DHAVE_ROUND")

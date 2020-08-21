@@ -2,6 +2,7 @@ include(cmake/modules/OptimizeForArchitecture.cmake)
 
 madnex_enable_cxx_compiler_flag(COMPILER_CXXFLAGS "MD")
 madnex_enable_cxx_compiler_flag(COMPILER_CXXFLAGS "EHsc")
+madnex_enable_cxx_compiler_flag(COMPILER_CXXFLAGS "utf-8")
 
 madnex_enable_cxx_compiler_flag(COMPILER_WARNINGS  "W4")
 #4251 : warning about export of STL classes

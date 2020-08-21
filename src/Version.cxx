@@ -41,8 +41,8 @@ namespace madnex{
     const auto d = openDataSet(g,n);
     const auto v = CompoundDataView(d);
     extract(o.major   ,v,std::size_t(0));
-    extract(o.minor   ,v,1);
-    extract(o.revision,v,2);
+    extract(o.minor   ,v,std::size_t(1));
+    extract(o.revision,v,std::size_t(2));
   }
   
 } // end of namespace madnex

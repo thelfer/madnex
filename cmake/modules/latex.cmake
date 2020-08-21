@@ -42,12 +42,21 @@ if(LATEX_COMPILER)
     add_custom_target(${doc}-doc-pdf ALL DEPENDS ${doc}.pdf)
     add_dependencies(doc-pdf
       ${doc}-doc-pdf)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${doc}.pdf
-      DESTINATION share/doc/mfront/${doc}
-      COMPONENT docs)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${doc}.pdf
-      DESTINATION share/doc/madnex/web/documents/${doc}
-      COMPONENT website)
+    if(MADNEX_APPEND_SUFFIX)
+      install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${doc}.pdf
+	DESTINATION share/doc/mfront-${MADNEX_SUFFIX}/${doc}
+	COMPONENT docs)
+      install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${doc}.pdf
+	DESTINATION share/doc/madnex-${MADNEX_SUFFIX}/web/documents/${doc}
+	COMPONENT website)
+    else(MADNEX_APPEND_SUFFIX)
+      install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${doc}.pdf
+	DESTINATION share/doc/mfront/${doc}
+	COMPONENT docs)
+      install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${doc}.pdf
+	DESTINATION share/doc/madnex/web/documents/${doc}
+	COMPONENT website)
+    endif(MADNEX_APPEND_SUFFIX)
   endmacro(latex_presentation doc)
 
   macro(pdflatex_presentation doc)
@@ -74,11 +83,20 @@ if(LATEX_COMPILER)
     add_custom_target(${doc}-doc-pdf ALL DEPENDS ${doc}.pdf)
     add_dependencies(doc-pdf
       ${doc}-doc-pdf)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${doc}.pdf
-      DESTINATION share/doc/mfront/${doc}
-      COMPONENT docs)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${doc}.pdf
-      DESTINATION share/doc/madnex/web/documents/${doc}
-      COMPONENT website)
+    if(MADNEX_APPEND_SUFFIX)
+      install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${doc}.pdf
+	DESTINATION share/doc/mfront-${MADNEX_SUFFIX}/${doc}
+	COMPONENT docs)
+      install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${doc}.pdf
+	DESTINATION share/doc/madnex-${MADNEX_SUFFIX}/web/documents/${doc}
+	COMPONENT website)
+    else(MADNEX_APPEND_SUFFIX)
+      install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${doc}.pdf
+	DESTINATION share/doc/mfront/${doc}
+	COMPONENT docs)
+      install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${doc}.pdf
+	DESTINATION share/doc/madnex/web/documents/${doc}
+	COMPONENT website)
+    endif(MADNEX_APPEND_SUFFIX)
   endmacro(pdflatex_presentation doc)
 endif(LATEX_COMPILER)

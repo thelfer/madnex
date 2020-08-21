@@ -1,53 +1,51 @@
 /*!
  * \file   CompoundDataArrayView.cxx
- * \brief    
- * \author THOMAS HELFER
- * \date   24 janv. 2017
+ * \brief
+ * \author Thomas Helfer
+ * \date   24/01/2017
  */
 
-#include"Madnex/CompoundDataArrayView.hxx"
+#include "Madnex/Raise.hxx"
+#include "Madnex/CompoundDataArrayView.hxx"
 
-namespace madnex{
+namespace madnex {
 
   CompoundDataArrayView::CompoundDataArrayView(const Group& g,
-					       const std::string& n)
-    : CompoundDataArrayView(openDataSet(g,n))
-  {} // end of CompoundDataArrayView
-  
+                                               const std::string& n)
+      : CompoundDataArrayView(openDataSet(g, n)) {
+  }  // end of CompoundDataArrayView
+
   CompoundDataArrayView::CompoundDataArrayView(const DataSet& d)
-    : CompoundDataViewBase(d)
-  {
+      : CompoundDataViewBase(d) {
     const auto dspace = d.getSpace();
-    if(dspace.getSimpleExtentNdims()!=1){
-      throw(std::runtime_error("CompoundDataArrayView: "
-			       "invalid dimension"));
+    if (dspace.getSimpleExtentNdims() != 1) {
+      raise("CompoundDataArrayView: invalid dimension");
     }
     hsize_t dims[1];
     dspace.getSimpleExtentDims(dims);
-    this->s=dims[0];
-    this->rdata.resize(this->ctype.getSize()*(this->s));
-    d.read(this->rdata.data(),this->ctype);
-  } // end of CompoundDataArrayView::CompoundDataArrayView
+    this->s = dims[0];
+    this->rdata.resize(this->ctype.getSize() * (this->s));
+    d.read(this->rdata.data(), this->ctype);
+  }  // end of CompoundDataArrayView::CompoundDataArrayView
 
-  CompoundDataView CompoundDataArrayView::operator[](const size_type i) const
-  {
-    return CompoundDataView(*this,this->rdata.data()+i*(this->ctype.getSize()));
-  } // end of CompoundDataArrayView::operator[]
+  CompoundDataView CompoundDataArrayView::operator[](const size_type i) const {
+    return CompoundDataView(*this,
+                            this->rdata.data() + i * (this->ctype.getSize()));
+  }  // end of CompoundDataArrayView::operator[]
 
-  CompoundDataView CompoundDataArrayView::at(const size_type i) const
-  {
-    if(i>=this->size()){
-      throw(std::out_of_range("CompoundDataArrayView::at: invalid index"));
+  CompoundDataView CompoundDataArrayView::at(const size_type i) const {
+    if (i >= this->size()) {
+      raise<std::out_of_range>("CompoundDataArrayView::at: invalid index");
     }
-    return CompoundDataView(*this,this->rdata.data()+i*(this->ctype.getSize()));
-  } // end of CompoundDataArrayView::at
-  
-  CompoundDataArrayView::size_type CompoundDataArrayView::size() const
-  {
+    return CompoundDataView(*this,
+                            this->rdata.data() + i * (this->ctype.getSize()));
+  }  // end of CompoundDataArrayView::at
+
+  CompoundDataArrayView::size_type CompoundDataArrayView::size() const {
     return this->s;
-  } // end of CompoundDataArrayView::size() const
-  
-  CompoundDataArrayView::~CompoundDataArrayView(){
+  }  // end of CompoundDataArrayView::size() const
+
+  CompoundDataArrayView::~CompoundDataArrayView() {
     // const unsigned s = static_cast<unsigned>(this->ctype.getNmembers());
     // for(unsigned i=0;i!=s;++i){
     //   const auto t = this->ctype.getMemberClass(i);
@@ -57,6 +55,6 @@ namespace madnex{
     // 	std::free(ptr);
     //   }
     // }
-  } // end of CompoundDataArrayView::~CompoundDataArrayView
-  
-} // end of namespace madnex
+  }  // end of CompoundDataArrayView::~CompoundDataArrayView
+
+}  // end of namespace madnex

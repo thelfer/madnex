@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file   include/Madnex/CompoundDataView.hxx
  * \brief
  * \author Helfer Thomas
@@ -6,34 +6,32 @@
  */
 
 #ifndef LIB_MADNEX_COMPOUNDDATAVIEW_H
-#define LIB_MADNEX_COMPOUNDDATAVIEW_H 
+#define LIB_MADNEX_COMPOUNDDATAVIEW_H
 
-#include<vector>
-#include"TFEL/Utilities/GenTypeBase.hxx"
-#include"Madnex/Config.hxx"
-#include"Madnex/FCString.hxx"
-#include"Madnex/HDF5.hxx"
-#include"Madnex/Types.hxx"
-#include"Madnex/CompoundDataViewBase.hxx"
+#include <vector>
+#include "Madnex/Config.hxx"
+#include "Madnex/FCString.hxx"
+#include "Madnex/HDF5.hxx"
+#include "Madnex/Types.hxx"
+#include "Madnex/CompoundDataViewBase.hxx"
 
-namespace madnex{
+namespace madnex {
 
   // forward declaration
   struct CompoundDataArrayView;
-  
+
   /*!
    * An helper structure used to extract members of a compound data
    * set.
    */
   struct MADNEX_VISIBILITY_EXPORT CompoundDataView
-    : public CompoundDataViewBase
-  {
+      : public CompoundDataViewBase {
     /*!
      * \brief constructor
      * \param[in] g: group
      * \param[in] p: data set path
      */
-    CompoundDataView(const Group&,const std::string&);
+    CompoundDataView(const Group&, const std::string&);
     /*!
      * \brief constructor
      * \param[in] d: data set
@@ -53,21 +51,22 @@ namespace madnex{
      * \return a member of the compound of the given type
      * \param[in] n: member name
      */
-    template<typename T>
+    template <typename T>
     T extract(const std::string&) const;
     /*!
      * \return a member of the compound of the given type
      * \param[in] n: member name
      */
-    template<typename T>
-    T extract(const char *) const;
+    template <typename T>
+    T extract(const char*) const;
     /*!
      * \return a member of the compound of the given type
      * \param[in] i: member index
      */
-    template<typename T>
+    template <typename T>
     T extract(const size_t) const;
-  private:
+
+   private:
     //  CompoundDataArrayView is made friend to be able to access the
     //  private constructor
     friend class CompoundDataArrayView;
@@ -76,11 +75,12 @@ namespace madnex{
      * \param[in] b: base class describing the compound data
      * \param[in] rd: data
      */
-    CompoundDataView(const CompoundDataViewBase&,
-		     const char* const);
-    //! an intermediate storage for the compound data type
-    tfel::utilities::GenType<std::vector<char>,const char*> rdata;
-  }; // end of CompoundDataView
+    CompoundDataView(const CompoundDataViewBase&, const char* const);
+    //! \brief an intermediate storage for the compound data type
+    std::vector<char> data_storage;
+    //! \brief pointer to the data
+    const char* data_pointer;
+  };  // end of CompoundDataView
   /*!
    * \brief extract a data from a CompoundDataView
    * \tparam     T: type to be extracted
@@ -88,8 +88,8 @@ namespace madnex{
    * \param[in]  d: data view
    * \param[in]  i: data index
    */
-  template<typename T>
-  void extract(T&,const CompoundDataView&,const size_t);
+  template <typename T>
+  void extract(T&, const CompoundDataView&, const size_t);
   /*!
    * \brief extract a data from a CompoundDataView
    * \tparam     T: type to be extracted
@@ -97,8 +97,8 @@ namespace madnex{
    * \param[in]  d: data view
    * \param[in]  i: data name
    */
-  template<typename T>
-  void extract(T&,const CompoundDataView&,const char* const);
+  template <typename T>
+  void extract(T&, const CompoundDataView&, const char* const);
   /*!
    * \brief extract a data from a CompoundDataView
    * \tparam     T: type to be extracted
@@ -106,11 +106,11 @@ namespace madnex{
    * \param[in]  d: data view
    * \param[in]  i: data name
    */
-  template<typename T>
-  void extract(T&,const CompoundDataView&,const std::string&);
-  
-} // end of namespace madnex
+  template <typename T>
+  void extract(T&, const CompoundDataView&, const std::string&);
 
-#include"Madnex/CompoundDataView.ixx"
+}  // end of namespace madnex
+
+#include "Madnex/CompoundDataView.ixx"
 
 #endif /* LIB_MADNEX__COMPOUNDDATAVIEW_H */

@@ -5,11 +5,24 @@
  * \date   22 janv. 2017
  */
 
+#include<string>
 #include<cstring>
 #include<stdexcept>
+#include"Madnex/Raise.hxx"
 #include"Madnex/CompoundDataViewBase.hxx"
 
 namespace madnex{
+
+  void CompoundExtractorBase::throwInvalidLengthException(
+      const std::string& msg,
+      const size_t i,
+      const size_t es,
+      const size_t cs) {
+    raise<std::length_error>("Error while extracting member '" +
+                             std::to_string(i) + "' " + "(expected '" +
+                             std::to_string(es) + "', " + "found '" +
+                             std::to_string(cs) + "')");
+  }  // end of CompoundExtractorBase::throwInvalidLengthException
 
   CompoundExtractorBase::CompoundExtractorBase(const CompoundDataViewBase& v)
     : cview(v)
@@ -19,8 +32,7 @@ namespace madnex{
 					       const H5T_class_t t)
   {
     if(e.getClass()!=t){
-      throw(std::runtime_error("CompoundExtractorBase:checkMemberClass: "
-  			       "invalid data type"));
+      raise("CompoundExtractorBase:checkMemberClass: invalid data type");
     }
   } // end of CompoundExtractorBase::checkMemberClass
   

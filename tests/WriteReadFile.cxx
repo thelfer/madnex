@@ -51,7 +51,6 @@ static void read_file(const char* const fn) {
 }
 
 int main(const int argc, const char* const* argv) {
-  using namespace madnex;
   if (argc != 2) {
     std::cout << "argc: " << argc << '\n';
     std::cerr << "WriteReadFile: invalid number of arguments\n"

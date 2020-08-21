@@ -1,4 +1,4 @@
-/*! 
+/*!
  * \file   include/Madnex/CompoundExtractor.hxx
  * \brief
  * \author Helfer Thomas
@@ -6,7 +6,7 @@
  */
 
 #ifndef LIB_MADNEX_COMPOUNDEXTRACTOR_H
-#define LIB_MADNEX_COMPOUNDEXTRACTOR_H 
+#define LIB_MADNEX_COMPOUNDEXTRACTOR_H
 
 #ifndef LIB_MADNEX_COMPOUNDDATAVIEWBASE_H
 #error "This file shall not be included directly"
@@ -15,13 +15,12 @@
 #error "This file shall not be included directly"
 #endif
 
-namespace madnex{
+namespace madnex {
 
   /*!
    * \brief base class for all CompoundExtractor
    */
-  struct MADNEX_VISIBILITY_EXPORT CompoundExtractorBase
-  {
+  struct MADNEX_VISIBILITY_EXPORT CompoundExtractorBase {
     /*!
      * \brief constructor
      * \param[in] v: compound view
@@ -31,22 +30,31 @@ namespace madnex{
      * \param[in] e: expected type
      * \param[in] t: type contained in the the compound type
      */
-    static void
-    checkMemberClass(const PredType&,const H5T_class_t);
-  protected:
+    static void checkMemberClass(const PredType&, const H5T_class_t);
+    /*!
+     * \brief throw std::length
+     * \param[in] m: error message
+     * \param[in] i: member index
+     * \param[in] es: expected size
+     * \param[in] cs: actual size
+     */
+    static void throwInvalidLengthException(const std::string&,
+                                            const size_t,
+                                            const size_t,
+                                            const size_t);
+
+   protected:
     //! a compound data view
     const CompoundDataViewBase& cview;
-  }; // end of struct CompoundExtractorBase
-  
+  };  // end of struct CompoundExtractorBase
+
   /*!
    * An helper structure used to extract members of a compound data
    * set.
    * \tparam T: type of the value to be extracted
    */
-  template<typename T>
-  struct CompoundExtractor
-    : public CompoundExtractorBase
-  {
+  template <typename T>
+  struct CompoundExtractor : public CompoundExtractorBase {
     // inheriting constructors
     using CompoundExtractorBase::CompoundExtractorBase;
     /*!
@@ -54,18 +62,16 @@ namespace madnex{
      * \param[in] d: raw data
      * \param[in] i: member index
      */
-    T extract(const char* const d,
-	      const size_t) const;
-  }; // end of CompoundExtractor
+    T extract(const char* const d, const size_t) const;
+  };  // end of CompoundExtractor
 
   /*!
    * An helper structure used to extract `std::string` members of a
    * compound data set.
    */
-  template<>
+  template <>
   struct MADNEX_VISIBILITY_EXPORT CompoundExtractor<std::string>
-    : public CompoundExtractorBase
-  {
+      : public CompoundExtractorBase {
     // inheriting constructors
     using CompoundExtractorBase::CompoundExtractorBase;
     /*!
@@ -73,18 +79,16 @@ namespace madnex{
      * \param[in] d: raw data
      * \param[in] i: member index
      */
-    std::string extract(const char* const d,
-			const size_t) const;
-  }; // end of CompoundExtractor
+    std::string extract(const char* const d, const size_t) const;
+  };  // end of CompoundExtractor
 
   /*!
-   * An helper structure used to extract `tfel::utilities::fcstring`
+   * An helper structure used to extract `madnex::fcstring`
    * members of a compound data set.
    */
-  template<std::size_t N>
-  struct MADNEX_VISIBILITY_EXPORT CompoundExtractor<tfel::utilities::fcstring<N>>
-    : public CompoundExtractorBase
-  {
+  template <std::size_t N>
+  struct MADNEX_VISIBILITY_EXPORT CompoundExtractor<madnex::fcstring<N>>
+      : public CompoundExtractorBase {
     // inheriting constructors
     using CompoundExtractorBase::CompoundExtractorBase;
     /*!
@@ -92,12 +96,11 @@ namespace madnex{
      * \param[in] d: raw data
      * \param[in] i: member index
      */
-    tfel::utilities::fcstring<N> extract(const char* const d,
-					 const size_t) const;
-  }; // end of CompoundExtractor
-  
-} // end of namespace madnex
+    madnex::fcstring<N> extract(const char* const d, const size_t) const;
+  };  // end of CompoundExtractor
 
-#include"Madnex/CompoundExtractor.ixx"
+}  // end of namespace madnex
+
+#include "Madnex/CompoundExtractor.ixx"
 
 #endif /* LIB_MADNEX__COMPOUNDEXTRACTOR_H */

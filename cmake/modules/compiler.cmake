@@ -129,7 +129,9 @@ option(PATHSCALE_COMPILER "set true if using the PathScale compiler" OFF)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   include(cmake/modules/gcc.cmake)
-elseif((CMAKE_CXX_COMPILER_ID STREQUAL "Clang") AND (NOT PATHSCALE_COMPILER))
+elseif(((CMAKE_CXX_COMPILER_ID STREQUAL "Clang") OR
+        (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")) AND
+       (NOT PATHSCALE_COMPILER))
   include(cmake/modules/clang.cmake)
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
   include(cmake/modules/intel.cmake)
@@ -142,8 +144,10 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "SunPro")
   # message(FATAL_ERROR "MADNEX C++11 support is not availabable with the SunPro compiler")
 elseif(MSVC)
   include(cmake/modules/msvc.cmake)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "PGI")
+  include(cmake/modules/pgi.cmake)
 else(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  message(FATAL_ERROR "unsupported compiler id")
+  message(FATAL_ERROR "unsupported compiler id ${CMAKE_CXX_COMPILER_ID}")
 endif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 
 file(WRITE "${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmp/src.cxx"
@@ -167,22 +171,37 @@ add_definitions("-DCOMPILER_WARNINGS=\\\"\"${COMPILER_WARNINGS}\"\\\"")
 add_definitions("-DCOMPILER_FLAGS=\\\"\"${COMPILER_FLAGS}\"\\\"")
 add_definitions("-DCOMPILER_CXXFLAGS=\\\"\"${COMPILER_CXXFLAGS}\"\\\"")
 
-set(CMAKE_C_FLAGS "${COMPILER_FLAGS} ${COMPILER_CFLAGS}")
-set(CMAKE_CXX_FLAGS "${VISIBILITY_FLAGS} ${COMPILER_WARNINGS} ${COMPILER_FLAGS} ${COMPILER_CXXFLAGS}")
-
-if(CMAKE_BUILD_TYPE STREQUAL "Profiling")
-  set(CMAKE_CXX_FLAGS_PROFILING "${OPTIMISATION_FLAGS} ${CMAKE_CXX_FLAGS_PROFILING}")
-  if(NOT enable-portable-build)
-    set(CMAKE_CXX_FLAGS_PROFILING "${OPTIMISATION_FLAGS_MARCH} ${CMAKE_CXX_FLAGS_PROFILING}")
-  endif(NOT enable-portable-build)
-elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
-  set(CMAKE_CXX_FLAGS_RELEASE   "${OPTIMISATION_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE}")
-  if(NOT enable-portable-build)
-    set(CMAKE_CXX_FLAGS_RELEASE "${OPTIMISATION_FLAGS_MARCH} ${CMAKE_CXX_FLAGS_RELEASE}")
-  endif(NOT enable-portable-build)
-else(CMAKE_BUILD_TYPE STREQUAL "Profiling")
-  set(CMAKE_CXX_FLAGS           "${OPTIMISATION_FLAGS} ${CMAKE_CXX_FLAGS}")
-  if(NOT enable-portable-build)
-    set(CMAKE_CXX_FLAGS "${OPTIMISATION_FLAGS_MARCH} ${CMAKE_CXX_FLAGS}")
-  endif(NOT enable-portable-build)
-endif(CMAKE_BUILD_TYPE STREQUAL "Profiling")
+# This option has been added for building conda package.
+# It circumvents the following issue: `cmake` discards `Boost_INCLUDEDIRS`
+# which is equal to `$PREFIX/include`. The same applies to
+# `PYTHON_INCLUDEDIRS`.
+#
+# `conda` adds `-I$PREFIX/include` in the `CFLAGS` and `CXXFLAGS`,
+# thus, using those variables `CFLAGS` and `CXXFLAGS` solves the issue and is more
+# consistent with other `conda` packages.
+#
+# See https://github.com/thelfer/staged-recipes/tree/master/recipes/madnex for a recipe
+# showing how to build `MADNEX` with `conda`.
+if(USE_EXTERNAL_COMPILER_FLAGS)
+  set(CMAKE_C_FLAGS "$ENV{CFLAGS}")
+  set(CMAKE_CXX_FLAGS "${COMPILER_WARNINGS} $ENV{CXXFLAGS}")
+else(USE_EXTERNAL_COMPILER_FLAGS)
+  set(CMAKE_C_FLAGS "${COMPILER_FLAGS} ${COMPILER_CFLAGS}")
+  set(CMAKE_CXX_FLAGS "${VISIBILITY_FLAGS} ${COMPILER_WARNINGS} ${COMPILER_FLAGS} ${COMPILER_CXXFLAGS}")
+  if(CMAKE_BUILD_TYPE STREQUAL "Profiling")
+    set(CMAKE_CXX_FLAGS_PROFILING "${OPTIMISATION_FLAGS} ${CMAKE_CXX_FLAGS_PROFILING}")
+    if(NOT enable-portable-build)
+      set(CMAKE_CXX_FLAGS_PROFILING "${OPTIMISATION_FLAGS_MARCH} ${CMAKE_CXX_FLAGS_PROFILING}")
+    endif(NOT enable-portable-build)
+  elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(CMAKE_CXX_FLAGS_RELEASE   "${OPTIMISATION_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE}")
+    if(NOT enable-portable-build)
+      set(CMAKE_CXX_FLAGS_RELEASE "${OPTIMISATION_FLAGS_MARCH} ${CMAKE_CXX_FLAGS_RELEASE}")
+    endif(NOT enable-portable-build)
+  else(CMAKE_BUILD_TYPE STREQUAL "Profiling")
+    set(CMAKE_CXX_FLAGS           "${OPTIMISATION_FLAGS} ${CMAKE_CXX_FLAGS}")
+    if(NOT enable-portable-build)
+      set(CMAKE_CXX_FLAGS "${OPTIMISATION_FLAGS_MARCH} ${CMAKE_CXX_FLAGS}")
+    endif(NOT enable-portable-build)
+  endif(CMAKE_BUILD_TYPE STREQUAL "Profiling")
+endif(USE_EXTERNAL_COMPILER_FLAGS)

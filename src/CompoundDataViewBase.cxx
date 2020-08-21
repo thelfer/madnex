@@ -13,7 +13,7 @@ namespace madnex{
   {
     const auto dtype  = d.getDataType();
     if(dtype.getClass()!=H5T_COMPOUND){
-      throw(std::runtime_error("CompoundDataViewBase: invalid data set"));
+      raise("CompoundDataViewBase: invalid data set");
     }
     this->ctype = H5::CompType(d);
   }

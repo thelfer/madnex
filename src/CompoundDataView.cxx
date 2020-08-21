@@ -1,60 +1,45 @@
 /*!
  * \file   CompoundDataView.cxx
- * \brief    
- * \author THOMAS HELFER
+ * \brief
+ * \author Thomas Helfer
  * \date   24 janv. 2017
  */
 
-#include"Madnex/CompoundDataView.hxx"
+#include "Madnex/Raise.hxx"
+#include "Madnex/CompoundDataView.hxx"
 
-namespace madnex{
+namespace madnex {
 
-  CompoundDataView::CompoundDataView(const Group& g,
-				     const std::string& n)
-    : CompoundDataView(openDataSet(g,n))
-  {} // end of CompoundDataView
-  
+  CompoundDataView::CompoundDataView(const Group& g, const std::string& n)
+      : CompoundDataView(openDataSet(g, n)) {}  // end of CompoundDataView
+
   CompoundDataView::CompoundDataView(const DataSet& d)
-    : CompoundDataViewBase(d)
-  {
+      : CompoundDataViewBase(d) {
     const auto dspace = d.getSpace();
-    if(dspace.getSimpleExtentNdims()!=1){
-      throw(std::runtime_error("CompoundDataView: "
-			       "invalid dimension"));
+    if (dspace.getSimpleExtentNdims() != 1) {
+      raise("CompoundDataView: invalid dimension");
     }
     hsize_t dims[1];
     dspace.getSimpleExtentDims(dims);
-    if(dims[0]!=1){
-      std::runtime_error("CompoundDataView: invalid "
-			 "structure dimension");
+    if (dims[0] != 1) {
+      raise("CompoundDataView: invalid structure dimension");
     }
-    this->rdata = std::vector<char>{};
-    auto& ld = this->rdata.get<std::vector<char>>();
-    ld.resize(this->ctype.getSize());
-    d.read(ld.data(),this->ctype);
-  } // end of CompoundDataView::CompoundDataView
+    this->data_storage.resize(this->ctype.getSize());
+    d.read(this->data_storage.data(), this->ctype);
+    this->data_pointer = this->data_storage.data();
+  }  // end of CompoundDataView::CompoundDataView
 
   CompoundDataView::CompoundDataView(const CompoundDataViewBase& b,
-				     const char* const rd)
-    : CompoundDataViewBase(b),
-      rdata(rd)
-  {} // end of CompoundDataView::CompoundDataView
+                                     const char* const rd)
+      : CompoundDataViewBase(b),
+        data_pointer(rd) {}  // end of CompoundDataView::CompoundDataView
 
   CompoundDataView::CompoundDataView(CompoundDataView&&) = default;
   CompoundDataView::CompoundDataView(const CompoundDataView&) = default;
   CompoundDataView& CompoundDataView::operator=(CompoundDataView&&) = default;
-  CompoundDataView& CompoundDataView::operator=(const CompoundDataView&) = default;
-  
-  CompoundDataView::~CompoundDataView(){
-    // const unsigned s = static_cast<unsigned>(this->ctype.getNmembers());
-    // for(unsigned i=0;i!=s;++i){
-    //   const auto t = this->ctype.getMemberClass(i);
-    //   if(t==madnex::getNativeType<std::string>().getClass()){
-    // 	const auto ptr =
-    // 	  this->data.data()+this->ctype.getMemberOffset(i);
-    // 	std::free(ptr);
-    //   }
-    // }
-  } // end of CompoundDataView::~CompoundDataView
-  
-} // end of namespace madnex
+  CompoundDataView& CompoundDataView::operator=(const CompoundDataView&) =
+      default;
+
+  CompoundDataView::~CompoundDataView() = default;
+
+}  // end of namespace madnex

@@ -8,6 +8,7 @@ madnex_enable_cxx_compiler_flag(COMPILER_WARNINGS  "Wdisabled-optimization")
 if(NOT i586-mingw32msvc_COMPILER)
   madnex_enable_cxx_compiler_flag(VISIBILITY_FLAGS "fvisibility=hidden")
   madnex_enable_cxx_compiler_flag(VISIBILITY_FLAGS "fvisibility-inlines-hidden")
+  set(COMPILER_DEFAULT_VISIBILITY "-fvisibility=default")
 endif(NOT i586-mingw32msvc_COMPILER)
 
 madnex_enable_cxx_compiler_flag(OPTIMISATION_FLAGS_MARCH "march=native")
@@ -35,14 +36,23 @@ endif(WIN32)
 if(enable-fast-math)
   madnex_enable_cxx_compiler_flag(OPTIMISATION_FLAGS  "ffast-math")
 else(enable-fast-math)
+  madnex_enable_cxx_compiler_flag(OPTIMISATION_FLAGS  "fno-fast-math")
   madnex_enable_cxx_compiler_flag(OPTIMISATION_FLAGS2 "ffast-math")
 endif(enable-fast-math)
 
 option(enable-sanitize-options "enable various gcc sanitize options (undefined, address,...)" OFF)
 
+option(enable-glibcxx-debug "use the debug version of the C++ standard as implemented by the glib C++ library" OFF)
+if(enable-glibcxx-debug)
 SET(CMAKE_CXX_FLAGS_DEBUG "-g -D_GLIBCXX_DEBUG" CACHE STRING
     "Flags used by the C++ compiler during debug builds."
     FORCE)
+else(enable-glibcxx-debug)
+SET(CMAKE_CXX_FLAGS_DEBUG "-g" CACHE STRING
+    "Flags used by the C++ compiler during debug builds."
+    FORCE)
+endif(enable-glibcxx-debug)
+
 SET(CMAKE_C_FLAGS_DEBUG "-g" CACHE STRING
     "Flags used by the C compiler during debug builds."
     FORCE)
@@ -77,6 +87,7 @@ MARK_AS_ADVANCED(CMAKE_CXX_FLAGS_PROFILING
   CMAKE_C_FLAGS_PROFILING)
 
 if(enable-sanitize-options)
+  madnex_enable_cxx_compiler_flag(COMPILER_FLAGS "fcheck-pointer-bounds")
   madnex_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=bounds-strict")
   madnex_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=undefined")
   madnex_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=float-divide-by-zero")
@@ -86,15 +97,29 @@ if(enable-sanitize-options)
   madnex_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=object-size")
   madnex_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=vpt")
   madnex_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=address")
-#  madnex_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=leak")
+  madnex_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=null")
+  madnex_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=return")
+  madnex_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=signed-integer-overflow")
+  madnex_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=bool")
+  madnex_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=enum")
+  madnex_enable_cxx_compiler_flag(COMPILER_FLAGS "fstack-check")
+  #  madnex_enable_cxx_compiler_flag(COMPILER_FLAGS "fsanitize=leak")
   madnex_enable_cxx_compiler_flag(COMPILER_FLAGS "fno-omit-frame-pointer")
 endif(enable-sanitize-options)
 
+option(enable-cxx-17 "enable support of the C++17 standard")
+if(enable-cxx-17)
+  if(${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 7.2)
+    message(FATAL_ERROR "MADNEX C++17 support is only available for gcc version >= 7.2")
+  endif(${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 7.2)
+  set(COMPILER_FLAGS "-std=c++17 ${COMPILER_FLAGS}")
+else(enable-cxx-17)
+  if(${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 4.7)
+    message(FATAL_ERROR "MADNEX C++11 support is only available for gcc version >= 4.7")
+  endif(${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 4.7)
+  set(COMPILER_CXXFLAGS "${COMPILER_CXXFLAGS} -std=c++11")  
+endif(enable-cxx-17)
 
-if(${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 4.7)
-  message(FATAL_ERROR "MADNEX C++11 support is only available for gcc version >= 4.7")
-endif(${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 4.7)
-set(COMPILER_CXXFLAGS "${COMPILER_CXXFLAGS} -std=c++11")
 # unsable flag
 # set(COMPILER_CXXFLAGS "${COMPILER_CXXFLAGS} -D_GLIBCXX_CONCEPT_CHECKS")
 

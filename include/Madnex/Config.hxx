@@ -1,14 +1,52 @@
 /*!
  * \file   include/Madnex/Config.hxx
  * \brief    
- * \author THOMAS HELFER
+ * \author Thomas Helfer
  * \date   16 janv. 2017
  */
 
 #ifndef LIB_MADNEX_CONFIG_HXX
 #define LIB_MADNEX_CONFIG_HXX
 
-#include"TFEL/Config/TFELConfig.hxx"
+#ifdef __cplusplus
+#include <cstddef>
+#else  /*  __cplusplus */
+#include <stddef.h>
+#endif /*  __cplusplus */
+
+/*!
+ * Macro extracted from :
+ * "Why is the new C++ visibility support so useful?"
+ * from http://gcc.gnu.org/wiki/Visibility
+ */
+#if defined _WIN32 || defined _WIN64 ||defined __CYGWIN__
+#define MADNEX_VISIBILITY_MACRO_IMPORT __declspec(dllimport)
+#define MADNEX_VISIBILITY_MACRO_EXPORT __declspec(dllexport)
+#define MADNEX_VISIBILITY_LOCAL
+#else /* defined _WIN32 || defined __CYGWIN__ */
+#if (defined __GNUC__) && (! defined __INTEL_COMPILER)
+#if __GNUC__ >= 4
+#define MADNEX_VISIBILITY_MACRO_IMPORT __attribute__((visibility("default")))
+#define MADNEX_VISIBILITY_MACRO_EXPORT __attribute__((visibility("default")))
+#define MADNEX_VISIBILITY_LOCAL  __attribute__((visibility("hidden")))
+#else /* __GNUC__ >= 4 */
+#define MADNEX_VISIBILITY_MACRO_IMPORT
+#define MADNEX_VISIBILITY_MACRO_EXPORT
+#define MADNEX_VISIBILITY_LOCAL
+#endif /* __GNUC__ >= 4 */
+#elif defined __INTEL_COMPILER
+#define MADNEX_VISIBILITY_MACRO_IMPORT __attribute__((visibility("default")))
+#define MADNEX_VISIBILITY_MACRO_EXPORT __attribute__((visibility("default")))
+#define MADNEX_VISIBILITY_LOCAL  __attribute__((visibility("hidden")))
+#else /* defined __INTEL_COMPILER */
+#define MADNEX_VISIBILITY_MACRO_IMPORT
+#define MADNEX_VISIBILITY_MACRO_EXPORT
+#define MADNEX_VISIBILITY_LOCAL
+#endif /* defined __INTEL_COMPILER */
+#endif /* defined _WIN32 || defined _WIN64 ||defined __CYGWIN__ */
+
+#define MADNEX_INLINE inline
+#define MADNEX_NORETURN [[noreturn]]
 
 /*!
  * \def MADNEX_VISIBILITY_EXPORT
@@ -18,16 +56,16 @@
  */
 #if defined _WIN32 || defined _WIN64 ||defined __CYGWIN__
 #  if defined Madnex_EXPORTS
-#    define MADNEX_VISIBILITY_EXPORT TFEL_VISIBILITY_EXPORT
+#    define MADNEX_VISIBILITY_EXPORT MADNEX_VISIBILITY_MACRO_EXPORT
 #  else
 #  ifndef MADNEX_STATIC_BUILD
-#    define MADNEX_VISIBILITY_EXPORT TFEL_VISIBILITY_IMPORT
+#    define MADNEX_VISIBILITY_EXPORT MADNEX_VISIBILITY_MACRO_IMPORT
 #  else 
 #    define MADNEX_VISIBILITY_EXPORT 
 #  endif
 #  endif
 #else
-#  define MADNEX_VISIBILITY_EXPORT TFEL_VISIBILITY_EXPORT
+#  define MADNEX_VISIBILITY_EXPORT MADNEX_VISIBILITY_MACRO_EXPORT
 #endif /* LIB_MADNEX_CONFIG_HXX_ */
 
 #endif /* LIB_MADNEX_CONFIG_HXX */

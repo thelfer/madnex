@@ -40,21 +40,15 @@ namespace madnex{
    * \param[in]  g: group
    * \param[in]  n: name of the data
    */
-  MADNEX_VISIBILITY_EXPORT void
-  read(Version&,
-       const Group&,
-       const std::string&);
+  MADNEX_VISIBILITY_EXPORT void read(Version&, const Group&, const std::string&);
   /*!
    * \brief write a version description in a group
    * \param[out] g: group
    * \param[in]  n: name of the data
    * \param[in]  o: object to be written
    */
-  MADNEX_VISIBILITY_EXPORT void
-  write(Group&,
-	const std::string&,
-	const Version&);
-  
+  MADNEX_VISIBILITY_EXPORT void write(Group&, const std::string&, const Version&);
+
 } // end of namespace madnex
 
 #endif /* LIB_MADNEX_VERSION_HXX */
