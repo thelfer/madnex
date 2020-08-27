@@ -278,7 +278,7 @@ if(enable-doxygen-doc)
     list(APPEND CPACK_COMPONENTS_ALL doxygen)
     set(CPACK_COMPONENT_DOXYGEN_DESCRIPTION
       "Contains the MADNEX doxygen documentation")
-    set(GENERATE_DOXYGEN ON)
+    set(MADNEX_GENERATE_DOXYGEN ON)
   else(DOXYGEN_FOUND)
     message(FATAL_ERROR "doxygen is required")
   endif(DOXYGEN_FOUND)

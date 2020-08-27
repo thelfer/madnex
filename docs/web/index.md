@@ -1,4 +1,17 @@
-# The `MADNEX` project
+---
+title: The `MADNEX` library
+author: Thomas Helfer, François Curtit
+date: 08/2020
+lang: en-EN
+link-citations: true
+colorlinks: true
+figPrefixTemplate: "$$i$$"
+tabPrefixTemplate: "$$i$$"
+secPrefixTemplate: "$$i$$"
+eqnPrefixTemplate: "($$i$$)"
+---
+
+# Description
 
 This project aims at providing tools (functions, classes, bindings,
 etc...) to manipulate `MADNEX` files.
@@ -9,11 +22,6 @@ format](https://www.hdfgroup.org/solutions/hdf5/), which can handle:
 - Experimental data.
 - [`MFront` files](http://tfel.sourceforge.net).
 - [`MTest` unit tests.](http://tfel.sourceforge.net)
-
-# Website
-
-The official website of the project is here:
-<https://thelfer.github.io/madnex/web/index.html>
 
 # Licence
 

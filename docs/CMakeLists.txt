@@ -1,3 +1,6 @@
-if(GENERATE_DOXYGEN)
+if(MADNEX_GENERATE_DOXYGEN)
   add_subdirectory(doxygen)
-endif(GENERATE_DOXYGEN)
+endif(MADNEX_GENERATE_DOXYGEN)
+if(MADNEX_GENERATE_WEBSITE)
+  add_subdirectory(web)
+endif(MADNEX_GENERATE_WEBSITE)
