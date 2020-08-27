@@ -17,7 +17,7 @@ namespace madnex {
   /*!
    * \brief base class for all exception throw by the `Madnex` library
    */
-  struct MADNEX_VISIBILITY_EXPORT Exception : public std::exception {
+  struct MADNEX_EXPORT Exception : public std::exception {
     //! default constructor
     Exception();
     //! copy constructor
@@ -31,7 +31,7 @@ namespace madnex {
   /*!
    * \brief a generic exception
    */
-  struct MADNEX_VISIBILITY_EXPORT RuntimeError : public Exception {
+  struct MADNEX_EXPORT RuntimeError : public Exception {
     /*!
      * \brief constructor from std::string
      * \param[in] m: error message

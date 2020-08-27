@@ -13,7 +13,7 @@
 
 namespace madnex{
 
-  struct MADNEX_VISIBILITY_EXPORT Evolution {
+  struct MADNEX_EXPORT Evolution {
     //! list of the parameters' names
     std::vector<std::string> title;
     //! list of the parameters' units

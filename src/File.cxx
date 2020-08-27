@@ -22,5 +22,8 @@ namespace madnex{
     return true;
   }
 
-  
+  bool exists(const File& f, const std::string& p) {
+    return H5Lexists(f.getId(), p.c_str(), H5P_DEFAULT) > 0;
+  }
+
 } // end of namespace madnex

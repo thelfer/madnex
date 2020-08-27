@@ -20,7 +20,7 @@ namespace madnex {
   /*!
    * \brief base class for all CompoundExtractor
    */
-  struct MADNEX_VISIBILITY_EXPORT CompoundExtractorBase {
+  struct MADNEX_EXPORT CompoundExtractorBase {
     /*!
      * \brief constructor
      * \param[in] v: compound view
@@ -70,7 +70,7 @@ namespace madnex {
    * compound data set.
    */
   template <>
-  struct MADNEX_VISIBILITY_EXPORT CompoundExtractor<std::string>
+  struct MADNEX_EXPORT CompoundExtractor<std::string>
       : public CompoundExtractorBase {
     // inheriting constructors
     using CompoundExtractorBase::CompoundExtractorBase;
@@ -87,7 +87,7 @@ namespace madnex {
    * members of a compound data set.
    */
   template <std::size_t N>
-  struct MADNEX_VISIBILITY_EXPORT CompoundExtractor<madnex::fcstring<N>>
+  struct MADNEX_EXPORT CompoundExtractor<madnex::fcstring<N>>
       : public CompoundExtractorBase {
     // inheriting constructors
     using CompoundExtractorBase::CompoundExtractorBase;

@@ -17,7 +17,7 @@ namespace madnex {
   /*!
    * \brief a structure describing the experimental condition
    */
-  struct MADNEX_VISIBILITY_EXPORT ExperimentalCondition
+  struct MADNEX_EXPORT ExperimentalCondition
   {
     //! default constructor
     ExperimentalCondition();
@@ -46,7 +46,7 @@ namespace madnex {
    * \param[in]  g: group
    * \param[in]  n: name of the data
    */
-  MADNEX_VISIBILITY_EXPORT void
+  MADNEX_EXPORT void
   read(ExperimentalConditions&,
        const Group&,
        const std::string&);
@@ -56,7 +56,7 @@ namespace madnex {
    * \param[in]  n: name of the data
    * \param[in]  o: object to be written
    */
-  MADNEX_VISIBILITY_EXPORT void
+  MADNEX_EXPORT void
   write(Group&,
 	const std::string&,
 	const ExperimentalConditions&);

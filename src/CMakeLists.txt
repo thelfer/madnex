@@ -11,7 +11,8 @@ madnex_library(Madnex
   ExperimentalConditions.cxx
   Scripts.cxx
   MainResults.cxx
-  Exceptions.cxx)
+  Exceptions.cxx
+  MFrontDataBase.cxx)
 target_include_directories(Madnex
    PUBLIC 
    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>

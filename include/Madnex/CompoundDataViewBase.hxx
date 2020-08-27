@@ -20,7 +20,7 @@ namespace madnex{
    * An helper structure used to extract members of a compound data
    * set.
    */
-  struct MADNEX_VISIBILITY_EXPORT CompoundDataViewBase
+  struct MADNEX_EXPORT CompoundDataViewBase
   {
     /*!
      * \brief constructor

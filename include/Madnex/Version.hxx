@@ -14,7 +14,7 @@
 
 namespace madnex{
 
-  struct MADNEX_VISIBILITY_EXPORT Version
+  struct MADNEX_EXPORT Version
   {
     //! default constructor
     Version();
@@ -40,14 +40,14 @@ namespace madnex{
    * \param[in]  g: group
    * \param[in]  n: name of the data
    */
-  MADNEX_VISIBILITY_EXPORT void read(Version&, const Group&, const std::string&);
+  MADNEX_EXPORT void read(Version&, const Group&, const std::string&);
   /*!
    * \brief write a version description in a group
    * \param[out] g: group
    * \param[in]  n: name of the data
    * \param[in]  o: object to be written
    */
-  MADNEX_VISIBILITY_EXPORT void write(Group&, const std::string&, const Version&);
+  MADNEX_EXPORT void write(Group&, const std::string&, const Version&);
 
 } // end of namespace madnex
 

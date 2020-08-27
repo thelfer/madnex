@@ -26,7 +26,7 @@
    * \param[in]  o: object to be written	                           \
    */						                           \
   template<>					                           \
-  struct MADNEX_VISIBILITY_EXPORT HDF5TypeDescriptionImplementation< X >{  \
+  struct MADNEX_EXPORT HDF5TypeDescriptionImplementation< X >{  \
     using type = PredType;			                           \
     /*!                                                                    \
      * \return the native type associated with X                           \
@@ -47,7 +47,7 @@ namespace madnex{
   struct HDF5TypeDescriptionImplementation;
   //! Partial specialiation of `HDF5TypeDescriptionImplementation` for `std::string`
   template<>
-  struct MADNEX_VISIBILITY_EXPORT HDF5TypeDescriptionImplementation<std::string>
+  struct MADNEX_EXPORT HDF5TypeDescriptionImplementation<std::string>
   {
     //! result
     using type = StrType;

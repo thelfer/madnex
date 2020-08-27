@@ -18,7 +18,7 @@ namespace madnex{
       const size_t i,
       const size_t es,
       const size_t cs) {
-    raise<std::length_error>("Error while extracting member '" +
+    raise<std::length_error>(msg + "\nError while extracting member '" +
                              std::to_string(i) + "' " + "(expected '" +
                              std::to_string(es) + "', " + "found '" +
                              std::to_string(cs) + "')");

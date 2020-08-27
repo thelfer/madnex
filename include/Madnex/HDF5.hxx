@@ -19,58 +19,54 @@
  * associated to plain old data types.
  * \param X: type
  */
-#define MADNEX_HDF5_POD_DECLARATION(X)                                       \
-  /*!                                                                        \
-   * \param[out] g: group                                                    \
-   * \param[in]  n: name of the data                                         \
-   * \param[in]  o: object to be written                                     \
-   */                                                                        \
-  MADNEX_VISIBILITY_EXPORT void write(Group&, const std::string&, const X&); \
-  /*!                                                                        \
-   * \param[out] o: object to be read                                        \
-   * \param[in]  g: group                                                    \
-   * \param[in]  n: name of the data                                         \
-   */                                                                        \
-  MADNEX_VISIBILITY_EXPORT void read(X&, const Group&, const std::string&);  \
-  /*!                                                                        \
-   * \return the object read                                                 \
-   * \param[in] g: group                                                     \
-   * \param[in] n: name of the data                                          \
-   */                                                                        \
-  template <>                                                                \
-  MADNEX_VISIBILITY_EXPORT X read(const Group&, const std::string&);         \
-  /*!                                                                        \
-   * \param[out] o: attribute value to be read                               \
-   * \param[in]  g: group                                                    \
-   * \param[in]  n: name of the data                                         \
-   */                                                                        \
-  MADNEX_VISIBILITY_EXPORT void getAttributeValue(X&, const Group&,          \
-                                                  const std::string&);       \
-  /*!                                                                        \
-   * \param[out] o: attribute value to be read                               \
-   * \param[in]  g: data set                                                 \
-   * \param[in]  n: name of the data                                         \
-   */                                                                        \
-  MADNEX_VISIBILITY_EXPORT void getAttributeValue(X&, const DataSet&,        \
-                                                  const std::string&)
+#define MADNEX_HDF5_POD_DECLARATION(X)                                        \
+  /*!                                                                         \
+   * \param[out] g: group                                                     \
+   * \param[in]  n: name of the data                                          \
+   * \param[in]  o: object to be written                                      \
+   */                                                                         \
+  MADNEX_EXPORT void write(Group&, const std::string&, const X&);             \
+  /*!                                                                         \
+   * \param[out] o: object to be read                                         \
+   * \param[in]  g: group                                                     \
+   * \param[in]  n: name of the data                                          \
+   */                                                                         \
+  MADNEX_EXPORT void read(X&, const Group&, const std::string&);              \
+  /*!                                                                         \
+   * \return the object read                                                  \
+   * \param[in] g: group                                                      \
+   * \param[in] n: name of the data                                           \
+   */                                                                         \
+  template <>                                                                 \
+  MADNEX_EXPORT X read(const Group&, const std::string&);                     \
+  /*!                                                                         \
+   * \param[out] o: attribute value to be read                                \
+   * \param[in]  g: group                                                     \
+   * \param[in]  n: name of the data                                          \
+   */                                                                         \
+  MADNEX_EXPORT void getAttributeValue(X&, const Group&, const std::string&); \
+  /*!                                                                         \
+   * \param[out] o: attribute value to be read                                \
+   * \param[in]  g: data set                                                  \
+   * \param[in]  n: name of the data                                          \
+   */                                                                         \
+  MADNEX_EXPORT void getAttributeValue(X&, const DataSet&, const std::string&)
 
-#define MADNEX_HDF5_VECTOR_DECLARATION(X)                                 \
-  /*!                                                                     \
-   * \param o : object to be written                                      \
-   * \param n : name of the dataset                                       \
-   * \param g : HDF5 group                                                \
-   */                                                                     \
-  template <>                                                             \
-  MADNEX_VISIBILITY_EXPORT void write(const std::vector<X>&,              \
-                                      const std::string&, Group&);        \
-  /*!                                                                     \
-   * \param o : object to be written                                      \
-   * \param n : name of the dataset                                       \
-   * \param g : HDF5 group                                                \
-   */                                                                     \
-  template <>                                                             \
-  MADNEX_VISIBILITY_EXPORT void read(std::vector<X>&, const std::string&, \
-                                     const Group&)
+#define MADNEX_HDF5_VECTOR_DECLARATION(X)                                      \
+  /*!                                                                          \
+   * \param o : object to be written                                           \
+   * \param n : name of the dataset                                            \
+   * \param g : HDF5 group                                                     \
+   */                                                                          \
+  template <>                                                                  \
+  MADNEX_EXPORT void write(const std::vector<X>&, const std::string&, Group&); \
+  /*!                                                                          \
+   * \param o : object to be written                                           \
+   * \param n : name of the dataset                                            \
+   * \param g : HDF5 group                                                     \
+   */                                                                          \
+  template <>                                                                  \
+  MADNEX_EXPORT void read(std::vector<X>&, const std::string&, const Group&)
 
 namespace madnex {
 
@@ -87,125 +83,128 @@ namespace madnex {
   };  // end of struct WriteFlag
 
   /*!
+   * \brief check if an object with the given path exists in the given group
+   * \param[in] g: group
+   * \param[in] p: path
+   */
+  MADNEX_EXPORT bool exists(const Group&, const std::string&);
+  /*!
+   * \brief check if a group with the given path exists in the given given
+   * \param[in] g: group
+   * \param[in] p: path
+   */
+  MADNEX_EXPORT bool subGroupExists(const Group&, const std::string&);
+  /*!
    * \brief create a new group
    * \param[in] g: parent group
    * \param[in] n: group name
    */
-  MADNEX_VISIBILITY_EXPORT Group createGroup(const Group&, const std::string&);
+  MADNEX_EXPORT Group createGroup(const Group&, const std::string&);
   /*!
    * \brief open a new group
    * \param[in] g: parent group
    * \param[in] n: group name
    */
-  MADNEX_VISIBILITY_EXPORT Group openGroup(const Group&, const std::string&);
+  MADNEX_EXPORT Group openGroup(const Group&, const std::string&);
   /*!
    * \brief open a data set
    * \param[in] g: parent group
    * \param[in] n: data set name
    */
-  MADNEX_VISIBILITY_EXPORT DataSet openDataSet(const Group&,
-                                               const std::string&);
+  MADNEX_EXPORT DataSet openDataSet(const Group&, const std::string&);
   /*!
    * \brief remove a data set
    * \param[in] g: parent group
    * \param[in] n: data set name
    */
-  MADNEX_VISIBILITY_EXPORT
+  MADNEX_EXPORT
   void removeDataSet(const Group&, const std::string&);
   /*!
    * \brief open an attribute of a data set
    * \param[in] d: data set
    * \param[in] n: attribute name
    */
-  MADNEX_VISIBILITY_EXPORT Attribute openAttribute(const DataSet&,
-                                                   const std::string&);
+  MADNEX_EXPORT Attribute openAttribute(const DataSet&, const std::string&);
   /*!
    * \brief open an attribute of a group
    * \param[in] g: group
    * \param[in] n: attribute name
    */
-  MADNEX_VISIBILITY_EXPORT Attribute openAttribute(const Group&,
-                                                   const std::string&);
+  MADNEX_EXPORT Attribute openAttribute(const Group&, const std::string&);
   /*!
    * \param[in]  g: group
    * \param[in]  b: boolean allowing other objects than groups to be
    * inside the given group
    */
-  MADNEX_VISIBILITY_EXPORT std::vector<std::string> getSubGroupNames(
-      const Group&, const bool = false);
+  MADNEX_EXPORT std::vector<std::string> getSubGroupNames(const Group&,
+                                                          const bool = false);
   /*!
    * \param[out] n: names
    * \param[in]  g: group
    * \param[in]  b: boolean allowing other objects than groups to be
    * inside the given group
    */
-  MADNEX_VISIBILITY_EXPORT void getSubGroupNames(std::vector<std::string>&,
-                                                 const Group&,
-                                                 const bool = false);
+  MADNEX_EXPORT void getSubGroupNames(std::vector<std::string>&,
+                                      const Group&,
+                                      const bool = false);
   /*!
    * \return all the dataset names in a give group
    * \param[in]  g: group
    */
-  MADNEX_VISIBILITY_EXPORT std::vector<std::string> getDataSetNames(
-      const Group&);
+  MADNEX_EXPORT std::vector<std::string> getDataSetNames(const Group&);
   /*!
    * \return all the dataset names in a give group
    * \param[out] n: names
    * \param[in]  g: group
    */
-  MADNEX_VISIBILITY_EXPORT void getDataSetNames(std::vector<std::string>&,
-                                                const Group&);
+  MADNEX_EXPORT void getDataSetNames(std::vector<std::string>&, const Group&);
   /*!
    * \return true if the given group contains an object with the
    * given name
    * \param[in] g: group
    * \param[in] n: name
    */
-  MADNEX_VISIBILITY_EXPORT bool contains(const Group&, const std::string&);
+  MADNEX_EXPORT bool contains(const Group&, const std::string&);
   /*!
    * \brief set an attribute stating that the data set is empty
    * \param[in,out] d: data set
    */
-  MADNEX_VISIBILITY_EXPORT void writeEmptyObjectAttribute(DataSet&);
+  MADNEX_EXPORT void writeEmptyObjectAttribute(DataSet&);
   /*!
    * \return true of the data set is the empty attribute
    * \param[in,out] d: data set
    */
-  MADNEX_VISIBILITY_EXPORT bool hasEmptyObjectAttribute(const DataSet&);
+  MADNEX_EXPORT bool hasEmptyObjectAttribute(const DataSet&);
   /*!
    * \return true if the given group has an attribute with the given
    * name
    * \param[in] g: group
    * \param[in] n: name
    */
-  MADNEX_VISIBILITY_EXPORT bool hasAttribute(const DataSet&,
-                                             const std::string&);
+  MADNEX_EXPORT bool hasAttribute(const DataSet&, const std::string&);
   /*!
    * \brief retrieve the names of the attributes of a group
    * \param[out] n: attributes' names
    * \param[in]  g: group
    */
-  MADNEX_VISIBILITY_EXPORT void getAttributeNames(std::vector<std::string>&,
-                                                  const Group&);
+  MADNEX_EXPORT void getAttributeNames(std::vector<std::string>&, const Group&);
   /*!
    * \return    the names of the attributes of a group
    * \param[in] g: group
    */
-  MADNEX_VISIBILITY_EXPORT std::vector<std::string> getAttributeNames(
-      const Group&);
+  MADNEX_EXPORT std::vector<std::string> getAttributeNames(const Group&);
   /*!
    * \brief retrieve the names of the attributes of a data set
    * \param[out] n: attributes' names
    * \param[in]  d: data set
    */
-  MADNEX_VISIBILITY_EXPORT void getAttributeNames(std::vector<std::string>&,
-                                                  const DataSet&);
+  MADNEX_EXPORT void getAttributeNames(std::vector<std::string>&,
+                                       const DataSet&);
   /*!
    * \return    the names of the attributes of a data set
    * \param[in] g: data set
    */
-  MADNEX_VISIBILITY_EXPORT std::vector<std::string> getAttributeNames(
-      const DataSet&);
+  MADNEX_EXPORT std::vector<std::string> getAttributeNames(const DataSet&);
   /*!
    * \brief retrieve the value of an attribute
    * \tparam    T: type of the value to be retrieved
@@ -220,17 +219,17 @@ namespace madnex {
    * \param[in] n: attribute name
    */
   template <>
-  MADNEX_VISIBILITY_EXPORT std::string getAttributeValue<std::string>(
-      const Group&, const std::string&);
+  MADNEX_EXPORT std::string getAttributeValue<std::string>(const Group&,
+                                                           const std::string&);
   /*!
    * \brief retrieve the value of an attribute
    * \param[out] v: value read
    * \param[in]  g: group
    * \param[in]  n: attribute name
    */
-  MADNEX_VISIBILITY_EXPORT void getAttributeValue(std::string&,
-                                                  const Group&,
-                                                  const std::string&);
+  MADNEX_EXPORT void getAttributeValue(std::string&,
+                                       const Group&,
+                                       const std::string&);
   /*!
    * \brief retrieve the value of an attribute
    * \tparam    T: type of the value to be retrieved
@@ -245,30 +244,29 @@ namespace madnex {
    * \param[in] n: attribute name
    */
   template <>
-  MADNEX_VISIBILITY_EXPORT std::string getAttributeValue<std::string>(
-      const DataSet&, const std::string&);
+  MADNEX_EXPORT std::string getAttributeValue<std::string>(const DataSet&,
+                                                           const std::string&);
   /*!
    * \brief retrieve the value of an attribute
    * \param[out] v: value read
    * \param[in]  d: data set
    * \param[in]  n: attribute name
    */
-  MADNEX_VISIBILITY_EXPORT void getAttributeValue(std::string&,
-                                                  const DataSet&,
-                                                  const std::string&);
+  MADNEX_EXPORT void getAttributeValue(std::string&,
+                                       const DataSet&,
+                                       const std::string&);
   /*!
    * \return the type attribute of a group.
    * \param[in]  g: group
    */
-  MADNEX_VISIBILITY_EXPORT std::string getTypeAttribute(const Group&);
+  MADNEX_EXPORT std::string getTypeAttribute(const Group&);
   /*!
    * \return the type attribute of a group or a dataset which has the
    * given name and which is part of the given group.
    * \param[in]  g: group
    * \param[in]  n: group or dataset name
    */
-  MADNEX_VISIBILITY_EXPORT std::string getTypeAttribute(const Group&,
-                                                        const std::string&);
+  MADNEX_EXPORT std::string getTypeAttribute(const Group&, const std::string&);
   /*!
    * get the type attribute of a group or a dataset which has the
    * given name and which is part of the given group.
@@ -277,39 +275,38 @@ namespace madnex {
    * \param[in]  g: group
    * \param[in]  n: group or dataset name
    */
-  MADNEX_VISIBILITY_EXPORT void getTypeAttribute(std::string&,
-                                                 const Group&,
-                                                 const std::string&);
+  MADNEX_EXPORT void getTypeAttribute(std::string&,
+                                      const Group&,
+                                      const std::string&);
   /*!
    * \brief get the type attribute of a group
    * \param[out] t: type
    * \param[in]  g: group
    */
-  MADNEX_VISIBILITY_EXPORT void getTypeAttribute(std::string&, const Group&);
+  MADNEX_EXPORT void getTypeAttribute(std::string&, const Group&);
   /*!
    * \return get the type attribute of a dataset
    * \param[in] d: dataset
    */
-  MADNEX_VISIBILITY_EXPORT std::string getTypeAttribute(const DataSet&);
+  MADNEX_EXPORT std::string getTypeAttribute(const DataSet&);
   /*!
    * \brief get the type attribute of a dataset
    * \param[out] t: type
    * \param[in]  d: dataset
    */
-  MADNEX_VISIBILITY_EXPORT void getTypeAttribute(std::string&, const DataSet&);
+  MADNEX_EXPORT void getTypeAttribute(std::string&, const DataSet&);
   /*!
    * \brief write the type attribute to a data set
    * \param[in,out] d: data set
    * \param[in]     t: type
    */
-  MADNEX_VISIBILITY_EXPORT void writeTypeAttribute(DataSet&,
-                                                   const std::string&);
+  MADNEX_EXPORT void writeTypeAttribute(DataSet&, const std::string&);
   /*!
    * \brief write the type attribute to a group
    * \param[in,out] g: group
    * \param[in]     t: type
    */
-  MADNEX_VISIBILITY_EXPORT void writeTypeAttribute(Group&, const std::string&);
+  MADNEX_EXPORT void writeTypeAttribute(Group&, const std::string&);
   /*!
    * \brief write the type attribute to a group
    * \tparam T: type
@@ -330,8 +327,7 @@ namespace madnex {
    * \param[in] t: expected type
    * \throw std::runtime_error if the type is not what is expected
    */
-  MADNEX_VISIBILITY_EXPORT void checkTypeAttribute(const Group&,
-                                                   const std::string&);
+  MADNEX_EXPORT void checkTypeAttribute(const Group&, const std::string&);
 
   /*!
    * check the type attribute of a dataset
@@ -339,8 +335,7 @@ namespace madnex {
    * \param[in] t: expected type
    * \throw std::runtime_error if the type is not what is expected
    */
-  MADNEX_VISIBILITY_EXPORT void checkTypeAttribute(const DataSet&,
-                                                   const std::string&);
+  MADNEX_EXPORT void checkTypeAttribute(const DataSet&, const std::string&);
   /*!
    * \brief check the type attribute to a group
    * \tparam    T: type
@@ -377,7 +372,7 @@ namespace madnex {
    * \param[in]  g: group
    * \param[in]  n: name of the data
    */
-  MADNEX_VISIBILITY_EXPORT
+  MADNEX_EXPORT
   void read(std::string&, const Group&, const std::string&);
   /*!
    * \brief write a string
@@ -385,7 +380,7 @@ namespace madnex {
    * \param[in]  n: name of the data
    * \param[in]  o: object to be written
    */
-  MADNEX_VISIBILITY_EXPORT
+  MADNEX_EXPORT
   void write(Group&, const std::string&, const std::string&);
   /*!
    * \brief write a C-string. It is stored and retrieved like a
@@ -394,7 +389,7 @@ namespace madnex {
    * \param[in]  n: name of the data
    * \param[in]  o: object to be written
    */
-  MADNEX_VISIBILITY_EXPORT
+  MADNEX_EXPORT
   void write(Group&, const std::string&, const char* const);
 
   template <typename T>

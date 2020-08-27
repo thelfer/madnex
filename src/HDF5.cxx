@@ -161,6 +161,20 @@
 
 namespace madnex {
 
+  bool exists(const Group& g, const std::string& p) {
+    return H5Lexists(g.getId(), p.c_str(), H5P_DEFAULT) > 0;
+  }
+
+  bool subGroupExists(const Group& g, const std::string& p) {
+    if (!exists(g, p)) {
+      return false;
+    }
+    H5O_info_t      infobuf;
+    auto status =
+        H5Oget_info_by_name(g.getId(), p.c_str(), &infobuf, H5P_DEFAULT);
+    return (status >= 0) && (infobuf.type == H5O_TYPE_GROUP);
+  }
+
   Group createGroup(const Group& g, const std::string& n) {
     Group gr;
     try {

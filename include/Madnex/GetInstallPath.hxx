@@ -13,7 +13,7 @@
 
 namespace madnex{
 
-  MADNEX_VISIBILITY_EXPORT std::string getInstallPath();
+  MADNEX_EXPORT std::string getInstallPath();
 
 } // end of namespace madnex
 
