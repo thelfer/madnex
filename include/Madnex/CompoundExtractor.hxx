@@ -38,10 +38,10 @@ namespace madnex {
      * \param[in] es: expected size
      * \param[in] cs: actual size
      */
-    static void throwInvalidLengthException(const std::string&,
-                                            const size_t,
-                                            const size_t,
-                                            const size_t);
+    [[noreturn]] static void throwInvalidLengthException(const std::string&,
+							 const size_t,
+							 const size_t,
+							 const size_t);
 
    protected:
     //! a compound data view

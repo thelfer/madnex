@@ -14,9 +14,25 @@
 namespace madnex {
 
   template <typename T>
+  void read_if(T& v, const Group& g, const std::string& d) {
+    if (exists(g, d)) {
+      read(v, g, d);
+    } else {
+      v = T{};
+    }
+  }  // end of read_if
+
+  template <typename T>
   T read(const Group& g, const std::string& d) {
     T x;
     read(x, g, d);
+    return x;
+  }  // end of read
+
+  template <typename T>
+  T read_if(const Group& g, const std::string& d) {
+    T x;
+    read_if(x, g, d);
     return x;
   }  // end of read
 
@@ -55,14 +71,12 @@ namespace madnex {
   }  // end of checkTypeAttribute
 
   template <typename V>
-  void write(const std::vector<V>& o, const std::string& d, Group& g) {
-    using namespace std;
-    typename vector<V>::const_iterator p;
-    typename vector<V>::size_type i;
+  void write(Group& g, const std::vector<V>& o, const std::string& d) {
     Group gm(createGroup(g, d));
-    writeTypeAttribute<vector<V>>(gm);
-    for (p = o.begin(), i = 0; p != o.end(); ++p, ++i) {
-      ostringstream idx;
+    writeTypeAttribute<std::vector<V>>(gm);
+    auto i = typename std::vector<V>::size_type{};
+    for (auto p = o.begin(); p != o.end(); ++p, ++i) {
+      std::ostringstream idx;
       idx << i;
       Group gr(createGroup(gm, idx.str()));
       write(*p, idx.str(), gr);
@@ -71,17 +85,16 @@ namespace madnex {
 
   template <typename V>
   void read(std::vector<V>& o, const std::string& d, const Group& g) {
-    using namespace std;
-    const Group& gm = openGroup(g, d);
-    checkTypeAttribute<vector<V>>(gm);
+    const auto& gm = openGroup(g, d);
+    checkTypeAttribute<std::vector<V>>(gm);
     hsize_t s = gm.getNumObjs();
     hsize_t i;
     o.clear();
     o.resize(s);
     for (i = 0u; i != s; ++i) {
-      ostringstream idx;
+      std::ostringstream idx;
       idx << i;
-      const Group& gr = openGroup(gm, idx.str());
+      const auto& gr = openGroup(gm, idx.str());
       read(o[i], idx.str(), gr);
     }
   }  // end of read

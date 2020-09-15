@@ -20,8 +20,18 @@ etc...) to manipulate `MADNEX` files.
 format](https://www.hdfgroup.org/solutions/hdf5/), which can handle:
 
 - Experimental data.
-- [`MFront` files](http://tfel.sourceforge.net).
+- [`MFront` files](http://tfel.sourceforge.net). The storage of `MFront`
+  files is detailed [here](mfront-implementations-storage.html).
 - [`MTest` unit tests.](http://tfel.sourceforge.net)
+
+# Contributing
+
+Contributions to this project are welcomed. More details about to
+contribute are detailed on [this page](contributing.html).
+
+# Installation guidelines
+
+The installation process is detailed [here](install.html).
 
 # Licence
 

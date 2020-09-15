@@ -12,6 +12,8 @@ madnex_library(Madnex
   Scripts.cxx
   MainResults.cxx
   Exceptions.cxx
+  MFrontMetaData.cxx
+  MFrontImplementation.cxx
   MFrontDataBase.cxx)
 target_include_directories(Madnex
    PUBLIC 

@@ -63,7 +63,7 @@ struct CallBack {
 };  // end of struct CallBack
 
 // selected material
-std::string material;
+static std::string material;
 
 static std::map<std::string, CallBack> getCallBacks() {
   using Function = CallBack::Function;
@@ -191,13 +191,13 @@ int main(const int argc, const char* const* const argv) {
       std::cout << "usage: madnex-query [options] file.madnex\n";
       std::cout << "The valid options are :\n";
       for (const auto& c : available_call_backs) {
-        std::cout << c.first << " : " << c.second.getDescription() << '\n';
+        std::cout << c.first << ": " << c.second.getDescription() << '\n';
       }
-      std::cout << "--material : specify the material name. <none> may be used "
+      std::cout << "--material: specify the material name. <none> may be used "
                    "to select material properties, behaviours or models not "
                    "associated with a material\n";
 #if (defined _WIN32) || (defined _WIN64)
-      std::cout << "/material : specify the material name (see above)\n";
+      std::cout << "/material: specify the material name (see above)\n";
 #endif
       std::exit(EXIT_SUCCESS);
 #if (defined _WIN32) || (defined _WIN64)

@@ -69,7 +69,7 @@ namespace madnex {
    private:
     //  CompoundDataArrayView is made friend to be able to access the
     //  private constructor
-    friend class CompoundDataArrayView;
+    friend struct CompoundDataArrayView;
     /*!
      * \brief constructor
      * \param[in] b: base class describing the compound data

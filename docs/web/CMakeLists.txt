@@ -7,6 +7,7 @@ if(MADNEX_HAVE_PANDOC)
       DEPENDS   ${CMAKE_CURRENT_SOURCE_DIR}/css/main.css
       COMMAND   ${PANDOC}
       ARGS      -f markdown-markdown_in_html_blocks+tex_math_single_backslash
+      ARGS      -F pandoc-crossref
       ARGS      --template=${CMAKE_CURRENT_SOURCE_DIR}/madnex-template.html --css=${CMAKE_CURRENT_SOURCE_DIR}/css/main.css
       ARGS      --mathjax
       ARGS      --highlight-style=tango
@@ -36,6 +37,7 @@ if(MADNEX_HAVE_PANDOC)
   madnex_pandoc_generate_html_page(install)
   madnex_pandoc_generate_html_page(contributing)
   madnex_pandoc_generate_html_page(madnex-query)
+  madnex_pandoc_generate_html_page(mfront-implementations-storage)
 endif(MADNEX_HAVE_PANDOC)
 
 if(MADNEX_APPEND_SUFFIX)

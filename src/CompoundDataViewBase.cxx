@@ -9,6 +9,14 @@
 
 namespace madnex{
 
+  CompoundDataViewBase::CompoundDataViewBase(CompoundDataViewBase&&) = default;
+
+  CompoundDataViewBase::CompoundDataViewBase(const CompoundDataViewBase&) = default;
+
+  CompoundDataViewBase& CompoundDataViewBase::operator=(CompoundDataViewBase&&) = default;
+
+  CompoundDataViewBase& CompoundDataViewBase::operator=(const CompoundDataViewBase&) = default;
+  
   CompoundDataViewBase::CompoundDataViewBase(const DataSet& d)
   {
     const auto dtype  = d.getDataType();

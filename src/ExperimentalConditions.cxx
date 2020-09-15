@@ -53,7 +53,7 @@ namespace madnex {
       r.value = ec.value.c_str();
       r.unit = ec.unit.c_str();
       r.type = ec.type.c_str();
-      return std::move(r);
+      return r;
     };
     const auto c = getExperimentalConditionCompType<const char>();
     std::vector<CExperimentalCondition<const char>> cecs;

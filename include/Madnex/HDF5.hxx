@@ -5,8 +5,8 @@
  * \brief  16/01/2017
  */
 
-#ifndef LIB_MADNEX_HDF5_H
-#define LIB_MADNEX_HDF5_H
+#ifndef LIB_MADNEX_HDF5_HXX
+#define LIB_MADNEX_HDF5_HXX
 
 #include <string>
 #include <vector>
@@ -59,14 +59,14 @@
    * \param g : HDF5 group                                                     \
    */                                                                          \
   template <>                                                                  \
-  MADNEX_EXPORT void write(const std::vector<X>&, const std::string&, Group&); \
+  MADNEX_EXPORT void write(Group&, const std::string&, const std::vector<X>&); \
   /*!                                                                          \
    * \param o : object to be written                                           \
    * \param n : name of the dataset                                            \
    * \param g : HDF5 group                                                     \
    */                                                                          \
   template <>                                                                  \
-  MADNEX_EXPORT void read(std::vector<X>&, const std::string&, const Group&)
+  MADNEX_EXPORT void read(std::vector<X>&, const Group&, const std::string&)
 
 namespace madnex {
 
@@ -79,7 +79,7 @@ namespace madnex {
 
   enum struct WriteFlag {
     CREATE = 1,
-    REPLACE = 1 << 1,
+    REPLACE = 1 << 1
   };  // end of struct WriteFlag
 
   /*!
@@ -359,6 +359,14 @@ namespace madnex {
   template <typename T>
   T read(const Group&, const std::string&);
 
+  /*!
+   * \return the object read if it exists. Assign a default value otherwise.
+   * \param d: name of the dataset
+   * \param g: group
+   */
+  template <typename T>
+  void read_if(T&, const Group&, const std::string&);
+
   MADNEX_HDF5_POD_DECLARATION(char);
   MADNEX_HDF5_POD_DECLARATION(std::int32_t);
   MADNEX_HDF5_POD_DECLARATION(std::int64_t);
@@ -393,10 +401,10 @@ namespace madnex {
   void write(Group&, const std::string&, const char* const);
 
   template <typename T>
-  void write(const std::vector<T>&, const std::string&, Group&);
+  void write(Group&, const std::string&, const std::vector<T>&);
 
   template <typename T>
-  void read(std::vector<T>&, const std::string&, const Group&);
+  void read(std::vector<T>&, const Group&, const std::string&);
 
   MADNEX_HDF5_VECTOR_DECLARATION(bool);
   MADNEX_HDF5_VECTOR_DECLARATION(char);
@@ -423,4 +431,4 @@ namespace madnex {
 
 #include "Madnex/HDF5.ixx"
 
-#endif /* LIB_MADNEX__HDF5_H */
+#endif /* LIB_MADNEX_HDF5_HXX */

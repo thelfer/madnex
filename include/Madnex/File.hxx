@@ -17,13 +17,22 @@ namespace madnex {
    * \brief a simple wrapper around the `H5File` class.
    */
   struct MADNEX_EXPORT File : H5::H5File {
+    // move constructor
+    File(File&&);
+    // copy constructor
+    File(const File&);
+    // move assignement
+    File& operator=(File&&);
+    // copy assignement
+    File& operator=(const File&);
     // inheriting constructors
     using H5::H5File::H5File;
-    //! return the root of the tree
+    //! \return the root of the tree
     Group getRoot();
-    //! return the root of the tree
+    //! \return the root of the tree
     Group getRoot() const;
-
+    //! \brief destructor
+    ~File() override;
    protected:
     /*!
      * \return true if the given group is writable

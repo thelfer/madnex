@@ -80,7 +80,7 @@
             n + "'");                                                    \
       }                                                                  \
       attr.read(getNativeType<X>(), &v);                                 \
-    } catch (H5::Exception & e) {                                        \
+    } catch (H5::Exception &) {                                          \
       raise("madnex::getTypeAttributeValue: can't get attribute '" + n + \
             "' for group");                                              \
     }                                                                    \
@@ -105,7 +105,7 @@
             n + "'");                                                    \
       }                                                                  \
       attr.read(getNativeType<X>(), &v);                                 \
-    } catch (H5::Exception & e) {                                        \
+    } catch (H5::Exception &) {                                          \
       raise("madnex::getTypeAttributeValue: can't get attribute '" + n + \
             "' for group");                                              \
     }                                                                    \
@@ -113,7 +113,7 @@
 
 #define MADNEX_HDF5_VECTOR_IMPLEMENTATION(X)                                 \
   template <>                                                                \
-  void write(const std::vector<X>& o, const std::string& d, Group& g) {      \
+  void write(Group& g, const std::string& d, const std::vector<X>& o) {      \
     using Type = X;                                                          \
     try {                                                                    \
       if (o.empty()) {                                                       \
@@ -141,7 +141,7 @@
   }                                                                          \
                                                                              \
   template <>                                                                \
-  void read(std::vector<X>& o, const std::string& d, const Group& g) {       \
+  void read(std::vector<X>& o, const Group& g, const std::string& d) {       \
     try {                                                                    \
       DataSet dataset = openDataSet(g, d);                                   \
       checkTypeAttribute<std::vector<X>>(dataset);                           \
@@ -301,7 +301,7 @@ namespace madnex {
           v.pop_back();
         }
       }
-    } catch (H5::Exception& e) {
+    } catch (H5::Exception&) {
       raise("madnex::getTypeAttributeValue: can't get attribute '" + n +
             "' for group");
     }
@@ -336,7 +336,7 @@ namespace madnex {
       attr.read(type, &pv);
       v = pv;
       std::free(pv);
-    } catch (H5::Exception& e) {
+    } catch (H5::Exception&) {
       raise("madnex::getTypeAttributeValue: can't get attribute '" + n +
             "' for data set");
     }
@@ -391,7 +391,7 @@ namespace madnex {
           }
         }
       }
-    } catch (H5::Exception& e) {
+    } catch (H5::Exception&) {
       raise("madnex::getTypeAttribute: can't get type attribute");
     }
     raise("getTypeAttribute: no object named '" + n + "'");

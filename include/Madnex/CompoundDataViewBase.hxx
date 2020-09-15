@@ -27,6 +27,14 @@ namespace madnex{
      * \param[in] d: data set
      */
     CompoundDataViewBase(const DataSet&);
+    //! \brief move constructor
+    CompoundDataViewBase(CompoundDataViewBase&&);
+    //! \brief copy constructor
+    CompoundDataViewBase(const CompoundDataViewBase&);
+    //! \brief move assignement
+    CompoundDataViewBase& operator=(CompoundDataViewBase&&);
+    //! \brief standard assignement
+    CompoundDataViewBase& operator=(const CompoundDataViewBase&);
     //! destructor
     ~CompoundDataViewBase();
     /*!

@@ -9,6 +9,11 @@
 
 namespace madnex{
 
+  File::File(File&&) = default;
+  File::File(const File&) = default;
+  File& File::operator=(File&&) = default;
+  File& File::operator=(const File&) = default;
+  
   Group File::getRoot(){
     return this->openGroup("/");
   }
@@ -17,7 +22,7 @@ namespace madnex{
     return this->openGroup("/");
   }
 
-  bool File::checkIfGroupIsWritable(const std::string& g) const{
+  bool File::checkIfGroupIsWritable(const std::string&) const{
     //    const auto g = this->getRoot();
     return true;
   }
@@ -26,4 +31,6 @@ namespace madnex{
     return H5Lexists(f.getId(), p.c_str(), H5P_DEFAULT) > 0;
   }
 
+  File::~File() = default;
+  
 } // end of namespace madnex
