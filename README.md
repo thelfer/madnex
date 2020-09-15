@@ -1,5 +1,7 @@
 # The `MADNEX` project
 
+![CMake](https://github.com/thelfer/madnex/workflows/CMake/badge.svg)
+
 This project aims at providing tools (functions, classes, bindings,
 etc...) to manipulate `MADNEX` files.
 
