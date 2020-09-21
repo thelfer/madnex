@@ -9,7 +9,7 @@
 
 namespace madnex{
 
-  MFrontMetaData::MFrontMetaData() noexcept = default;
+  MFrontMetaData::MFrontMetaData() = default;
 
   MFrontMetaData::MFrontMetaData(MFrontMetaData&&) = default;
 

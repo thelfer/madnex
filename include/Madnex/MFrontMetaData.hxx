@@ -19,7 +19,7 @@ namespace madnex {
    */
   struct MADNEX_EXPORT MFrontMetaData {
     //! \brief default constructor
-    MFrontMetaData() noexcept;
+    MFrontMetaData();
     //! \brief move constructor
     MFrontMetaData(MFrontMetaData&&) ;
     //! \brief copy constructor
