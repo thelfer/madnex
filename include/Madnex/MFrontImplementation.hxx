@@ -34,7 +34,7 @@ namespace madnex {
    */
   struct MADNEX_EXPORT MFrontImplementation {
     //! \brief default constructor
-    MFrontImplementation() noexcept;
+    MFrontImplementation();
     //! \brief move constructor
     MFrontImplementation(MFrontImplementation&&);
     //! \brief copy constructor

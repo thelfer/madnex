@@ -15,7 +15,7 @@
 
 namespace madnex {
 
-  MFrontImplementation::MFrontImplementation() noexcept = default;
+  MFrontImplementation::MFrontImplementation() = default;
 
   MFrontImplementation::MFrontImplementation(MFrontImplementation&&) = default;
 
