@@ -21,7 +21,7 @@ namespace madnex {
     //! \brief default constructor
     MFrontMetaData();
     //! \brief move constructor
-    MFrontMetaData(MFrontMetaData&&) ;
+    MFrontMetaData(MFrontMetaData&&);
     //! \brief copy constructor
     MFrontMetaData(const MFrontMetaData&);
     //! \brief move constructor
@@ -36,21 +36,20 @@ namespace madnex {
     std::string date;
     //! \brief description of the implementation
     std::string description;
-    //! \brief material
-    std::string material;
-  }; // end of struct MFrontMetaData
+  };  // end of struct MFrontMetaData
 
   /*!
-   * \brief read an `MFront` implementation in a group
+   * \brief read the metadata of a `MFront` implementation in a group
    * \param[out] i: object to be read
    * \param[in]  g: group
-   * \param[in]  n: destination
+   * \param[in]  n: path to the metadata
    */
   MADNEX_EXPORT void read(MFrontMetaData&, const Group&, const std::string&);
   /*!
-   * \brief write a `MFront` implementation in a group
+   * \brief write the metadata of a `MFront` implementation in a group
    * \param[out] g: group
-   * \param[in]  d: data
+   * \param[in]  n: path where the metadata will be written
+   * \param[in]  d: metadata
    */
   MADNEX_EXPORT void write(Group&, const std::string&, const MFrontMetaData&);
 

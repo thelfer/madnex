@@ -31,6 +31,7 @@ namespace madnex {
   Script::Script(const Script&) = default;
   Script& Script::operator=(Script&&) = default;
   Script& Script::operator=(const Script&) = default;
+  Script::~Script() = default;
 
   void write(Group& g, const std::string& n, const Scripts& o) {
     const auto c = getScriptCompType();

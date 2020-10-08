@@ -51,7 +51,7 @@ namespace madnex {
     std::string source;
     //! \brief meta-data  describing the implementation
     MFrontMetaData metadata;
-    //! \brief parameters value
+    //! \brief overriden parameters
     std::map<std::string, double> parameters;
     //! \brief lower bounds
     std::map<std::string, double> lower_bounds;

@@ -26,15 +26,13 @@ namespace madnex{
     read(d.author, data, "author");
     read(d.date, data, "date");
     read(d.description, data, "description");
-    read(d.material, data, "material");
   }  // end of read
 
   void write(Group& g, const std::string& n, const MFrontMetaData& d) {
-    auto data = openGroup(g, n);
-    write(data, d.author, "author");
-    write(data, d.date, "date");
-    write(data, d.description, "description");
-    write(data, d.material, "material");
+    auto data = createGroup(g, n);
+    write(data, "author",d.author);
+    write(data, "date", d.date);
+    write(data, "description", d.description);
   }  // end of write
 
 } // end of namespace madnex

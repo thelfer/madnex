@@ -31,12 +31,19 @@ namespace madnex {
   MFrontImplementation::~MFrontImplementation() noexcept = default;
 
   void write(Group& g, const MFrontImplementation& i) {
+    raise_if(i.name.empty(), "madnex::write: no implementation name given");
+    if (i.source.empty()) {
+      raise("madnex::write: no source associated with implementation '" +
+            i.name + "'");
+    }
     auto impl = createGroup(g, i.name);
     write(impl, "source", i.source);
     write(impl, "metadata", i.metadata);
-    auto parameters = createGroup(impl, "parameters");
-    for (const auto& p : i.parameters) {
-      write(parameters, p.first, p.second);
+    if (!i.parameters.empty()) {
+      auto parameters = createGroup(impl, "parameters");
+      for (const auto& p : i.parameters) {
+        write(parameters, p.first, p.second);
+      }
     }
     if ((!i.lower_bounds.empty()) || (!i.upper_bounds.empty())) {
       auto bounds = createGroup(impl, "bounds");
