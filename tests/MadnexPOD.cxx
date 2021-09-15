@@ -14,6 +14,7 @@
 #include <cstdlib>
 #include <cassert>
 #include <iostream>
+#include <stdexcept>
 
 #include "Madnex/HDF5.hxx"
 #include "Madnex/File.hxx"
