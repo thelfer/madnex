@@ -48,7 +48,7 @@ namespace madnex {
         const std::string&) const;
     /*!
      * \return the list of all the `MFront` behaviours contained in a
-     * `madnex` file. This map is index by the material name, 
+     * `madnex` file. This map is index by the material name,
      */
     std::map<std::string, std::vector<std::string>> getAvailableBehaviours()
         const;
@@ -69,7 +69,22 @@ namespace madnex {
      * \param[in] m: material
      */
     std::vector<std::string> getAvailableModels(const std::string&) const;
-
+    /*!
+     * \return the list of all `MTest` tests associated with the given material
+     * and behaviour.
+     * \param[in] m: material
+     * \param[in] b: behaviour
+     */
+    std::vector<std::string> getAvailableMTestTests(const std::string&,
+                                                    const std::string&) const;
+    /*!
+     * \return the list of all `MTest` tests associated with the given
+     * behaviour. The behaviour is assumed not to be associated with any
+     * material.
+     * \param[in] m: material
+     * \param[in] b: behaviour
+     */
+    std::vector<std::string> getAvailableMTestTests(const std::string&) const;
     //! \brief destructor
     ~MFrontDataBase();
 

@@ -157,6 +157,59 @@ namespace madnex {
     return getSubGroupIdentifiers(r, "MFront/" + m + "/Models");
   }  // end of MFrontDataBase::getAvailableModels
 
+  std::vector<std::string> MFrontDataBase::getAvailableMTestTests(
+      const std::string& m, const std::string& b) const {
+    if (!checkMFrontGroup(this->file)) {
+      return {};
+    }
+    const auto r = this->file.getRoot();
+    if (!subGroupExists(r, "MFront/" + m)) {
+      raise(
+          "MFrontDataBase::getAvailableMTestTests: no material "
+          "named '" +
+          m + "'");
+    }
+    if (!subGroupExists(r, "MFront/" + m + "/Behaviours")) {
+      raise(
+          "MFrontDataBase::getAvailableMTestTests: "
+          "no behaviours associated with "
+          "material '" +
+          m + "'");
+    }
+    if (!subGroupExists(r, "MFront/" + m + "/Behaviours/" + b)) {
+      raise(
+          "MFrontDataBase::getAvailableMTestTests: "
+          "no behaviour named '" +
+          b +
+          "' associated with "
+          "material '" +
+          m + "'");
+    }
+    const auto path = "MFront/" + m + "/Behaviours/" + b + "/MTestTests";
+    return getSubGroupIdentifiers(r, path);
+  }  // end of MFrontDataBase::getAvailableMTestTests
+
+  std::vector<std::string> MFrontDataBase::getAvailableMTestTests(
+      const std::string& b) const {
+    if (!checkMFrontGroup(this->file)) {
+      return {};
+    }
+    const auto r = this->file.getRoot();
+    if (!subGroupExists(r, "MFront/Behaviours")) {
+      raise(
+          "MFrontDataBase::getAvailableMTestTests: "
+          "no generic behaviours declared");
+    }
+    if (!subGroupExists(r, "MFront/Behaviours/" + b)) {
+      raise(
+          "MFrontDataBase::getAvailableMTestTests: "
+          "no generic behaviour named '" +
+          b + "'");
+    }
+    const auto path = "MFront/Behaviours/" + b + "/MTestTests";
+    return getSubGroupIdentifiers(r, path);
+  }  // end of MFrontDataBase::getAvailableMTestTests
+
   MFrontDataBase::~MFrontDataBase() = default;
 
 }  // end of namespace madnex

@@ -1,5 +1,5 @@
 ---
-title: Storage of material knowledge implementation written in `MFront` in `MADNEX` files and its usage
+title: Storage of material knowledge implementation written in `MFront` in `MADNEX` files and usage
 author: Thomas Helfer, François Curtit, Jean-François Rit, Shun Huang, Charles Toulemonde
 date: 2020
 lang: en-EN

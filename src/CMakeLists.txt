@@ -14,6 +14,8 @@ madnex_library(Madnex
   Exceptions.cxx
   MFrontMetaData.cxx
   MFrontImplementation.cxx
+  MTestTest.cxx
+  MTestTestMetaData.cxx
   MFrontDataBase.cxx)
 target_include_directories(Madnex
    PUBLIC 

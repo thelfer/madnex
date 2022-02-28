@@ -23,6 +23,8 @@ install_header(Madnex CompoundExtractor.ixx)
 install_header(Madnex MFrontDataBase.hxx)
 install_header(Madnex MFrontMetaData.hxx)
 install_header(Madnex MFrontImplementation.hxx)
+install_header(Madnex MTestTest.hxx)
+install_header(Madnex MTestTestMetaData.hxx)
 
 configure_file(${PROJECT_SOURCE_DIR}/include/Madnex/GetInstallPath-defines.hxx.in
                ${PROJECT_BINARY_DIR}/include/Madnex/GetInstallPath-defines.hxx)
