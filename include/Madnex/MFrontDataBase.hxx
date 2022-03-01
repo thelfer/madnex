@@ -81,7 +81,6 @@ namespace madnex {
      * \return the list of all `MTest` tests associated with the given
      * behaviour. The behaviour is assumed not to be associated with any
      * material.
-     * \param[in] m: material
      * \param[in] b: behaviour
      */
     std::vector<std::string> getAvailableMTestTests(const std::string&) const;

@@ -64,6 +64,8 @@ struct CallBack {
 
 // selected material
 static std::string material;
+// selected behaviour
+static std::string behaviour;
 
 static std::map<std::string, CallBack> getCallBacks() {
   using Function = CallBack::Function;
@@ -178,6 +180,24 @@ static std::map<std::string, CallBack> getCallBacks() {
           }
         }
       });
+  add("list-mtest-tests", "list all available MTest tests",
+      [](const std::string& f) {
+        if (behaviour.empty()) {
+          madnex::raise("no behaviour specified");
+        }
+        const auto tests = [&f] {
+          auto d = madnex::MFrontDataBase{f};
+          if (!material.empty()) {
+            return d.getAvailableMTestTests(
+                material == "<none>" ? "" : material, behaviour);
+          }
+          return d.getAvailableMTestTests(behaviour);
+        }();
+        std::cout << "- tests associated with behaviour '" + behaviour + "':\n";
+        for (const auto& t : tests) {
+          std::cout << "    - " << t << '\n';
+        }
+      });
   return call_backs;
 }  // end of getCallBacks
 
@@ -199,6 +219,11 @@ int main(const int argc, const char* const* const argv) {
 #if (defined _WIN32) || (defined _WIN64)
       std::cout << "/material: specify the material name (see above)\n";
 #endif
+      std::cout << "--behaviour: specify the behaviour when requesting the "
+                   "associated tests\n";
+#if (defined _WIN32) || (defined _WIN64)
+      std::cout << "/behaviour: specify the behaviour (see above)\n";
+#endif
       std::exit(EXIT_SUCCESS);
 #if (defined _WIN32) || (defined _WIN64)
     } else if (startsWith(a, "/material=")) {
@@ -210,6 +235,16 @@ int main(const int argc, const char* const* const argv) {
       madnex::raise_if(!material.empty(), "multiple material name specified");
       material = a.substr(std::strlen("--material="));
       madnex::raise_if(material.empty(), "empty material name");
+#if (defined _WIN32) || (defined _WIN64)
+    } else if (startsWith(a, "/behaviour=")) {
+      madnex::raise_if(!behaviour.empty(), "multiple behaviour specified");
+      behaviour = a.substr(std::strlen("/behaviour="));
+      madnex::raise_if(behaviour.empty(), "empty behaviour name");
+#endif
+    } else if (startsWith(a, "--behaviour=")) {
+      madnex::raise_if(!behaviour.empty(), "multiple behaviour specified");
+      behaviour = a.substr(std::strlen("--behaviour="));
+      madnex::raise_if(behaviour.empty(), "empty behaviour name");
     } else {
       const auto pc = available_call_backs.find(a);
       if (pc == available_call_backs.end()) {
