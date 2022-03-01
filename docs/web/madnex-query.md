@@ -14,23 +14,38 @@ eqnPrefixTemplate: "($$i$$)"
 The `madnex-query` allows querying a `MADNEX` file from the command
 line.
 
-# Options
+# Command line arguments
 
-Valid options are :
+Valid command line arguments are :
 
-- `--list-behaviours`: list all available `MFront` behaviours
+- `--list-behaviours`: list all available `MFront` behaviours.
 - `--list-material-properties`: list all available `MFront` material
-  properties
-- `--list-materials`: list all materials in the `MFront` subgroup
-- `--list-models`: list all available `MFront` models
+  properties.
+- `--list-materials`: list all materials in the `MFront` subgroup.
+- `--list-models`: list all available `MFront` models.
 - `--material`: specify the material name. <none> may be used to select
   material properties, behaviours or models not associated with a
-  material
+  material.
+- `--behaviour`: specify a behaviour.
+- `--list-mtest-tests`: list all the tests associated with a behaviour
+  (specified using the `--behaviour` command line argument) associated
+  with a material (specified using the `--material` command line
+  argument).
 
-# Example of usage
+# Examples of usage
+
+## List of materials
 
 ~~~~{.bash}
 $ madnex-query --list-materials MFront-test1.madnex 
 - UO2
 - Zircaloy4
+~~~~
+
+## List of tests associated with a behaviour
+
+~~~~{.bash}
+$ madnex-query --material="<none>" --behaviour=Plasticity --list-mtest-tests Plasticity.mdnx 
+- tests associated with behaviour 'Plasticity':
+    - UniaxialTensileTest
 ~~~~

@@ -33,10 +33,13 @@ knowledge implementations are supported:
 - Models.
 
 For the sake of simplicity, only behaviours are considered in the rest
-of this document.
+of this document. Also for the sake of simplicity, the storage of
+`MTest` tests associated with a behaviour are described on [this
+page](mtest-tests-storage.html).
 
-This hierarchy is the same of the one adopted in the `MFrontMaterials`
-project.
+This hierarchy is the same of the one adopted in the
+[`MFrontGallery`](https://github.com/thelfer/MFrontGallery)
+`MFrontMaterials` projects.
 
 # About material identifiers
 
