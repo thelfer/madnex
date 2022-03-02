@@ -76,7 +76,7 @@ namespace madnex {
   MADNEX_EXPORT void write(Group&, const MFrontImplementation&);
 
   /*!
-   * \brief display the complete description of a glossary entry
+   * \return an MFront implementation
    * \param[in] f: file name
    * \param[in] t: implementation type (must be either `material_property`,
    * `behaviour` or `model`)
@@ -90,7 +90,7 @@ namespace madnex {
                           const std::string&);
 
   /*!
-   * \brief display the complete description of a glossary entry
+   * \return an MFront implementation
    * \param[in] f: file name
    * \param[in] t: implementation type (must be either `material_property`,
    * `behaviour` or `model`)

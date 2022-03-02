@@ -41,6 +41,8 @@ namespace madnex {
     ~MTestTest() noexcept;
     //! \brief name of the test
     std::string name;
+    //! \brief scheme (shall be `mtest` or `ptest`)
+    std::string scheme;
     //! \brief core of the `MTest` test
     std::string test;
     //! \brief meta-data  describing the test
@@ -64,7 +66,7 @@ namespace madnex {
   MADNEX_EXPORT void write(Group&, const MTestTest&);
 
   /*!
-   * \brief display the complete description of a glossary entry
+   * \return a complete description of an MTest test
    * \param[in] f: file name
    * \param[in] m: material name
    * \param[in] b: behaviour name
@@ -76,7 +78,7 @@ namespace madnex {
                                        const std::string&);
 
   /*!
-   * \brief display the complete description of a glossary entry
+   * \return a complete description of an MTest test
    * \param[in] f: file name
    * \param[in] b: behaviour name
    * \param[in] i: test name
@@ -84,6 +86,27 @@ namespace madnex {
   MADNEX_EXPORT MTestTest getMTestTest(const std::string&,
                                        const std::string&,
                                        const std::string&);
+  /*!
+   * \return the scheme associated with a test
+   * \param[in] f: file name
+   * \param[in] m: material name
+   * \param[in] b: behaviour name
+   * \param[in] i: test name
+   */
+  MADNEX_EXPORT std::string getMTestTestScheme(const std::string&,
+                                               const std::string&,
+                                               const std::string&,
+                                               const std::string&);
+
+  /*!
+   * \return the scheme associated with a test
+   * \param[in] f: file name
+   * \param[in] b: behaviour name
+   * \param[in] i: test name
+   */
+  MADNEX_EXPORT std::string getMTestTestScheme(const std::string&,
+                                               const std::string&,
+                                               const std::string&);
 
 }  // end of namespace madnex
 
