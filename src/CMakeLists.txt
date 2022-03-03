@@ -16,7 +16,7 @@ madnex_library(Madnex
   MFrontImplementation.cxx
   MTestTest.cxx
   MTestTestMetaData.cxx
-  MFrontDataBase.cxx)
+  DataBase.cxx)
 target_include_directories(Madnex
    PUBLIC 
    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>

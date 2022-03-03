@@ -1,12 +1,12 @@
 /*!
- * \file   src/MFrontDataBase.cxx
+ * \file   src/DataBase.cxx
  * \brief
  * \author Thomas Helfer
  * \date   21/08/2020
  */
 
 #include "Madnex/Raise.hxx"
-#include "Madnex/MFrontDataBase.hxx"
+#include "Madnex/DataBase.hxx"
 
 namespace madnex {
 
@@ -37,12 +37,12 @@ namespace madnex {
     return groups;
   }  // end of getSubGroupIdentifiers
 
-  MFrontDataBase::MFrontDataBase(const std::string& f)
-      : file(f, H5F_ACC_RDONLY) {}  // end of MFrontDataBase::MFrontDataBase
+  DataBase::DataBase(const std::string& f)
+      : file(f, H5F_ACC_RDONLY) {}  // end of DataBase::DataBase
 
-  MFrontDataBase::MFrontDataBase(MFrontDataBase&&) = default;
+  DataBase::DataBase(DataBase&&) = default;
 
-  std::vector<std::string> MFrontDataBase::getMaterialsList() const {
+  std::vector<std::string> DataBase::getMaterialsList() const {
     if (!checkMFrontGroup(this->file)) {
       return {};
     }
@@ -60,10 +60,10 @@ namespace madnex {
       }
     }
     return materials;
-  }  // end of MFrontDataBase::getMaterialsList
+  }  // end of DataBase::getMaterialsList
 
   std::map<std::string, std::vector<std::string>>
-  MFrontDataBase::getAvailableMaterialProperties() const {
+  DataBase::getAvailableMaterialProperties() const {
     auto mmps = std::map<std::string, std::vector<std::string>>{};
     auto insert_if = [&mmps](const std::string& m,
                              std::vector<std::string> mps) {
@@ -78,9 +78,9 @@ namespace madnex {
           m, getSubGroupIdentifiers(r, "MFront/" + m + "/MaterialProperties"));
     }
     return mmps;
-  }  // end of MFrontDataBase::getAvailableMaterialProperties
+  }  // end of DataBase::getAvailableMaterialProperties
 
-  std::vector<std::string> MFrontDataBase::getAvailableMaterialProperties(
+  std::vector<std::string> DataBase::getAvailableMaterialProperties(
       const std::string& m) const {
     if (!checkMFrontGroup(this->file)) {
       return {};
@@ -88,15 +88,15 @@ namespace madnex {
     const auto r = this->file.getRoot();
     if (!subGroupExists(r, "MFront/" + m)) {
       raise(
-          "MFrontDataBase::getAvailableMaterialProperties: no material "
+          "DataBase::getAvailableMaterialProperties: no material "
           "named '" +
           m + "'");
     }
     return getSubGroupIdentifiers(r, "MFront/" + m + "/MaterialProperties");
-  }  // end of MFrontDataBase::getAvailableMaterialProperties
+  }  // end of DataBase::getAvailableMaterialProperties
 
   std::map<std::string, std::vector<std::string>>
-  MFrontDataBase::getAvailableBehaviours() const {
+  DataBase::getAvailableBehaviours() const {
     auto mbs = std::map<std::string, std::vector<std::string>>{};
     auto insert_if = [&mbs](const std::string& m, std::vector<std::string> bs) {
       if (!bs.empty()) {
@@ -109,9 +109,9 @@ namespace madnex {
       insert_if(m, getSubGroupIdentifiers(r, "MFront/" + m + "/Behaviours"));
     }
     return mbs;
-  }  // end of MFrontDataBase::getAvailableBehaviours
+  }  // end of DataBase::getAvailableBehaviours
 
-  std::vector<std::string> MFrontDataBase::getAvailableBehaviours(
+  std::vector<std::string> DataBase::getAvailableBehaviours(
       const std::string& m) const {
     if (!checkMFrontGroup(this->file)) {
       return {};
@@ -119,15 +119,15 @@ namespace madnex {
     const auto r = this->file.getRoot();
     if (!subGroupExists(r, "MFront/" + m)) {
       raise(
-          "MFrontDataBase::getAvailableBehaviours: no material "
+          "DataBase::getAvailableBehaviours: no material "
           "named '" +
           m + "'");
     }
     return getSubGroupIdentifiers(r, "MFront/" + m + "/Behaviours");
-  }  // end of MFrontDataBase::getAvailableBehaviours
+  }  // end of DataBase::getAvailableBehaviours
 
   std::map<std::string, std::vector<std::string>>
-  MFrontDataBase::getAvailableModels() const {
+  DataBase::getAvailableModels() const {
     auto mms = std::map<std::string, std::vector<std::string>>{};
     auto insert_if = [&mms](const std::string& m, std::vector<std::string> ms) {
       if (!ms.empty()) {
@@ -140,9 +140,9 @@ namespace madnex {
       insert_if(m, getSubGroupIdentifiers(r, "MFront/" + m + "/Models"));
     }
     return mms;
-  }  // end of MFrontDataBase::getAvailableModels
+  }  // end of DataBase::getAvailableModels
 
-  std::vector<std::string> MFrontDataBase::getAvailableModels(
+  std::vector<std::string> DataBase::getAvailableModels(
       const std::string& m) const {
     if (!checkMFrontGroup(this->file)) {
       return {};
@@ -150,14 +150,14 @@ namespace madnex {
     const auto r = this->file.getRoot();
     if (!subGroupExists(r, "MFront/" + m)) {
       raise(
-          "MFrontDataBase::getAvailableModels: no material "
+          "DataBase::getAvailableModels: no material "
           "named '" +
           m + "'");
     }
     return getSubGroupIdentifiers(r, "MFront/" + m + "/Models");
-  }  // end of MFrontDataBase::getAvailableModels
+  }  // end of DataBase::getAvailableModels
 
-  std::vector<std::string> MFrontDataBase::getAvailableMTestTests(
+  std::vector<std::string> DataBase::getAvailableMTestTests(
       const std::string& m, const std::string& b) const {
     if (!checkMFrontGroup(this->file)) {
       return {};
@@ -165,20 +165,20 @@ namespace madnex {
     const auto r = this->file.getRoot();
     if (!subGroupExists(r, "MFront/" + m)) {
       raise(
-          "MFrontDataBase::getAvailableMTestTests: no material "
+          "DataBase::getAvailableMTestTests: no material "
           "named '" +
           m + "'");
     }
     if (!subGroupExists(r, "MFront/" + m + "/Behaviours")) {
       raise(
-          "MFrontDataBase::getAvailableMTestTests: "
+          "DataBase::getAvailableMTestTests: "
           "no behaviours associated with "
           "material '" +
           m + "'");
     }
     if (!subGroupExists(r, "MFront/" + m + "/Behaviours/" + b)) {
       raise(
-          "MFrontDataBase::getAvailableMTestTests: "
+          "DataBase::getAvailableMTestTests: "
           "no behaviour named '" +
           b +
           "' associated with "
@@ -187,9 +187,9 @@ namespace madnex {
     }
     const auto path = "MFront/" + m + "/Behaviours/" + b + "/MTestTests";
     return getSubGroupIdentifiers(r, path);
-  }  // end of MFrontDataBase::getAvailableMTestTests
+  }  // end of DataBase::getAvailableMTestTests
 
-  std::vector<std::string> MFrontDataBase::getAvailableMTestTests(
+  std::vector<std::string> DataBase::getAvailableMTestTests(
       const std::string& b) const {
     if (!checkMFrontGroup(this->file)) {
       return {};
@@ -197,19 +197,19 @@ namespace madnex {
     const auto r = this->file.getRoot();
     if (!subGroupExists(r, "MFront/Behaviours")) {
       raise(
-          "MFrontDataBase::getAvailableMTestTests: "
+          "DataBase::getAvailableMTestTests: "
           "no generic behaviours declared");
     }
     if (!subGroupExists(r, "MFront/Behaviours/" + b)) {
       raise(
-          "MFrontDataBase::getAvailableMTestTests: "
+          "DataBase::getAvailableMTestTests: "
           "no generic behaviour named '" +
           b + "'");
     }
     const auto path = "MFront/Behaviours/" + b + "/MTestTests";
     return getSubGroupIdentifiers(r, path);
-  }  // end of MFrontDataBase::getAvailableMTestTests
+  }  // end of DataBase::getAvailableMTestTests
 
-  MFrontDataBase::~MFrontDataBase() = default;
+  DataBase::~DataBase() = default;
 
 }  // end of namespace madnex
