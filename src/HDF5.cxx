@@ -176,6 +176,9 @@ namespace madnex {
   }
 
   Group createGroup(const Group& g, const std::string& n) {
+    if (subGroupExists(g, n)) {
+      return openGroup(g, n);
+    }
     Group gr;
     try {
       gr = g.createGroup(n);
