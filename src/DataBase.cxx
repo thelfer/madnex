@@ -5,6 +5,9 @@
  * \date   21/08/2020
  */
 
+#include <regex>
+#include <iterator>
+#include <algorithm>
 #include "Madnex/Raise.hxx"
 #include "Madnex/DataBase.hxx"
 
@@ -126,8 +129,8 @@ namespace madnex {
     return getSubGroupIdentifiers(r, "MFront/" + m + "/Behaviours");
   }  // end of DataBase::getAvailableBehaviours
 
-  std::map<std::string, std::vector<std::string>>
-  DataBase::getAvailableModels() const {
+  std::map<std::string, std::vector<std::string>> DataBase::getAvailableModels()
+      const {
     auto mms = std::map<std::string, std::vector<std::string>>{};
     auto insert_if = [&mms](const std::string& m, std::vector<std::string> ms) {
       if (!ms.empty()) {
@@ -156,6 +159,60 @@ namespace madnex {
     }
     return getSubGroupIdentifiers(r, "MFront/" + m + "/Models");
   }  // end of DataBase::getAvailableModels
+
+  std::vector<std::string> DataBase::getAvailableMFMTestGeneratorTests(
+      const std::string& m, const std::string& b) const {
+    if (!checkMFrontGroup(this->file)) {
+      return {};
+    }
+    const auto r = this->file.getRoot();
+    if (!subGroupExists(r, "MFront/" + m)) {
+      raise(
+          "DataBase::getAvailableMFMTestGeneratorTests: no material "
+          "named '" +
+          m + "'");
+    }
+    if (!subGroupExists(r, "MFront/" + m + "/Behaviours")) {
+      raise(
+          "DataBase::getAvailableMFMTestGeneratorTests: "
+          "no behaviours associated with "
+          "material '" +
+          m + "'");
+    }
+    if (!subGroupExists(r, "MFront/" + m + "/Behaviours/" + b)) {
+      raise(
+          "DataBase::getAvailableMFMTestGeneratorTests: "
+          "no behaviour named '" +
+          b +
+          "' associated with "
+          "material '" +
+          m + "'");
+    }
+    const auto path =
+        "MFront/" + m + "/Behaviours/" + b + "/MFMTestGeneratorTests";
+    return getSubGroupIdentifiers(r, path);
+  }  // end of DataBase::getAvailableMFMTestGeneratorTests
+
+  std::vector<std::string> DataBase::getAvailableMFMTestGeneratorTests(
+      const std::string& b) const {
+    if (!checkMFrontGroup(this->file)) {
+      return {};
+    }
+    const auto r = this->file.getRoot();
+    if (!subGroupExists(r, "MFront/Behaviours")) {
+      raise(
+          "DataBase::getAvailableMFMTestGeneratorTests: "
+          "no generic behaviours declared");
+    }
+    if (!subGroupExists(r, "MFront/Behaviours/" + b)) {
+      raise(
+          "DataBase::getAvailableMFMTestGeneratorTests: "
+          "no generic behaviour named '" +
+          b + "'");
+    }
+    const auto path = "MFront/Behaviours/" + b + "/MFMTestGeneratorTests";
+    return getSubGroupIdentifiers(r, path);
+  }  // end of DataBase::getAvailableMFMTestGeneratorTests
 
   std::vector<std::string> DataBase::getAvailableMTestTests(
       const std::string& m, const std::string& b) const {
@@ -212,4 +269,66 @@ namespace madnex {
 
   DataBase::~DataBase() = default;
 
-}  // end of namespace madnex
+  namespace internals {
+
+    static std::vector<std::string> filter(
+        const std::vector<std::string>& names, const std::string& p) {
+      auto res = std::vector<std::string>{};
+      std::regex r(p);
+      std::copy_if(
+          names.begin(), names.end(), std::back_inserter(res),
+          [&r](const std::string& n) { return std::regex_match(n, r); });
+      return res;
+    };  // end of filter
+
+    template <std::vector<std::string> (madnex::DataBase::*get)(
+        const std::string&) const>
+    static std::map<std::string, std::vector<std::string>>
+    getMatchingMaterialKnoweldge(const madnex::DataBase& d,
+                                 const std::string& m,
+                                 const std::string& n) {
+      auto r = std::map<std::string, std::vector<std::string>>{};
+      const auto materials = madnex::getMatchingMaterials(d, m);
+      for (const auto material : materials) {
+        auto mks = filter((d.*get)(material), n);
+        if (!mks.empty()) {
+          r.insert({material, mks});
+        }
+      }
+      return r;
+    }  // end of getMatchingMdaterialKnoweldge
+
+  }  // end of namespace internals
+
+  std::vector<std::string> getMatchingMaterials(const DataBase& d,
+                                                const std::string& m) {
+    auto materials = d.getMaterialsList();
+    materials.push_back("");
+    return internals::filter(materials, m);
+  }  // end of getMatchingMaterials
+
+  std::map<std::string, std::vector<std::string>> getMatchingMaterialProperties(
+      const DataBase& d, const std::string& m, const std::string& mp) {
+    using ptr =
+        std::vector<std::string> (DataBase::*)(const std::string&) const;
+    return internals::getMatchingMaterialKnoweldge<static_cast<ptr>(
+        &DataBase::getAvailableMaterialProperties)>(d, m, mp);
+  }  // end of getMatchingMaterialProperties
+
+  std::map<std::string, std::vector<std::string>> getMatchingBehaviours(
+      const DataBase& d, const std::string& m, const std::string& b) {
+    using ptr =
+        std::vector<std::string> (DataBase::*)(const std::string&) const;
+    return internals::getMatchingMaterialKnoweldge<static_cast<ptr>(
+        &DataBase::getAvailableBehaviours)>(d, m, b);
+  }  // end of getMatchingBehaviours
+
+  std::map<std::string, std::vector<std::string>> getMatchingModels(
+      const DataBase& d, const std::string& m, const std::string& model) {
+    using ptr =
+        std::vector<std::string> (DataBase::*)(const std::string&) const;
+    return internals::getMatchingMaterialKnoweldge<static_cast<ptr>(
+        &DataBase::getAvailableModels)>(d, m, model);
+  }  // end of getMatchingModels
+
+}  // namespace madnex

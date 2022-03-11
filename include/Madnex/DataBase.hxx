@@ -84,6 +84,22 @@ namespace madnex {
      * \param[in] b: behaviour
      */
     std::vector<std::string> getAvailableMTestTests(const std::string&) const;
+    /*!
+     * \return the list of all `mfm-test-generator` tests associated with the
+     * given material and behaviour.
+     * \param[in] m: material
+     * \param[in] b: behaviour
+     */
+    std::vector<std::string> getAvailableMFMTestGeneratorTests(
+        const std::string&, const std::string&) const;
+    /*!
+     * \return the list of all `mfm-test-generator` tests associated with the
+     * given behaviour. The behaviour is assumed not to be associated with any
+     * material.
+     * \param[in] b: behaviour
+     */
+    std::vector<std::string> getAvailableMFMTestGeneratorTests(
+        const std::string&) const;
     //! \brief destructor
     ~DataBase();
 
@@ -97,6 +113,35 @@ namespace madnex {
     //! underlying file
     File file;
   };  // end of struct DataBase
+
+  /*!
+   * \return the list of materials matching the given regular expression
+   * \param[in] m: regex filtering the materials
+   */
+  MADNEX_EXPORT std::vector<std::string> getMatchingMaterials(
+      const DataBase&, const std::string&);
+  /*!
+   * \return the list of material properties matching the given regular
+   * expressions.
+   * \param[in] m: regex filtering the materials
+   * \param[in] mp: regex filtering the material propertiess
+   */
+  MADNEX_EXPORT std::vector<std::string> getMatchingMaterialProperties(
+      const DataBase&, const std::string&);
+  /*!
+   * \return the list of behaviours matching the given regular expressions.
+   * \param[in] m: regex filtering the materials
+   * \param[in] mp: regex filtering the behaviours
+   */
+  MADNEX_EXPORT std::vector<std::string> getMatchingBehaviours(
+      const DataBase&, const std::string&);
+  /*!
+   * \return the list of models matching the given regular expressions.
+   * \param[in] m: regex filtering the materials
+   * \param[in] mp: regex filtering the models
+   */
+  MADNEX_EXPORT std::vector<std::string> getMatchingModels(const DataBase&,
+                                                           const std::string&);
 
 }  // end of namespace madnex
 

@@ -26,6 +26,8 @@ install_header(Madnex MFrontMetaData.hxx)
 install_header(Madnex MFrontImplementation.hxx)
 install_header(Madnex MTestTest.hxx)
 install_header(Madnex MTestTestMetaData.hxx)
+install_header(Madnex MFMTestGeneratorTest.hxx)
+install_header(Madnex MFMTestGeneratorTestMetaData.hxx)
 
 configure_file(${PROJECT_SOURCE_DIR}/include/Madnex/GetInstallPath-defines.hxx.in
                ${PROJECT_BINARY_DIR}/include/Madnex/GetInstallPath-defines.hxx)

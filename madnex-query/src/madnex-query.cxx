@@ -198,6 +198,24 @@ static std::map<std::string, CallBack> getCallBacks() {
           std::cout << "    - " << t << '\n';
         }
       });
+  add("list-mfm-test-generator-tests",
+      "list all available mfm-test-generator tests", [](const std::string& f) {
+        if (behaviour.empty()) {
+          madnex::raise("no behaviour specified");
+        }
+        const auto tests = [&f] {
+          auto d = madnex::MFrontDataBase{f};
+          if (!material.empty()) {
+            return d.getAvailableMFMTestGeneratorTests(
+                material == "<none>" ? "" : material, behaviour);
+          }
+          return d.getAvailableMFMTestGeneratorTests(behaviour);
+        }();
+        std::cout << "- tests associated with behaviour '" + behaviour + "':\n";
+        for (const auto& t : tests) {
+          std::cout << "    - " << t << '\n';
+        }
+      });
   return call_backs;
 }  // end of getCallBacks
 

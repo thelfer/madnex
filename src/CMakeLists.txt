@@ -16,6 +16,8 @@ madnex_library(Madnex
   MFrontImplementation.cxx
   MTestTest.cxx
   MTestTestMetaData.cxx
+  MFMTestGeneratorTest.cxx
+  MFMTestGeneratorTestMetaData.cxx
   DataBase.cxx)
 target_include_directories(Madnex
    PUBLIC 

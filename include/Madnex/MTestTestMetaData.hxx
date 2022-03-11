@@ -5,8 +5,8 @@
  * \date   18/02/2022
  */
 
-#ifndef LIB_MADNEX_MTESTTESTMETADATA_HXX
-#define LIB_MADNEX_MTESTTESTMETADATA_HXX
+#ifndef LIB_MADNEX_MTEST_TEST_METADATA_HXX
+#define LIB_MADNEX_MTEST_TEST_METADATA_HXX
 
 #include <string>
 #include "Madnex/Config.hxx"
@@ -15,7 +15,7 @@
 namespace madnex {
 
   /*!
-   * \brief meta-data associated with an `MFront` implementation.
+   * \brief meta-data associated with an `MTest` test.
    */
   struct MADNEX_EXPORT MTestTestMetaData {
     //! \brief default constructor
@@ -39,20 +39,22 @@ namespace madnex {
   };  // end of struct MTestTestMetaData
 
   /*!
-   * \brief read the metadata of a `MFront` implementation in a group
+   * \brief read the metadata of a `MTest` test in a group
    * \param[out] i: object to be read
    * \param[in]  g: group
    * \param[in]  n: path to the metadata
    */
   MADNEX_EXPORT void read(MTestTestMetaData&, const Group&, const std::string&);
   /*!
-   * \brief write the metadata of a `MFront` implementation in a group
+   * \brief write the metadata of a `MTest` test in a group
    * \param[out] g: group
    * \param[in]  n: path where the metadata will be written
    * \param[in]  d: metadata
    */
-  MADNEX_EXPORT void write(Group&, const std::string&, const MTestTestMetaData&);
+  MADNEX_EXPORT void write(Group&,
+                           const std::string&,
+                           const MTestTestMetaData&);
 
 }  // end of namespace madnex
 
-#endif /* LIB_MADNEX_MTESTTESTMETADATA_HXX */
+#endif /* LIB_MADNEX_MTEST_TEST_METADATA_HXX */

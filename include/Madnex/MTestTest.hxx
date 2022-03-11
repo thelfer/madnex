@@ -5,8 +5,8 @@
  * \date   27/08/2020
  */
 
-#ifndef LIB_MADNEX_MTESTTEST_HXX
-#define LIB_MADNEX_MTESTTEST_HXX
+#ifndef LIB_MADNEX_MTEST_TEST_HXX
+#define LIB_MADNEX_MTEST_TEST_HXX
 
 #include <map>
 #include <string>
@@ -110,4 +110,4 @@ namespace madnex {
 
 }  // end of namespace madnex
 
-#endif /* LIB_MADNEX_MTESTTEST_HXX */
+#endif /* LIB_MADNEX_MTEST_TEST_HXX */
