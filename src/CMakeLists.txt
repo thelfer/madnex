@@ -13,6 +13,7 @@ madnex_library(Madnex
   MainResults.cxx
   Exceptions.cxx
   MFrontMetaData.cxx
+  MFrontParameters.cxx
   MFrontImplementation.cxx
   MTestTest.cxx
   MTestTestMetaData.cxx

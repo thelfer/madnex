@@ -32,7 +32,6 @@
   void read(X& o, const Group& g, const std::string& d) {                \
     try {                                                                \
       auto dataset = openDataSet(g, d);                                  \
-      checkTypeAttribute<X>(dataset);                                    \
       const auto s = dataset.getSpace();                                 \
       if (s.getSimpleExtentNdims() != 1) {                               \
         raise(                                                           \
@@ -144,7 +143,6 @@
   void read(std::vector<X>& o, const Group& g, const std::string& d) {       \
     try {                                                                    \
       DataSet dataset = openDataSet(g, d);                                   \
-      checkTypeAttribute<std::vector<X>>(dataset);                           \
       if (hasEmptyObjectAttribute(dataset)) {                                \
         o.clear();                                                           \
       } else {                                                               \
@@ -598,7 +596,6 @@ namespace madnex {
   void read(std::string& o, const Group& g, const std::string& d) {
     try {
       auto dataset = openDataSet(g, d);
-      checkTypeAttribute<std::string>(dataset);
       if (hasEmptyObjectAttribute(dataset)) {
         o.clear();
       } else {

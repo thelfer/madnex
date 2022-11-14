@@ -17,8 +17,7 @@ namespace madnex {
   /*!
    * \brief a structure describing the experimental condition
    */
-  struct MADNEX_EXPORT ExperimentalCondition
-  {
+  struct MADNEX_EXPORT ExperimentalCondition {
     //! default constructor
     ExperimentalCondition();
     //! move constructor
@@ -35,7 +34,7 @@ namespace madnex {
     std::string value;
     std::string unit;
     std::string type;
-  }; // end of struct ExperimentalCondition
+  };  // end of struct ExperimentalCondition
 
   //! a simple alias
   using ExperimentalConditions = std::vector<ExperimentalCondition>;

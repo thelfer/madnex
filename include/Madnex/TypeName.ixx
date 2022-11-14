@@ -35,7 +35,7 @@ namespace madnex {
 
   /*
    * POD type begins with @
-   * type declare in the std namespace begins with @
+   * type declare in the std namespace begins with !
    */
 
   MADNEX_TYPENAME_STDTYPE(char, "@c");
