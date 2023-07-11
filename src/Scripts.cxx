@@ -33,7 +33,10 @@ namespace madnex {
   Script& Script::operator=(const Script&) = default;
   Script::~Script() = default;
 
-  void write(Group& g, const std::string& n, const Scripts& o) {
+  void write(Group& g, const std::string& n, const Scripts& o, const bool b) {
+    if(b){
+      unlinkIfExists(g,n);
+    }
     const auto c = getScriptCompType();
     hsize_t dim[] = {o.size()}; /* Dataspace dimensions */
     const auto d = g.createDataSet(n, c, DataSpace(1, dim));

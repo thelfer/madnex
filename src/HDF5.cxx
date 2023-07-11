@@ -16,105 +16,113 @@
  * \brief macro used to implement the `read`/`write` functions for
  * plain old data types.
  */
-#define MADNEX_POD_IMPLEMENTATION(X)                                     \
-  void write(Group& g, const std::string& d, const X& o) {               \
-    try {                                                                \
-      hsize_t dimsf[1] = {1};                                            \
-      DataSpace dataspace(1, dimsf);                                     \
-      auto dataset = g.createDataSet(d, getNativeType<X>(), dataspace);  \
-      dataset.write(&o, getNativeType<X>());                             \
-      writeTypeAttribute<X>(dataset);                                    \
-    } catch (H5::Exception & e) {                                        \
-      raise(e.getDetailMsg());                                           \
-    }                                                                    \
-  }                                                                      \
-                                                                         \
-  void read(X& o, const Group& g, const std::string& d) {                \
-    try {                                                                \
-      auto dataset = openDataSet(g, d);                                  \
-      checkTypeAttribute<X>(dataset);                                    \
-      const auto s = dataset.getSpace();                                 \
-      if (s.getSimpleExtentNdims() != 1) {                               \
-        raise(                                                           \
-            "madnex::read: invalid type size\n"                          \
-            "error while retreiving a '#X' in '" +                       \
-            d + "'");                                                    \
-      }                                                                  \
-      hsize_t dims[1];                                                   \
-      s.getSimpleExtentDims(dims);                                       \
-      if (dims[0] != 1) {                                                \
-        raise(                                                           \
-            "madnex::read: invalid type size\n"                          \
-            "error while retreiving a '#X' in '" +                       \
-            d + "'");                                                    \
-      }                                                                  \
-      dataset.read(&o, getNativeType<X>());                              \
-    } catch (H5::Exception & e) {                                        \
-      raise(e.getDetailMsg());                                           \
-    }                                                                    \
-  }                                                                      \
-                                                                         \
-  template <>                                                            \
-  X read(const Group& g, const std::string& d) {                         \
-    X o;                                                                 \
-    read(o, g, d);                                                       \
-    return o;                                                            \
-  }                                                                      \
-                                                                         \
-  void getAttributeValue(X& v, const Group& g, const std::string& n) {   \
-    try {                                                                \
-      const auto attr = openAttribute(g, n);                             \
-      const auto s = attr.getSpace();                                    \
-      if (s.getSimpleExtentNdims() != 1) {                               \
-        raise(                                                           \
-            "madnex::getAttributeValue: invalid type size\n"             \
-            "error while retreiving a '#X' in group '" +                 \
-            n + "'");                                                    \
-      }                                                                  \
-      hsize_t dims[1]; /* dataset dimensions */                          \
-      s.getSimpleExtentDims(dims);                                       \
-      if (dims[0] != 1) {                                                \
-        raise(                                                           \
-            "madnex::getAttributeValue: invalid type size\n"             \
-            "error while retreiving a '#X' in group '" +                 \
-            n + "'");                                                    \
-      }                                                                  \
-      attr.read(getNativeType<X>(), &v);                                 \
-    } catch (H5::Exception &) {                                          \
-      raise("madnex::getTypeAttributeValue: can't get attribute '" + n + \
-            "' for group");                                              \
-    }                                                                    \
-  }                                                                      \
-                                                                         \
-  void getAttributeValue(X& v, const DataSet& d, const std::string& n) { \
-    try {                                                                \
-      const auto attr = openAttribute(d, n);                             \
-      const auto s = attr.getSpace();                                    \
-      if (s.getSimpleExtentNdims() != 1) {                               \
-        raise(                                                           \
-            "madnex::getAttributeValue: invalid type size\n"             \
-            "error while retreiving a '#X' in data set '" +              \
-            n + "'");                                                    \
-      }                                                                  \
-      hsize_t dims[1]; /* dataset dimensions */                          \
-      s.getSimpleExtentDims(dims);                                       \
-      if (dims[0] != 1) {                                                \
-        raise(                                                           \
-            "madnex::getAttributeValue: invalid type size\n"             \
-            "error while retreiving a '#X' in data set '" +              \
-            n + "'");                                                    \
-      }                                                                  \
-      attr.read(getNativeType<X>(), &v);                                 \
-    } catch (H5::Exception &) {                                          \
-      raise("madnex::getTypeAttributeValue: can't get attribute '" + n + \
-            "' for group");                                              \
-    }                                                                    \
+#define MADNEX_POD_IMPLEMENTATION(X)                                        \
+  void write(Group& g, const std::string& d, const X& o, const bool b) {    \
+    try {                                                                   \
+      if (b) {                                                              \
+        unlinkIfExists(g, d);                                               \
+      }                                                                     \
+      hsize_t dimsf[1] = {1};                                               \
+      DataSpace dataspace(1, dimsf);                                        \
+      auto dataset = g.createDataSet(d, getNativeType<X>(), dataspace);     \
+      dataset.write(&o, getNativeType<X>());                                \
+      writeTypeAttribute<X>(dataset);                                       \
+    } catch (H5::Exception & e) {                                           \
+      raise(e.getDetailMsg());                                              \
+    }                                                                       \
+  }                                                                         \
+                                                                            \
+  void read(X& o, const Group& g, const std::string& d) {                   \
+    try {                                                                   \
+      auto dataset = openDataSet(g, d);                                     \
+      checkTypeAttribute<X>(dataset);                                       \
+      const auto s = dataset.getSpace();                                    \
+      if (s.getSimpleExtentNdims() != 1) {                                  \
+        raise(                                                              \
+            "madnex::read: invalid type size\n"                             \
+            "error while retreiving a '#X' in '" +                          \
+            d + "'");                                                       \
+      }                                                                     \
+      hsize_t dims[1];                                                      \
+      s.getSimpleExtentDims(dims);                                          \
+      if (dims[0] != 1) {                                                   \
+        raise(                                                              \
+            "madnex::read: invalid type size\n"                             \
+            "error while retreiving a '#X' in '" +                          \
+            d + "'");                                                       \
+      }                                                                     \
+      dataset.read(&o, getNativeType<X>());                                 \
+    } catch (H5::Exception & e) {                                           \
+      raise("Error while reading '" + d + "' in group '" + g.getObjName() + \
+            "': " + e.getDetailMsg());                                      \
+    }                                                                       \
+  }                                                                         \
+                                                                            \
+  template <>                                                               \
+  X read(const Group& g, const std::string& d) {                            \
+    X o;                                                                    \
+    read(o, g, d);                                                          \
+    return o;                                                               \
+  }                                                                         \
+                                                                            \
+  void getAttributeValue(X& v, const Group& g, const std::string& n) {      \
+    try {                                                                   \
+      const auto attr = openAttribute(g, n);                                \
+      const auto s = attr.getSpace();                                       \
+      if (s.getSimpleExtentNdims() != 1) {                                  \
+        raise(                                                              \
+            "madnex::getAttributeValue: invalid type size\n"                \
+            "error while retreiving a '#X' in group '" +                    \
+            n + "'");                                                       \
+      }                                                                     \
+      hsize_t dims[1]; /* dataset dimensions */                             \
+      s.getSimpleExtentDims(dims);                                          \
+      if (dims[0] != 1) {                                                   \
+        raise(                                                              \
+            "madnex::getAttributeValue: invalid type size\n"                \
+            "error while retreiving a '#X' in group '" +                    \
+            n + "'");                                                       \
+      }                                                                     \
+      attr.read(getNativeType<X>(), &v);                                    \
+    } catch (H5::Exception&) {                                              \
+      raise("madnex::getTypeAttributeValue: can't get attribute '" + n +    \
+            "' for group");                                                 \
+    }                                                                       \
+  }                                                                         \
+                                                                            \
+  void getAttributeValue(X& v, const DataSet& d, const std::string& n) {    \
+    try {                                                                   \
+      const auto attr = openAttribute(d, n);                                \
+      const auto s = attr.getSpace();                                       \
+      if (s.getSimpleExtentNdims() != 1) {                                  \
+        raise(                                                              \
+            "madnex::getAttributeValue: invalid type size\n"                \
+            "error while retreiving a '#X' in data set '" +                 \
+            n + "'");                                                       \
+      }                                                                     \
+      hsize_t dims[1]; /* dataset dimensions */                             \
+      s.getSimpleExtentDims(dims);                                          \
+      if (dims[0] != 1) {                                                   \
+        raise(                                                              \
+            "madnex::getAttributeValue: invalid type size\n"                \
+            "error while retreiving a '#X' in data set '" +                 \
+            n + "'");                                                       \
+      }                                                                     \
+      attr.read(getNativeType<X>(), &v);                                    \
+    } catch (H5::Exception&) {                                              \
+      raise("madnex::getTypeAttributeValue: can't get attribute '" + n +    \
+            "' for group");                                                 \
+    }                                                                       \
   }
 
 #define MADNEX_HDF5_VECTOR_IMPLEMENTATION(X)                                 \
   template <>                                                                \
-  void write(Group& g, const std::string& d, const std::vector<X>& o) {      \
+  void write(Group& g, const std::string& d, const std::vector<X>& o,        \
+             const bool b) {                                                 \
     using Type = X;                                                          \
+    if (b) {                                                                 \
+      unlinkIfExists(g, d);                                                  \
+    }                                                                        \
     try {                                                                    \
       if (o.empty()) {                                                       \
         auto c = Type();                                                     \
@@ -155,7 +163,8 @@
         dataset.read(&o[0], getNativeType<X>());                             \
       }                                                                      \
     } catch (H5::Exception & e) {                                            \
-      raise(e.getDetailMsg());                                               \
+      raise("Error while reading '" + d + "' in group '" + g.getObjName() + "': "  \
+             + e.getDetailMsg());                                            \
     }                                                                        \
   }
 
@@ -169,7 +178,7 @@ namespace madnex {
     if (!exists(g, p)) {
       return false;
     }
-    H5O_info_t      infobuf;
+    H5O_info_t infobuf;
     auto status =
         H5Oget_info_by_name(g.getId(), p.c_str(), &infobuf, H5P_DEFAULT);
     return (status >= 0) && (infobuf.type == H5O_TYPE_GROUP);
@@ -362,6 +371,8 @@ namespace madnex {
     return type;
   }
 
+  bool hasTypeAttribute(const DataSet& d) { return hasAttribute(d, "type"); }
+
   void getTypeAttribute(std::string& t, const DataSet& d) {
     getAttributeValue(t, d, "type");
   }  // end of getTypeAttribute
@@ -383,8 +394,8 @@ namespace madnex {
             getTypeAttribute(t, gr);
             return;
           } else if (g.getObjTypeByIdx(i) == H5G_DATASET) {
-            const auto& gr = openDataSet(g, n);
-            getTypeAttribute(t, gr);
+            const auto& d = openDataSet(g, n);
+            getTypeAttribute(t, d);
             return;
           } else {
             raise(
@@ -412,12 +423,15 @@ namespace madnex {
   }  // end of checkTypeAttribute
 
   void checkTypeAttribute(const DataSet& d, const std::string& t) {
+    if (!hasTypeAttribute(d)) {
+      return;
+    }
     std::string type;
     getTypeAttribute(type, d);
     if (type != t) {
       raise(
-          "madnex::checkTypeAttribute: group type attribute is not what was "
-          "expected (expected '" +
+          "madnex::checkTypeAttribute: group type attribute is not what "
+          " was expected (expected '" +
           t + "', read '" + type + "')");
     }
   }  // end of checkTypeAttribute
@@ -467,12 +481,14 @@ namespace madnex {
   //     checkTypeAttribute<bool>(dataset);
   //     const auto s = dataset.getSpace();
   //     if(s.getSimpleExtentNdims()!=1){
-  // 	raise"madnex::read: invalid type size. Error while retreiving boolean in '"+d+"'");
+  // 	raise"madnex::read: invalid type size. Error while retreiving boolean in
+  // '"+d+"'");
   //     }
   //     hsize_t dims[1];
   //     s.getSimpleExtentDims(dims);
   //     if(dims[0]!=1){
-  // 	raise("madnex::read: invalid type size. Error while retreiving boolean in '"+d+"'");
+  // 	raise("madnex::read: invalid type size. Error while retreiving boolean
+  // in '"+d+"'");
   //     }
   //     dataset.read(&c,getNativeType<char>());
   //     if(c==0){
@@ -494,8 +510,14 @@ namespace madnex {
   //   return v;
   // } // end of bool read
 
-  void write(Group& g, const std::string& d, const std::string& o) {
+  void write(Group& g,
+             const std::string& d,
+             const std::string& o,
+             const bool b) {
     try {
+      if (b) {
+        unlinkIfExists(g, d);
+      }
       if (o.empty()) {
         const auto c = "";
         hsize_t dimsf[1];
@@ -521,8 +543,14 @@ namespace madnex {
     }
   }
 
-  void write(Group& g, const std::string& d, const char* const o) {
+  void write(Group& g,
+             const std::string& d,
+             const char* const o,
+             const bool b) {
     try {
+      if (b) {
+        unlinkIfExists(g, d);
+      }
       const auto type = getNativeType<std::string>();
       hsize_t dimsf[1] = {1};
       DataSpace dataspace(1, dimsf);
@@ -626,7 +654,8 @@ namespace madnex {
         }
       }
     } catch (H5::Exception& e) {
-      raise(e.getDetailMsg());
+      raise("Error while reading '" + d + "' in group '" + g.getObjName() +
+            "': " + e.getDetailMsg());
     }
   }
 
@@ -691,5 +720,12 @@ namespace madnex {
     }
     return found;
   }  // end of contains
+
+  void unlinkIfExists(const Group& g, const std::string& n) {
+    if (!exists(g, n)) {
+      return;
+    }
+    g.unlink(n);
+  }
 
 }  // end of namespace madnex

@@ -72,6 +72,7 @@ namespace madnex {
    * \brief write a `MFront` implementation in a group
    * \param[out] g: group
    * \param[in]  i: implementation
+   * \param[in]  b: allow overwrite
    */
   MADNEX_EXPORT void write(Group&, const MFrontImplementation&);
 

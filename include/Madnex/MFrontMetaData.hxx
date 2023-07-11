@@ -11,6 +11,7 @@
 #include <string>
 #include "Madnex/Config.hxx"
 #include "Madnex/HDF5.hxx"
+#include "Madnex/FCString.hxx"
 
 namespace madnex {
 
@@ -32,10 +33,14 @@ namespace madnex {
     ~MFrontMetaData() noexcept;
     //! \brief author of the implementation
     std::string author;
-    //! \brief date of the implementation
+    //! \brief date
     std::string date;
-    //! \brief description of the implementation
+    //! \brief status
+    std::string status;
+    //! \brief description of the implemnetation
     std::string description;
+    //! \brief universally unique identifier
+    std::string uuid;
   };  // end of struct MFrontMetaData
 
   /*!
@@ -50,8 +55,10 @@ namespace madnex {
    * \param[out] g: group
    * \param[in]  n: path where the metadata will be written
    * \param[in]  d: metadata
+   * \param[in]  b: allow overwrite
    */
-  MADNEX_EXPORT void write(Group&, const std::string&, const MFrontMetaData&);
+  MADNEX_EXPORT void write(Group&, const std::string&, const MFrontMetaData&,
+			   const bool = false);
 
 }  // end of namespace madnex
 

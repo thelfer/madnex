@@ -29,7 +29,10 @@ namespace madnex {
   MainResult& MainResult::operator=(MainResult&&) = default;
   MainResult& MainResult::operator=(const MainResult&) = default;
 
-  void write(Group& g, const std::string& n, const MainResults& o) {
+  void write(Group& g, const std::string& n, const MainResults& o, const bool b) {
+    if(b){
+      unlinkIfExists(g,n);
+    }
     const auto c = getMainResultsCompType();
     if(contains(g,n)){
       removeDataSet(g,n);

@@ -53,10 +53,12 @@ namespace madnex {
    * \param[out] g: group
    * \param[in]  n: path where the metadata will be written
    * \param[in]  d: metadata
+   * \param[in]  b: allow overwrite
    */
   MADNEX_EXPORT void write(Group&,
                            const std::string&,
-                           const MFMTestGeneratorTestMetaData&);
+                           const MFMTestGeneratorTestMetaData&,
+                           const bool = false);
 
 }  // end of namespace madnex
 

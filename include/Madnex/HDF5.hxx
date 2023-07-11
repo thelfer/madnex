@@ -24,8 +24,10 @@
    * \param[out] g: group                                                     \
    * \param[in]  n: name of the data                                          \
    * \param[in]  o: object to be written                                      \
+   * \param[in]  b: allow overwrite                                           \
    */                                                                         \
-  MADNEX_EXPORT void write(Group&, const std::string&, const X&);             \
+  MADNEX_EXPORT void write(Group&, const std::string&, const X&,              \
+                           const bool = false);                               \
   /*!                                                                         \
    * \param[out] o: object to be read                                         \
    * \param[in]  g: group                                                     \
@@ -52,20 +54,22 @@
    */                                                                         \
   MADNEX_EXPORT void getAttributeValue(X&, const DataSet&, const std::string&)
 
-#define MADNEX_HDF5_VECTOR_DECLARATION(X)                                      \
-  /*!                                                                          \
-   * \param o : object to be written                                           \
-   * \param n : name of the dataset                                            \
-   * \param g : HDF5 group                                                     \
-   */                                                                          \
-  template <>                                                                  \
-  MADNEX_EXPORT void write(Group&, const std::string&, const std::vector<X>&); \
-  /*!                                                                          \
-   * \param o : object to be written                                           \
-   * \param n : name of the dataset                                            \
-   * \param g : HDF5 group                                                     \
-   */                                                                          \
-  template <>                                                                  \
+#define MADNEX_HDF5_VECTOR_DECLARATION(X)                                     \
+  /*!                                                                         \
+   * \param o : object to be written                                          \
+   * \param n : name of the dataset                                           \
+   * \param g : HDF5 group                                                    \
+   * \param[in]  b: allow overwrite                                           \
+   */                                                                         \
+  template <>                                                                 \
+  MADNEX_EXPORT void write(Group&, const std::string&, const std::vector<X>&, \
+                           const bool);                                       \
+  /*!                                                                         \
+   * \param o : object to be written                                          \
+   * \param n : name of the dataset                                           \
+   * \param g : HDF5 group                                                    \
+   */                                                                         \
+  template <>                                                                 \
   MADNEX_EXPORT void read(std::vector<X>&, const Group&, const std::string&)
 
 namespace madnex {
@@ -76,11 +80,6 @@ namespace madnex {
   using H5::Attribute;
   using H5::StrType;
   using H5::DataSpace;
-
-  enum struct WriteFlag {
-    CREATE = 1,
-    REPLACE = 1 << 1
-  };  // end of struct WriteFlag
 
   /*!
    * \brief check if an object with the given path exists in the given group
@@ -106,6 +105,12 @@ namespace madnex {
    * \param[in] n: group name
    */
   MADNEX_EXPORT Group openGroup(const Group&, const std::string&);
+  /*!
+   * \brief delete an existing group or dataset if it exists
+   * \param[in] g: parent group
+   * \param[in] n: group or dataset name
+   */
+  MADNEX_EXPORT void unlinkIfExists(const Group&, const std::string&);
   /*!
    * \brief open a data set
    * \param[in] g: parent group
@@ -387,21 +392,29 @@ namespace madnex {
    * \param[out] g: group
    * \param[in]  n: name of the data
    * \param[in]  o: object to be written
+   * \param[in]  b: allow overwrite
    */
   MADNEX_EXPORT
-  void write(Group&, const std::string&, const std::string&);
+  void write(Group&,
+             const std::string&,
+             const std::string&,
+             const bool = false);
   /*!
    * \brief write a C-string. It is stored and retrieved like a
    * `std::string`.
    * \param[out] g: group
    * \param[in]  n: name of the data
    * \param[in]  o: object to be written
+   * \param[in]  b: allow overwrite
    */
   MADNEX_EXPORT
-  void write(Group&, const std::string&, const char* const);
+  void write(Group&, const std::string&, const char* const, const bool = false);
 
   template <typename T>
-  void write(Group&, const std::string&, const std::vector<T>&);
+  void write(Group&,
+             const std::string&,
+             const std::vector<T>&,
+             const bool = false);
 
   template <typename T>
   void read(std::vector<T>&, const Group&, const std::string&);

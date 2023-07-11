@@ -45,7 +45,10 @@ namespace madnex {
   ExperimentalCondition& ExperimentalCondition::operator=(
       const ExperimentalCondition&) = default;
 
-  void write(Group& g, const std::string& n, const ExperimentalConditions& o) {
+  void write(Group& g, const std::string& n, const ExperimentalConditions& o, const bool b) {
+    if(b){
+      unlinkIfExists(g,n);
+    }
     auto make_copy = [](const ExperimentalCondition& ec) {
       CExperimentalCondition<const char> r;
       r.name = ec.name.c_str();

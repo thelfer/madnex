@@ -138,6 +138,9 @@ namespace madnex {
   template <std::size_t N, typename CharT, typename Traits>
   basic_fcstring<N, CharT, Traits>::operator std::basic_string<CharT, Traits>()
       const {
+    if (this->empty()) {
+      return "";
+    }
     return std::basic_string<CharT, Traits>(this->data());
   }  // end of basic_fcstring<N,CharT,Traits>::operator std::string
 

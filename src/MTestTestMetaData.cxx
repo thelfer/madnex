@@ -30,7 +30,10 @@ namespace madnex {
     read(d.description, data, "description");
   }  // end of read
 
-  void write(Group& g, const std::string& n, const MTestTestMetaData& d) {
+  void write(Group& g, const std::string& n, const MTestTestMetaData& d, const bool b) {
+    if(b){
+      unlinkIfExists(g,n);
+    }
     auto data = createGroup(g, n);
     write(data, "author", d.author);
     write(data, "date", d.date);

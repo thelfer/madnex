@@ -5,8 +5,8 @@
  * \brief  09 fév 2011
  */
 
-#ifndef LIB_MADNEX_HDF5_IXX_
-#define LIB_MADNEX_HDF5_IXX_
+#ifndef LIB_MADNEX_HDF5_IXX
+#define LIB_MADNEX_HDF5_IXX
 
 #include <sstream>
 #include "Madnex/TypeName.hxx"
@@ -71,7 +71,13 @@ namespace madnex {
   }  // end of checkTypeAttribute
 
   template <typename V>
-  void write(Group& g, const std::vector<V>& o, const std::string& d) {
+  void write(Group& g,
+             const std::vector<V>& o,
+             const std::string& d,
+             const bool b) {
+    if (b) {
+      unlinkIfExists(g, d);
+    }
     Group gm(createGroup(g, d));
     writeTypeAttribute<std::vector<V>>(gm);
     auto i = typename std::vector<V>::size_type{};

@@ -83,7 +83,7 @@ namespace madnex {
    * \param[in] i: test name
    */
   MADNEX_EXPORT MFMTestGeneratorTest getMFMTestGeneratorTest(
-      const std::string&, const std::string&, const std::string&);
+							     const std::string&, const std::string&, const std::string&);
 
 }  // end of namespace madnex
 

@@ -61,8 +61,10 @@ namespace madnex {
    * \param[out] g: group
    * \param[in]  n: name of the data
    * \param[in]  o: object to be written
+   * \param[in]  b: allow overwrite
    */
-  MADNEX_EXPORT void write(Group&, const std::string&, const MainResults&);
+  MADNEX_EXPORT void write(Group&, const std::string&, const MainResults&,
+			   const bool = false);
 
 }  // end of namespace madnex
 

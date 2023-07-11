@@ -55,12 +55,13 @@ namespace madnex {
    * \param[out] g: group
    * \param[in]  n: name of the data
    * \param[in]  o: object to be written
+   * \param[in]  b: allow overwrite
    */
-  MADNEX_EXPORT void
-  write(Group&,
-	const std::string&,
-	const ExperimentalConditions&);
-  
+  MADNEX_EXPORT void write(Group&,
+                           const std::string&,
+                           const ExperimentalConditions&,
+                           const bool = false);
+
 } // end of namespace madnex
 
 #endif /* LIB_MADNEX_EXPERIMENTALCONDITIONS_HXX */

@@ -37,7 +37,11 @@ namespace madnex {
 
   void write(Group& g,
              const std::string& n,
-             const MFMTestGeneratorTestMetaData& d) {
+             const MFMTestGeneratorTestMetaData& d,
+             const bool b) {
+    if (b) {
+      unlinkIfExists(g, n);
+    }
     auto data = createGroup(g, n);
     write(data, "author", d.author);
     write(data, "date", d.date);
