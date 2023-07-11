@@ -5,6 +5,7 @@
  * \brief  17/01/2017
  */
 
+#include <iostream>
 #include <cstring>
 #include <stdexcept>
 #include "Madnex/Raise.hxx"
@@ -170,8 +171,43 @@
 
 namespace madnex {
 
+  static std::vector<std::string> tokenize(std::string_view s,
+                                           const char c,
+                                           const bool keep_empty_strings) {
+    std::vector<std::string> res;
+    auto b = std::string::size_type{};
+    auto e = s.find_first_of(c, b);
+    while (std::string::npos != e || std::string::npos != b) {
+      // Found a token, add it to the vector.
+      res.push_back(std::string{s.substr(b, e - b)});
+      if (keep_empty_strings) {
+        b = e == std::string::npos ? e : e + 1;
+      } else {
+        b = s.find_first_not_of(c, e);
+      }
+      e = s.find_first_of(c, b);
+    }
+    return res;
+  }  // end of tokenize
+
   bool exists(const Group& g, const std::string& p) {
-    return H5Lexists(g.getId(), p.c_str(), H5P_DEFAULT) > 0;
+    // break paths
+    const auto leafs = tokenize(p, '/', false);
+    if (leafs.empty()) {
+      return false;
+    }
+    auto cpath = std::string{};
+    for (const auto& l : leafs) {
+      if (!cpath.empty()) {
+        cpath += '/';
+      }
+      cpath += l;
+      const auto b = H5Lexists(g.getId(), cpath.c_str(), H5P_DEFAULT) > 0;
+      if (!b) {
+        return false;
+      }
+    }
+    return true;
   }
 
   bool subGroupExists(const Group& g, const std::string& p) {
