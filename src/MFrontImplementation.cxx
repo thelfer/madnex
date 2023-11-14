@@ -48,7 +48,7 @@ namespace madnex {
     }
     hsize_t dim[] = {o.size()}; /* Dataspace dimensions */
     const auto d = g.createDataSet(n, c, DataSpace(1, dim));
-    d.write(&o, c);
+    d.write(o.data(), c);
   }  // end of write
 
   void read(std::vector<MFrontParameter>& o,
@@ -137,7 +137,7 @@ namespace madnex {
     }
     hsize_t dim[] = {o.size()}; /* Dataspace dimensions */
     const auto d = g.createDataSet(n, c, DataSpace(1, dim));
-    d.write(&o, c);
+    d.write(o.data(), c);
   }  // end of write
 
   void read(std::vector<MFrontBounds>& o,
@@ -185,8 +185,8 @@ namespace madnex {
     auto impl = createGroup(g, i.name);
     write(impl, "source", i.source);
     write(impl, "metadata", i.metadata);
+    std::vector<MFrontParameter> parameters;
     if (!i.parameters.empty()) {
-      std::vector<MFrontParameter> parameters;
       for (const auto& nv : i.parameters) {
         MFrontParameter p;
         p.code = nv.first;
@@ -196,8 +196,10 @@ namespace madnex {
         p.unit = "";
         parameters.push_back(p);
       }
-      write(impl, "parameters", parameters, true);
     }
+    write(impl, "parameters", parameters, true);
+    //
+    std::vector<MFrontBounds> bounds;
     if ((!i.lower_bounds.empty()) || (!i.upper_bounds.empty())) {
       auto names = std::set<std::string>{};
       auto insert_names =
@@ -209,7 +211,6 @@ namespace madnex {
           };
       insert_names(i.upper_bounds);
       insert_names(i.lower_bounds);
-      std::vector<MFrontBounds> bounds;
       for (const auto& n : names) {
         auto bvalues =
             std::array<double, 2>{std::numeric_limits<double>::quiet_NaN(),
@@ -229,8 +230,8 @@ namespace madnex {
         b.unit = "";
         bounds.push_back(b);
       }
-      write(impl, "bounds", bounds, true);
     }
+    write(impl, "bounds", bounds, true);
   }  // end of write
 
   void read(MFrontImplementation& i, const Group& g, const std::string& n) {

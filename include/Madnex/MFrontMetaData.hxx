@@ -39,6 +39,8 @@ namespace madnex {
     std::string status;
     //! \brief description of the implemnetation
     std::string description;
+    //! \brief unit system
+    std::string unit_system;
     //! \brief universally unique identifier
     std::string uuid;
   };  // end of struct MFrontMetaData
