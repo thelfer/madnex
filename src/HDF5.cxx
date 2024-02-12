@@ -215,8 +215,18 @@ namespace madnex {
       return false;
     }
     H5O_info_t infobuf;
+#ifdef H5Oget_info_by_name_vers
+#if H5Oget_info_by_name_vers >=3
+    auto status = H5Oget_info_by_name(g.getId(), p.c_str(), &infobuf,
+                                      H5O_INFO_ALL, H5P_DEFAULT);
+#else
     auto status =
         H5Oget_info_by_name(g.getId(), p.c_str(), &infobuf, H5P_DEFAULT);
+#endif
+#else
+    auto status =
+        H5Oget_info_by_name(g.getId(), p.c_str(), &infobuf, H5P_DEFAULT);
+#endif
     return (status >= 0) && (infobuf.type == H5O_TYPE_GROUP);
   }
 
