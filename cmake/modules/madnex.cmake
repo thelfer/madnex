@@ -1,5 +1,4 @@
 macro(madnex_project madnex_version_major madnex_version_minor madnex_version_patch)
-  project("madnex")
   set(PACKAGE_NAME "madnex")
   set(VERSION "${madnex_version_major}.${madnex_version_minor}.${madnex_version_patch}")
   set(MADNEX_VERSION "${VERSION}")

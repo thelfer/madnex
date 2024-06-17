@@ -1,5 +1,5 @@
-# Remove when CMake >= 2.8.4 is required
-set(CMAKE_LEGACY_CYGWIN_WIN32 0) 
+project(madnex)
+
 cmake_minimum_required(VERSION 2.4)
 cmake_policy(SET CMP0005 OLD)
 if(CMAKE_VERSION VERSION_GREATER 2.8.12)

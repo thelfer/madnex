@@ -289,7 +289,7 @@ namespace madnex {
                                  const std::string& n) {
       auto r = std::map<std::string, std::vector<std::string>>{};
       const auto materials = madnex::getMatchingMaterials(d, m);
-      for (const auto material : materials) {
+      for (const auto& material : materials) {
         auto mks = filter((d.*get)(material), n);
         if (!mks.empty()) {
           r.insert({material, mks});
