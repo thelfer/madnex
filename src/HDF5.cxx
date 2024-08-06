@@ -5,9 +5,9 @@
  * \brief  17/01/2017
  */
 
-#include <iostream>
 #include <cstring>
 #include <stdexcept>
+#include <string_view>
 #include "Madnex/Raise.hxx"
 #include "Madnex/Types.hxx"
 #include "Madnex/TypeName.hxx"
