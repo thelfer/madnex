@@ -7,6 +7,7 @@
 
 #include <cstdlib>
 #include <stdexcept>
+#include "Madnex/Raise.hxx"
 #include "Madnex/Types.hxx"
 #include "Madnex/ExperimentalConditions.hxx"
 
@@ -22,15 +23,19 @@ struct CExperimentalCondition {
 
 template <typename char_type>
 static H5::CompType getExperimentalConditionCompType() {
-  using CEC = CExperimentalCondition<char_type>;
-  H5::CompType c(sizeof(CEC));
-  const auto type = madnex::getNativeType<std::string>();
-  c.insertMember("name", HOFFSET(CEC, name), type);
-  c.insertMember("label", HOFFSET(CEC, label), type);
-  c.insertMember("value", HOFFSET(CEC, value), type);
-  c.insertMember("unit", HOFFSET(CEC, unit), type);
-  c.insertMember("type", HOFFSET(CEC, type), type);
-  return c;
+  try {
+    using CEC = CExperimentalCondition<char_type>;
+    H5::CompType c(sizeof(CEC));
+    const auto type = madnex::getNativeType<std::string>();
+    c.insertMember("name", HOFFSET(CEC, name), type);
+    c.insertMember("label", HOFFSET(CEC, label), type);
+    c.insertMember("value", HOFFSET(CEC, value), type);
+    c.insertMember("unit", HOFFSET(CEC, unit), type);
+    c.insertMember("type", HOFFSET(CEC, type), type);
+    return c;
+  } catch (H5::Exception& e) {
+    madnex::raise(e.getDetailMsg());
+  }
 }  // end of getExperimentalConditionCompType
 
 namespace madnex {
@@ -46,27 +51,31 @@ namespace madnex {
       const ExperimentalCondition&) = default;
 
   void write(Group& g, const std::string& n, const ExperimentalConditions& o, const bool b) {
-    if(b){
-      unlinkIfExists(g,n);
+    try {
+      if (b) {
+        unlinkIfExists(g, n);
+      }
+      auto make_copy = [](const ExperimentalCondition& ec) {
+        CExperimentalCondition<const char> r;
+        r.name = ec.name.c_str();
+        r.label = ec.label.c_str();
+        r.value = ec.value.c_str();
+        r.unit = ec.unit.c_str();
+        r.type = ec.type.c_str();
+        return r;
+      };
+      const auto c = getExperimentalConditionCompType<const char>();
+      std::vector<CExperimentalCondition<const char>> cecs;
+      cecs.reserve(o.size());
+      for (const auto& ec : o) {
+        cecs.emplace_back(make_copy(ec));
+      }
+      hsize_t dim[] = {o.size()}; /* Dataspace dimensions */
+      const auto d = g.createDataSet(n, c, DataSpace(1, dim));
+      d.write(cecs.data(), c);
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
     }
-    auto make_copy = [](const ExperimentalCondition& ec) {
-      CExperimentalCondition<const char> r;
-      r.name = ec.name.c_str();
-      r.label = ec.label.c_str();
-      r.value = ec.value.c_str();
-      r.unit = ec.unit.c_str();
-      r.type = ec.type.c_str();
-      return r;
-    };
-    const auto c = getExperimentalConditionCompType<const char>();
-    std::vector<CExperimentalCondition<const char>> cecs;
-    cecs.reserve(o.size());
-    for (const auto& ec : o) {
-      cecs.emplace_back(make_copy(ec));
-    }
-    hsize_t dim[] = {o.size()}; /* Dataspace dimensions */
-    const auto d = g.createDataSet(n, c, DataSpace(1, dim));
-    d.write(cecs.data(), c);
   }  // end of write
 
   void read(ExperimentalConditions& o, const Group& g, const std::string& n) {

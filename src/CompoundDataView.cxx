@@ -15,18 +15,22 @@ namespace madnex {
 
   CompoundDataView::CompoundDataView(const DataSet& d)
       : CompoundDataViewBase(d) {
-    const auto dspace = d.getSpace();
-    if (dspace.getSimpleExtentNdims() != 1) {
-      raise("CompoundDataView: invalid dimension");
+    try {
+      const auto dspace = d.getSpace();
+      if (dspace.getSimpleExtentNdims() != 1) {
+        raise("CompoundDataView: invalid dimension");
+      }
+      hsize_t dims[1];
+      dspace.getSimpleExtentDims(dims);
+      if (dims[0] != 1) {
+        raise("CompoundDataView: invalid structure dimension");
+      }
+      this->data_storage.resize(this->ctype.getSize());
+      d.read(this->data_storage.data(), this->ctype);
+      this->data_pointer = this->data_storage.data();
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
     }
-    hsize_t dims[1];
-    dspace.getSimpleExtentDims(dims);
-    if (dims[0] != 1) {
-      raise("CompoundDataView: invalid structure dimension");
-    }
-    this->data_storage.resize(this->ctype.getSize());
-    d.read(this->data_storage.data(), this->ctype);
-    this->data_pointer = this->data_storage.data();
   }  // end of CompoundDataView::CompoundDataView
 
   CompoundDataView::CompoundDataView(const CompoundDataViewBase& b,

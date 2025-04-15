@@ -17,28 +17,40 @@ namespace madnex {
 
   CompoundDataArrayView::CompoundDataArrayView(const DataSet& d)
       : CompoundDataViewBase(d) {
-    const auto dspace = d.getSpace();
-    if (dspace.getSimpleExtentNdims() != 1) {
-      raise("CompoundDataArrayView: invalid dimension");
+    try {
+      const auto dspace = d.getSpace();
+      if (dspace.getSimpleExtentNdims() != 1) {
+        raise("CompoundDataArrayView: invalid dimension");
+      }
+      hsize_t dims[1];
+      dspace.getSimpleExtentDims(dims);
+      this->s = dims[0];
+      this->rdata.resize(this->ctype.getSize() * (this->s));
+      d.read(this->rdata.data(), this->ctype);
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
     }
-    hsize_t dims[1];
-    dspace.getSimpleExtentDims(dims);
-    this->s = dims[0];
-    this->rdata.resize(this->ctype.getSize() * (this->s));
-    d.read(this->rdata.data(), this->ctype);
   }  // end of CompoundDataArrayView::CompoundDataArrayView
 
   CompoundDataView CompoundDataArrayView::operator[](const size_type i) const {
-    return CompoundDataView(*this,
-                            this->rdata.data() + i * (this->ctype.getSize()));
+    try {
+      return CompoundDataView(*this,
+                              this->rdata.data() + i * (this->ctype.getSize()));
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
+    }
   }  // end of CompoundDataArrayView::operator[]
 
   CompoundDataView CompoundDataArrayView::at(const size_type i) const {
-    if (i >= this->size()) {
-      raise<std::out_of_range>("CompoundDataArrayView::at: invalid index");
+    try {
+      if (i >= this->size()) {
+        raise<std::out_of_range>("CompoundDataArrayView::at: invalid index");
+      }
+      return CompoundDataView(*this,
+                              this->rdata.data() + i * (this->ctype.getSize()));
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
     }
-    return CompoundDataView(*this,
-                            this->rdata.data() + i * (this->ctype.getSize()));
   }  // end of CompoundDataArrayView::at
 
   CompoundDataArrayView::size_type CompoundDataArrayView::size() const {

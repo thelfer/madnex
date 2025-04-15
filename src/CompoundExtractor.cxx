@@ -39,21 +39,25 @@ namespace madnex{
   std::string
   CompoundExtractor<std::string>::extract(const char * const d,
 					  const size_t i) const{
-    auto strnlen = [](const char *s,const size_t m){
-      auto r = size_t{};
-      while((s[r]!='\0')&&(r<m)){
-	++r;
+    try {
+      auto strnlen = [](const char* s, const size_t m) {
+        auto r = size_t{};
+        while ((s[r] != '\0') && (r < m)) {
+          ++r;
+        }
+        return r;
+      };
+      const auto o = this->cview.getMemberOffset(i);
+      const auto t = this->cview.getMemberStrType(i);
+      const auto s = t.getSize();
+      std::string r;
+      if (s == H5T_VARIABLE) {
+        return {d + o};
       }
-      return r;
-    };
-    const auto o   = this->cview.getMemberOffset(i);
-    const auto t   = this->cview.getMemberStrType(i);
-    const auto s   = t.getSize();
-    std::string r;
-    if(s==H5T_VARIABLE){
-      return {d+o};
+      return {d + o, strnlen(d + o, s)};
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
     }
-    return {d+o,strnlen(d+o,s)};
-  } // end of CompoundExtractor::extract
-    
+  }  // end of CompoundExtractor::extract
+
 } // end of namespace madnex

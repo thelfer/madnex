@@ -5,6 +5,7 @@
  * \date   16 janv. 2017
  */
 
+#include"Madnex/Raise.hxx"
 #include"Madnex/File.hxx"
 
 namespace madnex{
@@ -15,11 +16,19 @@ namespace madnex{
   File& File::operator=(const File&) = default;
   
   Group File::getRoot(){
-    return this->openGroup("/");
+    try {
+      return this->openGroup("/");
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
+    }
   }
 
   Group File::getRoot() const{
-    return this->openGroup("/");
+    try {
+      return this->openGroup("/");
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
+    }
   }
 
   bool File::checkIfGroupIsWritable(const std::string&) const{

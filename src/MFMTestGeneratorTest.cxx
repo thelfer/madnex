@@ -31,22 +31,30 @@ namespace madnex {
   MFMTestGeneratorTest::~MFMTestGeneratorTest() noexcept = default;
 
   void write(Group& g, const MFMTestGeneratorTest& i) {
-    raise_if(i.name.empty(), "madnex::write: no implementation name given");
-    if (i.test.empty()) {
-      raise("madnex::write: no test associated with implementation '" + i.name +
-            "'");
+    try {
+      raise_if(i.name.empty(), "madnex::write: no implementation name given");
+      if (i.test.empty()) {
+        raise("madnex::write: no test associated with implementation '" +
+              i.name + "'");
+      }
+      auto impl = createGroup(g, i.name);
+      write(impl, "test", i.test);
+      write(impl, "metadata", i.metadata);
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
     }
-    auto impl = createGroup(g, i.name);
-    write(impl, "test", i.test);
-    write(impl, "metadata", i.metadata);
   }  // end of write
 
   void read(MFMTestGeneratorTest& i, const Group& g, const std::string& n) {
-    auto impl = openGroup(g, n);
-    i.name = n;
-    read(i.test, impl, "test");
-    if (exists(impl, "metadata")) {
-      read_if(i.metadata, impl, "metadata");
+    try {
+      auto impl = openGroup(g, n);
+      i.name = n;
+      read(i.test, impl, "test");
+      if (exists(impl, "metadata")) {
+        read_if(i.metadata, impl, "metadata");
+      }
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
     }
   }  // end of read
 
@@ -54,22 +62,31 @@ namespace madnex {
                                                const std::string& m,
                                                const std::string& b,
                                                const std::string& i) {
-    if (m.empty()) {
-      return getMFMTestGeneratorTest(f, b, i);
+    try {
+      if (m.empty()) {
+        return getMFMTestGeneratorTest(f, b, i);
+      }
+      const auto file = File(f, H5F_ACC_RDONLY);
+      const auto g =
+          openGroup(file.getRoot(), "MFront/" + m + "/Behaviours/" + b +
+                                        "/MFMTestGeneratorTests/");
+      return read<MFMTestGeneratorTest>(g, i);
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
     }
-    const auto file = File(f, H5F_ACC_RDONLY);
-    const auto g = openGroup(file.getRoot(), "MFront/" + m + "/Behaviours/" +
-                                                 b + "/MFMTestGeneratorTests/");
-    return read<MFMTestGeneratorTest>(g, i);
   }  // end of getMFMTestGeneratorTest
 
   MFMTestGeneratorTest getMFMTestGeneratorTest(const std::string& f,
                                                const std::string& b,
                                                const std::string& i) {
-    const auto file = File(f, H5F_ACC_RDONLY);
-    const auto g = openGroup(
-        file.getRoot(), "MFront/Behaviours/" + b + "/MFMTestGeneratorTests/");
-    return read<MFMTestGeneratorTest>(g, i);
+    try {
+      const auto file = File(f, H5F_ACC_RDONLY);
+      const auto g = openGroup(
+          file.getRoot(), "MFront/Behaviours/" + b + "/MFMTestGeneratorTests/");
+      return read<MFMTestGeneratorTest>(g, i);
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
+    }
   }  // end of getMFMTestGeneratorTest
 
 }  // end of namespace madnex

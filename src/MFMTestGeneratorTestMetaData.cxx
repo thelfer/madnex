@@ -5,6 +5,7 @@
  * \date   27/08/2020
  */
 
+#include "Madnex/Raise.hxx"
 #include "Madnex/MFMTestGeneratorTestMetaData.hxx"
 
 namespace madnex {
@@ -29,23 +30,31 @@ namespace madnex {
   void read(MFMTestGeneratorTestMetaData& d,
             const Group& g,
             const std::string& n) {
-    auto data = openGroup(g, n);
-    read(d.author, data, "author");
-    read(d.date, data, "date");
-    read(d.description, data, "description");
+    try {
+      auto data = openGroup(g, n);
+      read(d.author, data, "author");
+      read(d.date, data, "date");
+      read(d.description, data, "description");
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
+    }
   }  // end of read
 
   void write(Group& g,
              const std::string& n,
              const MFMTestGeneratorTestMetaData& d,
              const bool b) {
-    if (b) {
-      unlinkIfExists(g, n);
+    try {
+      if (b) {
+        unlinkIfExists(g, n);
+      }
+      auto data = createGroup(g, n);
+      write(data, "author", d.author);
+      write(data, "date", d.date);
+      write(data, "description", d.description);
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
     }
-    auto data = createGroup(g, n);
-    write(data, "author", d.author);
-    write(data, "date", d.date);
-    write(data, "description", d.description);
   }  // end of write
 
 }  // end of namespace madnex

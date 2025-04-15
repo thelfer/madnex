@@ -31,16 +31,26 @@ namespace madnex{
   };
 
   static H5::CompType getMFrontMetaDataWrapperCompType() {
-    H5::CompType c(sizeof(MFrontMetaDataWrapper));
-    c.insertMember("author", HOFFSET(MFrontMetaDataWrapper, author), StrType(0, 32));
-    c.insertMember("date", HOFFSET(MFrontMetaDataWrapper, date), StrType(0, 32));
-    c.insertMember("status", HOFFSET(MFrontMetaDataWrapper, status), StrType(0, 32));
-    c.insertMember("description", HOFFSET(MFrontMetaDataWrapper, description), StrType(0, 512));
-    c.insertMember("uuid", HOFFSET(MFrontMetaDataWrapper, uuid), StrType(0, 36));
-    return c;
+    try {
+      H5::CompType c(sizeof(MFrontMetaDataWrapper));
+      c.insertMember("author", HOFFSET(MFrontMetaDataWrapper, author),
+                     StrType(0, 32));
+      c.insertMember("date", HOFFSET(MFrontMetaDataWrapper, date),
+                     StrType(0, 32));
+      c.insertMember("status", HOFFSET(MFrontMetaDataWrapper, status),
+                     StrType(0, 32));
+      c.insertMember("description", HOFFSET(MFrontMetaDataWrapper, description),
+                     StrType(0, 512));
+      c.insertMember("uuid", HOFFSET(MFrontMetaDataWrapper, uuid),
+                     StrType(0, 36));
+      return c;
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
+    }
   }  // end of getMFrontMetaDataWrapperCompType
 
   static void write(Group& g, const std::string& n, const MFrontMetaDataWrapper& o, const bool b) {
+try{
     if(b){
       unlinkIfExists(g,n);
     }
@@ -51,16 +61,19 @@ namespace madnex{
     hsize_t dim[] = {1}; /* Dataspace dimensions */
     const auto d = g.createDataSet(n, c, DataSpace(1, dim));
     d.write(&o, c);
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
+    }
   }  // end of write
 
   static void read(MFrontMetaDataWrapper& o,
                    const Group& g,
                    const std::string& n) {
-    if (subGroupExists(g, n)) {
-      return;
-    }
-    using size_type = size_t;
     try {
+      using size_type = size_t;
+      if (subGroupExists(g, n)) {
+        return;
+      }
       CompoundDataArrayView a(openDataSet(g, n));
       if (a.size() != 1u) {
         raise("invalid number of metadata");
@@ -80,23 +93,31 @@ namespace madnex{
              const std::string& n,
              const MFrontMetaData& o,
              const bool b) {
-    auto w = MFrontMetaDataWrapper{};
-    w.author = o.author;
-    w.date = o.date;
-    w.status = o.status;
-    w.description = o.description;
-    w.uuid = o.uuid;
-    write(g, n, w, b);
+    try {
+      auto w = MFrontMetaDataWrapper{};
+      w.author = o.author;
+      w.date = o.date;
+      w.status = o.status;
+      w.description = o.description;
+      w.uuid = o.uuid;
+      write(g, n, w, b);
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
+    }
   }
 
   void read(MFrontMetaData& o, const Group& g, const std::string& n) {
-    auto w = MFrontMetaDataWrapper{};
-    read(w, g, n);
-    o.author = static_cast<std::string>(w.author);
-    o.date = static_cast<std::string>(w.date);
-    o.status = static_cast<std::string>(w.status);
-    o.description = static_cast<std::string>(w.description);
-    o.uuid = static_cast<std::string>(w.uuid);
+    try {
+      auto w = MFrontMetaDataWrapper{};
+      read(w, g, n);
+      o.author = static_cast<std::string>(w.author);
+      o.date = static_cast<std::string>(w.date);
+      o.status = static_cast<std::string>(w.status);
+      o.description = static_cast<std::string>(w.description);
+      o.uuid = static_cast<std::string>(w.uuid);
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
+    }
   }
 
 } // end of namespace madnex

@@ -164,8 +164,8 @@
         dataset.read(&o[0], getNativeType<X>());                             \
       }                                                                      \
     } catch (H5::Exception & e) {                                            \
-      raise("Error while reading '" + d + "' in group '" + g.getObjName() + "': "  \
-             + e.getDetailMsg());                                            \
+      raise("Error while reading '" + d + "' in group '" + g.getObjName() +  \
+            "': " + e.getDetailMsg());                                       \
     }                                                                        \
   }
 
@@ -216,7 +216,7 @@ namespace madnex {
     }
     H5O_info_t infobuf;
 #ifdef H5Oget_info_by_name_vers
-#if H5Oget_info_by_name_vers >=3
+#if H5Oget_info_by_name_vers >= 3
     auto status = H5Oget_info_by_name(g.getId(), p.c_str(), &infobuf,
                                       H5O_INFO_ALL, H5P_DEFAULT);
 #else
@@ -613,11 +613,15 @@ namespace madnex {
   }
 
   void getAttributeNames(std::vector<std::string>& n, const Group& g) {
-    const auto size = static_cast<hsize_t>(g.getNumAttrs());
-    n.clear();
-    n.resize(size);
-    for (hsize_t i = 0; i != size; ++i) {
-      n[i] = g.openAttribute(i).getName();
+    try {
+      const auto size = static_cast<hsize_t>(g.getNumAttrs());
+      n.clear();
+      n.resize(size);
+      for (hsize_t i = 0; i != size; ++i) {
+        n[i] = g.openAttribute(i).getName();
+      }
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
     }
   }  // end of getAttributeNames
 
@@ -628,11 +632,15 @@ namespace madnex {
   }  // end of getAttributeNames
 
   void getAttributeNames(std::vector<std::string>& n, const DataSet& d) {
-    const auto size = static_cast<hsize_t>(d.getNumAttrs());
-    n.clear();
-    n.resize(size);
-    for (hsize_t i = 0; i != size; ++i) {
-      n[i] = d.openAttribute(i).getName();
+    try {
+      const auto size = static_cast<hsize_t>(d.getNumAttrs());
+      n.clear();
+      n.resize(size);
+      for (hsize_t i = 0; i != size; ++i) {
+        n[i] = d.openAttribute(i).getName();
+      }
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
     }
   }  // end of getAttributeNames
 
@@ -643,12 +651,16 @@ namespace madnex {
   }  // end of getAttributeNames
 
   bool hasAttribute(const DataSet& g, const std::string& n) {
-    hsize_t size = static_cast<hsize_t>(g.getNumAttrs());
-    auto found = false;
-    for (hsize_t i = 0; (i != size) && (!found); ++i) {
-      if (g.openAttribute(i).getName() == n) found = true;
+    try {
+      hsize_t size = static_cast<hsize_t>(g.getNumAttrs());
+      auto found = false;
+      for (hsize_t i = 0; (i != size) && (!found); ++i) {
+        if (g.openAttribute(i).getName() == n) found = true;
+      }
+      return found;
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
     }
-    return found;
   }  // end of hasAttribute
 
   void writeEmptyObjectAttribute(DataSet& d) {
@@ -768,10 +780,14 @@ namespace madnex {
   }  // end of contains
 
   void unlinkIfExists(const Group& g, const std::string& n) {
-    if (!exists(g, n)) {
-      return;
+    try {
+      if (!exists(g, n)) {
+        return;
+      }
+      g.unlink(n);
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
     }
-    g.unlink(n);
   }
 
 }  // end of namespace madnex

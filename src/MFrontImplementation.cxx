@@ -26,37 +26,45 @@ namespace madnex {
   };
 
   static H5::CompType getMFrontParameterCompType() {
-    H5::CompType c(sizeof(MFrontParameter));
-    c.insertMember("code", HOFFSET(MFrontParameter, code), StrType(0, 32));
-    c.insertMember("name", HOFFSET(MFrontParameter, name), StrType(0, 512));
-    c.insertMember("type", HOFFSET(MFrontParameter, type), StrType(0, 16));
-    c.insertMember("value", HOFFSET(MFrontParameter, value), StrType(0, 512));
-    c.insertMember("unit", HOFFSET(MFrontParameter, unit), StrType(0, 16));
-    return c;
+    try {
+      H5::CompType c(sizeof(MFrontParameter));
+      c.insertMember("code", HOFFSET(MFrontParameter, code), StrType(0, 32));
+      c.insertMember("name", HOFFSET(MFrontParameter, name), StrType(0, 512));
+      c.insertMember("type", HOFFSET(MFrontParameter, type), StrType(0, 16));
+      c.insertMember("value", HOFFSET(MFrontParameter, value), StrType(0, 512));
+      c.insertMember("unit", HOFFSET(MFrontParameter, unit), StrType(0, 16));
+      return c;
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
+    }
   }  // end of getMFrontParameterCompType
 
   static void write(Group& g,
                     const std::string& n,
                     const std::vector<MFrontParameter>& o,
                     const bool b) {
-    if (b) {
-      unlinkIfExists(g, n);
+    try {
+      if (b) {
+        unlinkIfExists(g, n);
+      }
+      const auto c = getMFrontParameterCompType();
+      if (contains(g, n)) {
+        removeDataSet(g, n);
+      }
+      hsize_t dim[] = {o.size()}; /* Dataspace dimensions */
+      const auto d = g.createDataSet(n, c, DataSpace(1, dim));
+      d.write(o.data(), c);
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
     }
-    const auto c = getMFrontParameterCompType();
-    if (contains(g, n)) {
-      removeDataSet(g, n);
-    }
-    hsize_t dim[] = {o.size()}; /* Dataspace dimensions */
-    const auto d = g.createDataSet(n, c, DataSpace(1, dim));
-    d.write(o.data(), c);
   }  // end of write
 
   void read(std::vector<MFrontParameter>& o,
             const Group& g,
             const std::string& n) {
-    using size_type = decltype(o.size());
-    o.clear();
     try {
+      using size_type = decltype(o.size());
+      o.clear();
       CompoundDataArrayView a(openDataSet(g, n));
       for (decltype(a.size()) i = 0; i != a.size(); ++i) {
         const auto v = a[i];
@@ -81,15 +89,19 @@ namespace madnex {
   };
 
   static H5::CompType getMFrontBoundsCompType() {
-    H5::CompType c(sizeof(MFrontBounds));
-    // bounds
-    c.insertMember("name", HOFFSET(MFrontBounds, name), StrType(0, 32));
-    c.insertMember("min_value", HOFFSET(MFrontBounds, min_value),
-                   StrType(0, 512));
-    c.insertMember("max_value", HOFFSET(MFrontBounds, max_value),
-                   StrType(0, 512));
-    c.insertMember("unit", HOFFSET(MFrontBounds, unit), StrType(0, 16));
-    return c;
+    try {
+      H5::CompType c(sizeof(MFrontBounds));
+      // bounds
+      c.insertMember("name", HOFFSET(MFrontBounds, name), StrType(0, 32));
+      c.insertMember("min_value", HOFFSET(MFrontBounds, min_value),
+                     StrType(0, 512));
+      c.insertMember("max_value", HOFFSET(MFrontBounds, max_value),
+                     StrType(0, 512));
+      c.insertMember("unit", HOFFSET(MFrontBounds, unit), StrType(0, 16));
+      return c;
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
+    }
   }  // end of getMFrontBoundsCompType
 
   static double extractFloatingPointNumber(const std::string& s) {
@@ -128,24 +140,28 @@ namespace madnex {
                     const std::string& n,
                     const std::vector<MFrontBounds>& o,
                     const bool b) {
-    if (b) {
-      unlinkIfExists(g, n);
+    try {
+      if (b) {
+        unlinkIfExists(g, n);
+      }
+      const auto c = getMFrontBoundsCompType();
+      if (contains(g, n)) {
+        removeDataSet(g, n);
+      }
+      hsize_t dim[] = {o.size()}; /* Dataspace dimensions */
+      const auto d = g.createDataSet(n, c, DataSpace(1, dim));
+      d.write(o.data(), c);
+    } catch (H5::Exception& e) {
+      raise(e.getDetailMsg());
     }
-    const auto c = getMFrontBoundsCompType();
-    if (contains(g, n)) {
-      removeDataSet(g, n);
-    }
-    hsize_t dim[] = {o.size()}; /* Dataspace dimensions */
-    const auto d = g.createDataSet(n, c, DataSpace(1, dim));
-    d.write(o.data(), c);
   }  // end of write
 
   void read(std::vector<MFrontBounds>& o,
             const Group& g,
             const std::string& n) {
-    using size_type = decltype(o.size());
-    o.clear();
     try {
+      using size_type = decltype(o.size());
+      o.clear();
       CompoundDataArrayView a(openDataSet(g, n));
       for (decltype(a.size()) i = 0; i != a.size(); ++i) {
         const auto v = a[i];
