@@ -114,8 +114,8 @@ namespace madnex {
                                           "to double");
     };
     throw_if(s.empty());
-    std::size_t p;
-    double r;
+    auto p = std::size_t{};
+    auto r = double{};
     try {
       r = std::stod(s, &p);
     } catch (std::exception&) {
