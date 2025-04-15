@@ -10,6 +10,7 @@
 
 #include <string>
 #include <vector>
+#include <cstdint>
 #include <H5Cpp.h>
 
 #include "Madnex/Config.hxx"
