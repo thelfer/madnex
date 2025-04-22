@@ -131,8 +131,9 @@ namespace madnex {
       return;
     }
     std::ostringstream ss;
+    ss.precision(14);
     ss.imbue(std::locale::classic());
-    ss << std::fixed << value;
+    ss << std::scientific << value;
     s = ss.str();
   }
 

@@ -110,6 +110,11 @@ namespace madnex {
     DataBase& operator=(const DataBase&) = default;
     //! \brief move assignement  (disabled)
     DataBase& operator=(DataBase&&) = default;
+    /*!
+     * \brief check if the given material exists, throws otherwise
+     * \param[in] m: material name
+     */
+    void checkIfMaterialExists(const std::string&) const;
     //! underlying file
     File file;
   };  // end of struct DataBase

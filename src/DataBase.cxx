@@ -102,16 +102,8 @@ namespace madnex {
   std::vector<std::string> DataBase::getAvailableMaterialProperties(
       const std::string& m) const {
     try {
-      if (!checkMFrontGroup(this->file)) {
-        return {};
-      }
+      checkIfMaterialExists(m);
       const auto r = this->file.getRoot();
-      if (!subGroupExists(r, "MFront/" + m)) {
-        raise(
-            "DataBase::getAvailableMaterialProperties: no material "
-            "named '" +
-            m + "'");
-      }
       return getSubGroupIdentifiers(r, "MFront/" + m + "/MaterialProperties");
     } catch (H5::Exception& e) {
       raise(e.getDetailMsg());
@@ -142,16 +134,8 @@ namespace madnex {
   std::vector<std::string> DataBase::getAvailableBehaviours(
       const std::string& m) const {
     try {
-      if (!checkMFrontGroup(this->file)) {
-        return {};
-      }
+      checkIfMaterialExists(m);
       const auto r = this->file.getRoot();
-      if (!subGroupExists(r, "MFront/" + m)) {
-        raise(
-            "DataBase::getAvailableBehaviours: no material "
-            "named '" +
-            m + "'");
-      }
       return getSubGroupIdentifiers(r, "MFront/" + m + "/Behaviours");
     } catch (H5::Exception& e) {
       raise(e.getDetailMsg());
@@ -182,16 +166,8 @@ namespace madnex {
   std::vector<std::string> DataBase::getAvailableModels(
       const std::string& m) const {
     try {
-      if (!checkMFrontGroup(this->file)) {
-        return {};
-      }
+      checkIfMaterialExists(m);
       const auto r = this->file.getRoot();
-      if (!subGroupExists(r, "MFront/" + m)) {
-        raise(
-            "DataBase::getAvailableModels: no material "
-            "named '" +
-            m + "'");
-      }
       return getSubGroupIdentifiers(r, "MFront/" + m + "/Models");
     } catch (H5::Exception& e) {
       raise(e.getDetailMsg());
@@ -298,11 +274,11 @@ namespace madnex {
 
   std::vector<std::string> DataBase::getAvailableMTestTests(
       const std::string& b) const {
+    const auto r = this->file.getRoot();
     try {
       if (!checkMFrontGroup(this->file)) {
         return {};
       }
-      const auto r = this->file.getRoot();
       if (!subGroupExists(r, "MFront/Behaviours")) {
         raise(
             "DataBase::getAvailableMTestTests: "
@@ -320,6 +296,33 @@ namespace madnex {
       raise(e.getDetailMsg());
     }
   }  // end of DataBase::getAvailableMTestTests
+
+  void DataBase::checkIfMaterialExists(const std::string& m) const {
+    if (!checkMFrontGroup(this->file)) {
+      raise(
+          "DataBase::getAvailableBehaviours: no material "
+          "named '" +
+          m + "' (no material defined)");
+    }
+    const auto r = this->file.getRoot();
+    if (subGroupExists(r, "MFront/" + m)) {
+      return;
+    }
+    auto msg =
+        "DataBase::getAvailableBehaviours: no material "
+        "named '" +
+        m + "'";
+    const auto materials = this->getMaterialsList();
+    if (materials.empty()) {
+      msg += " (no material defined)";
+    } else {
+      msg += ". The following materials are defined:";
+      for (const auto& mn : materials) {
+        msg += "\n- " + mn;
+      }
+    }
+    raise(msg);
+  }  // end of checkIfMaterialExists
 
   DataBase::~DataBase() = default;
 
