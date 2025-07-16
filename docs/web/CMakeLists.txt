@@ -39,6 +39,7 @@ if(MADNEX_HAVE_PANDOC)
   madnex_pandoc_generate_html_page(madnex-query)
   madnex_pandoc_generate_html_page(mfront-implementations-storage)
   madnex_pandoc_generate_html_page(mtest-tests-storage)
+  madnex_pandoc_generate_html_page(release-notes-1.0.1)
 endif(MADNEX_HAVE_PANDOC)
 
 if(MADNEX_APPEND_SUFFIX)

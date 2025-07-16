@@ -20,7 +20,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CXX_STANDARD_REQUIRED ON)
 
 #major and minor version
-madnex_project(2 0 "0-dev")
+madnex_project(1 0 "1-dev")
 set(PACKAGE_BUGREPORT "thomas.helfer@cea.fr;françois.curtit@edf.fr")
 
 #hdf5
