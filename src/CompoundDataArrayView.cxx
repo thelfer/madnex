@@ -25,6 +25,7 @@ namespace madnex {
       hsize_t dims[1];
       dspace.getSimpleExtentDims(dims);
       this->s = dims[0];
+      checkAllocationSize(this->s, this->ctype.getSize());
       this->rdata.resize(this->ctype.getSize() * (this->s));
       d.read(this->rdata.data(), this->ctype);
     } catch (H5::Exception& e) {

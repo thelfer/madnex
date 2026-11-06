@@ -18,6 +18,7 @@
 
 #include "Madnex/HDF5.hxx"
 #include "Madnex/File.hxx"
+#include "Madnex/Types.hxx"
 
 /*!
  * \brief read a floatting_point value.
@@ -84,6 +85,38 @@ static void read_file() {
     auto catched = false;
     try {
       read<double>(r, "string_value");
+    } catch (std::runtime_error&) {
+      catched = true;
+    }
+    assert(catched);
+  }
+  // a corrupt file declaring a huge extent must be rejected before any
+  // allocation occurs (regression test for issue #12): the data set
+  // below declares `2^50` elements but only stores one, thanks to the
+  // chunked storage
+  {
+    const auto fname = std::string("MadnexPODHugeExtent.madnex");
+    {
+      const auto f2 = File(fname, H5F_ACC_TRUNC);
+      const auto r2 = f2.getRoot();
+      const hsize_t big_dims[1] = {hsize_t(1) << 50};
+      const hsize_t chunk[1] = {10};
+      auto s = DataSpace(1, big_dims);
+      auto p = H5::DSetCreatPropList();
+      p.setChunk(1, chunk);
+      const auto d2 =
+          r2.createDataSet("huge", getNativeType<std::int32_t>(), s, p);
+      const hsize_t one[1] = {1};
+      s.selectHyperslab(H5S_SELECT_SET, one, one);
+      const auto mem = DataSpace(1, one);
+      const auto v = static_cast<std::int32_t>(12);
+      d2.write(&v, getNativeType<std::int32_t>(), mem, s);
+    }
+    const auto f2 = File(fname, H5F_ACC_RDONLY);
+    const auto r2 = f2.getRoot();
+    auto catched = false;
+    try {
+      read<std::vector<std::int32_t>>(r2, "huge");
     } catch (std::runtime_error&) {
       catched = true;
     }
