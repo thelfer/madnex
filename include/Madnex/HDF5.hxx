@@ -83,6 +83,17 @@ namespace madnex {
   using H5::DataSpace;
 
   /*!
+   * \brief check that the size of the memory allocation driven by the
+   * extent of a data set is reasonable before allocating it, so that a
+   * corrupt or hostile file cannot trigger an enormous allocation.
+   * \param[in] n: number of elements declared by the file
+   * \param[in] s: size of a single element, in bytes
+   * \exception std::runtime_error if the total size exceeds the maximum
+   * allowed allocation size
+   */
+  MADNEX_EXPORT void checkAllocationSize(const hsize_t, const std::size_t);
+
+  /*!
    * \brief check if an object with the given path exists in the given group
    * \param[in] g: group
    * \param[in] p: path

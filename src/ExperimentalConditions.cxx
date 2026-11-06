@@ -85,6 +85,7 @@ namespace madnex {
       const auto d = openDataSet(g, n);
       hsize_t dims[1];
       d.getSpace().getSimpleExtentDims(dims);
+      checkAllocationSize(dims[0], sizeof(CExperimentalCondition<char>));
       o.reserve(dims[0]);
       cecs.resize(dims[0]);
       d.read(cecs.data(), c);

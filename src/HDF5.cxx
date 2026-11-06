@@ -160,6 +160,7 @@
         DataSpace filespace = dataset.getSpace();                            \
         hsize_t dims[1];                                                     \
         filespace.getSimpleExtentDims(dims);                                 \
+        checkAllocationSize(dims[0], sizeof(X));                             \
         o.resize(dims[0]);                                                   \
         dataset.read(&o[0], getNativeType<X>());                             \
       }                                                                      \
@@ -170,6 +171,20 @@
   }
 
 namespace madnex {
+
+  void checkAllocationSize(const hsize_t n, const std::size_t s) {
+    // maximum size, in bytes, of a memory allocation driven by the
+    // extents declared by a file. This limit is only meant to prevent
+    // corrupt or malicious files from triggering gigantic allocations;
+    // it is purposely much larger than any sane MADNEX file.
+    constexpr const hsize_t max_size = hsize_t{1024} * hsize_t{1024} *
+                                       hsize_t{1024} * hsize_t{1024};  // 1 TiB
+    if ((s != 0) && (n != 0) && (n > max_size / hsize_t{s})) {
+      raise("madnex::checkAllocationSize: the file declares a data set of " +
+            std::to_string(n) + " elements of " + std::to_string(s) +
+            " bytes, which exceeds the maximum allowed allocation size");
+    }
+  }  // end of checkAllocationSize
 
   static std::vector<std::string> tokenize(std::string_view s,
                                            const char c,
@@ -352,6 +367,7 @@ namespace madnex {
         std::free(pv);
       } else {
         // using an fixed length string
+        checkAllocationSize(dims[0], 1);
         v.resize(dims[0]);
         const auto type = H5::PredType::C_S1;
         attr.read(type, &v[0]);
