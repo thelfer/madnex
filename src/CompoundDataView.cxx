@@ -38,11 +38,56 @@ namespace madnex {
       : CompoundDataViewBase(b),
         data_pointer(rd) {}  // end of CompoundDataView::CompoundDataView
 
-  CompoundDataView::CompoundDataView(CompoundDataView&&) = default;
-  CompoundDataView::CompoundDataView(const CompoundDataView&) = default;
-  CompoundDataView& CompoundDataView::operator=(CompoundDataView&&) = default;
-  CompoundDataView& CompoundDataView::operator=(const CompoundDataView&) =
-      default;
+  // \note `data_pointer` refers to `data_storage` when this object owns
+  // its data (i.e. when `data_storage` is not empty) and to an external
+  // buffer otherwise (a view over a `CompoundDataArrayView` element).
+  // The special members below are hand-written so that the pointer is
+  // re-pointed to the new owner's storage on copy (the defaulted
+  // implementation kept it addressing the source's buffer, leading to a
+  // use-after-free once the source was destroyed) and reset to `nullptr`
+  // on move of an owning view.
+  CompoundDataView::CompoundDataView(CompoundDataView&& other)
+      : CompoundDataViewBase(std::move(other)),
+        data_storage(std::move(other.data_storage)) {
+    if (!this->data_storage.empty()) {  // the ownership was transferred
+      this->data_pointer = this->data_storage.data();
+      other.data_pointer = nullptr;
+    } else {  // 'other' was a view over an external buffer
+      this->data_pointer = other.data_pointer;
+    }
+  }
+  CompoundDataView::CompoundDataView(const CompoundDataView& other)
+      : CompoundDataViewBase(other),
+        data_storage(other.data_storage),
+        data_pointer(other.data_pointer) {
+    if (!this->data_storage.empty()) {
+      this->data_pointer = this->data_storage.data();
+    }
+  }
+  CompoundDataView& CompoundDataView::operator=(CompoundDataView&& other) {
+    if (this != &other) {
+      CompoundDataViewBase::operator=(std::move(other));
+      this->data_storage = std::move(other.data_storage);
+      if (!this->data_storage.empty()) {  // the ownership was transferred
+        this->data_pointer = this->data_storage.data();
+        other.data_pointer = nullptr;
+      } else {  // 'other' was a view over an external buffer
+        this->data_pointer = other.data_pointer;
+      }
+    }
+    return *this;
+  }
+  CompoundDataView& CompoundDataView::operator=(const CompoundDataView& other) {
+    if (this != &other) {
+      CompoundDataViewBase::operator=(other);
+      this->data_storage = other.data_storage;
+      this->data_pointer = other.data_pointer;
+      if (!this->data_storage.empty()) {
+        this->data_pointer = this->data_storage.data();
+      }
+    }
+    return *this;
+  }
 
   CompoundDataView::~CompoundDataView() = default;
 

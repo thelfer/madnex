@@ -50,6 +50,18 @@ static void read_file() {
   CompoundDataView e(openDataSet(r, "test"));
   assert(e.extract<std::int32_t>("integer_value") == 12);
   assert(std::abs(e.extract<float>("float_value") - 3.14156f) < eps);
+  // check that a copied view remains valid once the source object is
+  // destroyed (regression test for issue #4: the defaulted copy
+  // constructor used to keep `data_pointer` addressing the source's
+  // internal storage, which resulted in a use-after-free)
+  auto value_copy = std::int32_t{};
+  {
+    const CompoundDataView e_copy = e;
+    auto e_move = CompoundDataView(e_copy);
+    value_copy = e_move.extract<std::int32_t>("integer_value");
+    assert(e_copy.extract<std::int32_t>("integer_value") == 12);
+  }
+  assert(value_copy == 12);
 }
 
 static void read_file2(const std::string& fileName) {
