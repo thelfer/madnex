@@ -92,6 +92,17 @@ namespace madnex{
       template <std::size_t N2>
       basic_fcstring& operator=(const CStringNarrowedView<N2, CharT>&);
       /*!
+       * \brief assign the content of a buffer of known size, stopping at
+       * the first null character. Unlike `operator=(const CharT*)`, this
+       * method does not require the buffer to be null terminated, which
+       * is the typical case of fixed length strings stored in a HDF5
+       * file.
+       * \param[in] s: source buffer
+       * \param[in] len: number of characters guaranteed to be readable
+       * \return this object
+       */
+      basic_fcstring& assign(const CharT* s, const std::size_t len);
+      /*!
        * \brief access opeartor
        * \param[in] i: index
        * \return the element at the given position
@@ -163,6 +174,14 @@ namespace madnex{
        * \param[in] s: external C-string
        */
       static std::size_t strnlen(const CharT*);
+      /*!
+       * \return the size of an external C-string if a null character
+       * is found in the `max_size` first characters, `max_size`
+       * otherwise.
+       * \param[in] s: external C-string
+       * \param[in] max_size: maximum number of characters to scan
+       */
+      static std::size_t strnlen(const CharT*, const std::size_t);
     };  // end of struct basic_fcstring
 
     //! a simple alias for `char`
