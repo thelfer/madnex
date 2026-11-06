@@ -8,6 +8,8 @@
 #ifndef LIB_MADNEX_COMPOUNDEXTRACTOR_IXX
 #define LIB_MADNEX_COMPOUNDEXTRACTOR_IXX
 
+#include <cstring>
+
 namespace madnex {
 
   template <typename T>
@@ -15,7 +17,14 @@ namespace madnex {
     CompoundExtractorBase::checkMemberClass(getNativeType<T>(),
                                             this->cview.getMemberClass(i));
     const auto o = this->cview.getMemberOffset(i);
-    return *(reinterpret_cast<const T*>(d + o));
+    // the offset of a member in a HDF5 compound type is not guaranteed
+    // to satisfy the alignment requirement of `T`: copy the bytes
+    // instead of reading them through a reinterpretation of the
+    // pointer, which would be undefined behaviour on strict alignment
+    // targets
+    auto r = T{};
+    std::memcpy(&r, d + o, sizeof(T));
+    return r;
   }  // end of CompoundExtractor::extract
 
   template <std::size_t N>
