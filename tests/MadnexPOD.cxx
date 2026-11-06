@@ -67,6 +67,21 @@ static void read_file() {
   const auto r = f.getRoot();
   assert(read<char>(r, "char_value") == 'c');
   assert(read<std::int32_t>(r, "integer_value") == 12);
+  // check the attribute accessors associated with data sets
+  // (regression test for issue #7: `getAttributeValue<T>(const
+  // DataSet&, ...)` used to call a non-existent `getAttribute`
+  // function, which prevented any instantiation from compiling)
+  {
+    const auto d = openDataSet(r, "integer_value");
+    assert(getAttributeValue<std::string>(d, "type") == "@i32");
+    auto catched = false;
+    try {
+      getAttributeValue<std::int32_t>(d, "no_such_attribute");
+    } catch (std::runtime_error&) {
+      catched = true;
+    }
+    assert(catched);
+  }
   {
     auto catched = false;
     try {
