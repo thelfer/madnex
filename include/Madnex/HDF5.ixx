@@ -45,7 +45,7 @@ namespace madnex {
   template <typename T>
   T getAttributeValue(const DataSet& d, const std::string& n) {
     T r;
-    getAttribute(r, d, n);
+    getAttributeValue(r, d, n);
     return r;
   }
 
