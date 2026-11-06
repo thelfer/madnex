@@ -55,6 +55,8 @@ static void write_file() {
   write(r, "double_value", 12.);
   write(r, "long_double_value", static_cast<long double>(12));
   write(r, "string_value", "lorem ipsum");
+  write(r, "integer_vector", std::vector<std::int32_t>{1, 2, 3});
+  write(r, "long_double_vector", std::vector<long double>{1., 2., 3.});
 }
 
 /*!
@@ -80,6 +82,14 @@ static void read_file() {
   read_floatting_point_number<double>(r, "double_value", 12.);
   read_floatting_point_number<long double>(r, "long_double_value", 12.);
   assert(read<std::string>(r, "string_value") == "lorem ipsum");
+  // check the `std::vector` overloads: the list of usable types used to
+  // differ from the list of types defined by the library (regression
+  // test for issue #8: `std::vector<long double>` was defined but not
+  // declared, while several declared types were not defined)
+  assert((read<std::vector<std::int32_t>>(r, "integer_vector") ==
+          std::vector<std::int32_t>{1, 2, 3}));
+  assert((read<std::vector<long double>>(r, "long_double_vector") ==
+          std::vector<long double>{1., 2., 3.}));
   {
     auto catched = false;
     try {
