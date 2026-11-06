@@ -431,16 +431,6 @@ namespace madnex {
   MADNEX_HDF5_VECTOR_DECLARATION(double);
   MADNEX_HDF5_VECTOR_DECLARATION(long double);
 
-  /*!
-   * \brief write a string
-   * \param[out] g: group
-   * \param[in]  n: name of the data
-   * \param[in]  o: object to be written
-   * \param[in]  a: object value and name
-   */
-  template <typename... Args>
-  void writeCompoundData(Group&, const std::string&, const Args&...);
-
 }  // end of namespace madnex
 
 #include "Madnex/HDF5.ixx"
