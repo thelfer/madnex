@@ -352,6 +352,12 @@ namespace madnex {
         std::free(pv);
       } else {
         // using an fixed length string
+        if (dims[0] == 0) {
+          // the attribute is stored with a zero sized extent: reading
+          // through `&v[0]` or testing `v.back()` would be undefined
+          // behaviour on the empty string. The value is just empty.
+          return;
+        }
         v.resize(dims[0]);
         const auto type = H5::PredType::C_S1;
         attr.read(type, &v[0]);
