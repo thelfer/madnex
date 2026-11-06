@@ -40,6 +40,15 @@ static void read_file() {
   assert(ec.name == "Temperature");
   assert(ec.value == "273.15");
   assert(ec.unit == "K");
+  // `read` clears its output parameter: reading twice in the same
+  // container does not duplicate the content (regression test for
+  // issue #11)
+  auto ecs2 = read<ExperimentalConditions>(r, "experimental_conditions");
+  read(ecs2, r, "experimental_conditions");
+  assert(ecs2.size() == 1u);
+  assert(ecs2[0].name == "Temperature");
+  assert(ecs2[0].value == "273.15");
+  assert(ecs2[0].unit == "K");
 }
 
 int main() {
