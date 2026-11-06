@@ -46,6 +46,21 @@ namespace madnex{
     }
   }  // end of CompoundDataViewBase::getMemberIndex
 
+  size_t CompoundDataViewBase::getMemberIndexOr(const char* n,
+                                                const size_t f) const {
+    try {
+      const auto i = this->ctype.getMemberIndex(n);
+      if (i >= 0) {
+        return static_cast<size_t>(i);
+      }
+    } catch (H5::Exception&) {
+      // the member does not exist: fall back to the given index. This
+      // allows reading legacy files whose members carry different names
+      // but kept the same relative order.
+    }
+    return f;
+  }  // end of CompoundDataViewBase::getMemberIndexOr
+
   H5T_class_t CompoundDataViewBase::getMemberClass(const size_t i) const
   {
     try {

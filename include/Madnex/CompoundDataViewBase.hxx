@@ -48,6 +48,15 @@ namespace madnex{
      */
     size_t getMemberIndex(const std::string&) const;
     /*!
+     * \brief return the index of the member with the given name; if no
+     * member has this name, return the given fallback index. This allows
+     * reading files written by foreign (or legacy) applications whose
+     * members carry different names but kept the same relative order.
+     * \param[in] n: member name
+     * \param[in] f: fallback index
+     */
+    size_t getMemberIndexOr(const char*, const size_t) const;
+    /*!
      * \return the class of the member
      * \param[in] i: member index
      */
