@@ -112,7 +112,7 @@
       attr.read(getNativeType<X>(), &v);                                    \
     } catch (H5::Exception&) {                                              \
       raise("madnex::getTypeAttributeValue: can't get attribute '" + n +    \
-            "' for group");                                                 \
+            "' for data set");                                              \
     }                                                                       \
   }
 
@@ -476,7 +476,7 @@ namespace madnex {
     getTypeAttribute(type, d);
     if (type != t) {
       raise(
-          "madnex::checkTypeAttribute: group type attribute is not what "
+          "madnex::checkTypeAttribute: data set type attribute is not what "
           " was expected (expected '" +
           t + "', read '" + type + "')");
     }

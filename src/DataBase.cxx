@@ -300,7 +300,7 @@ namespace madnex {
   void DataBase::checkIfMaterialExists(const std::string& m) const {
     if (!checkMFrontGroup(this->file)) {
       raise(
-          "DataBase::getAvailableBehaviours: no material "
+          "DataBase::checkIfMaterialExists: no material "
           "named '" +
           m + "' (no material defined)");
     }
@@ -309,7 +309,7 @@ namespace madnex {
       return;
     }
     auto msg =
-        "DataBase::getAvailableBehaviours: no material "
+        "DataBase::checkIfMaterialExists: no material "
         "named '" +
         m + "'";
     const auto materials = this->getMaterialsList();
