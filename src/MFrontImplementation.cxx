@@ -270,6 +270,12 @@ namespace madnex {
           auto parameters = std::vector<MFrontParameter>{};
           read(parameters, impl, "parameters");
           for (const auto& p : parameters) {
+            if (p.value.empty()) {
+              // non-finite values (NaN, infinite) are written as empty
+              // strings (see `convert`): do not try to convert them, as
+              // the bounds below do
+              continue;
+            }
             i.parameters.insert({static_cast<std::string>(p.code),
                                  extractFloatingPointNumber(
                                      static_cast<std::string>(p.value))});
