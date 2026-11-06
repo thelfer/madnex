@@ -78,33 +78,65 @@ namespace madnex {
     }
   }  // end of write
 
+  // \brief release the memory allocated by the HDF5 library while
+  // reading a record of variable length strings. This function shall not
+  // throw so that it can be called while unwinding.
+  static void releaseCExperimentalCondition(CExperimentalCondition<char>& cec) {
+    H5free_memory(cec.name);
+    cec.name = nullptr;
+    H5free_memory(cec.label);
+    cec.label = nullptr;
+    H5free_memory(cec.value);
+    cec.value = nullptr;
+    H5free_memory(cec.unit);
+    cec.unit = nullptr;
+    H5free_memory(cec.type);
+    cec.type = nullptr;
+  }  // end of releaseCExperimentalCondition
+
   void read(ExperimentalConditions& o, const Group& g, const std::string& n) {
     try {
-      std::vector<CExperimentalCondition<char>> cecs;
       const auto c = getExperimentalConditionCompType<char>();
       const auto d = openDataSet(g, n);
+      const auto dspace = d.getSpace();
+      if (dspace.getSimpleExtentNdims() != 1) {
+        raise("madnex::read: invalid dimension");
+      }
       hsize_t dims[1];
-      d.getSpace().getSimpleExtentDims(dims);
-      o.reserve(dims[0]);
+      dspace.getSimpleExtentDims(dims);
+      // the data set may contain less records than the rows already
+      // stored in the out paramter: clear it first, like all the other
+      // `read` functions of the library
+      o.clear();
+      std::vector<CExperimentalCondition<char>> cecs;
       cecs.resize(dims[0]);
-      d.read(cecs.data(), c);
+      try {
+        d.read(cecs.data(), c);
+        o.reserve(dims[0]);
+        for (auto& cec : cecs) {
+          ExperimentalCondition ec;
+          ec.name = cec.name;
+          ec.label = cec.label;
+          ec.value = cec.value;
+          ec.unit = cec.unit;
+          ec.type = cec.type;
+          o.emplace_back(std::move(ec));
+        }
+      } catch (...) {
+        // release the memory allocated by the HDF5 library before
+        // propagating the exception (an exception may be thrown while
+        // copying the strings, e.g. `std::bad_alloc`)
+        for (auto& cec : cecs) {
+          releaseCExperimentalCondition(cec);
+        }
+        throw;
+      }
       for (auto& cec : cecs) {
-        ExperimentalCondition ec;
-        ec.name = cec.name;
-        ec.label = cec.label;
-        ec.value = cec.value;
-        ec.unit = cec.unit;
-        ec.type = cec.type;
-        std::free(cec.name);
-        std::free(cec.label);
-        std::free(cec.value);
-        std::free(cec.unit);
-        std::free(cec.type);
-        o.emplace_back(std::move(ec));
+        releaseCExperimentalCondition(cec);
       }
     } catch (H5::Exception& e) {
       raise(e.getDetailMsg());
     }
-  }
+  }  // end of read
 
 }  // end of namespace madnex
