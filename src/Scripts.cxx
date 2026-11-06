@@ -57,13 +57,20 @@ namespace madnex {
       const CompoundDataArrayView v(openDataSet(g, n));
       o.clear();
       o.reserve(v.size());
+      // resolve the members by name, falling back to the position of the
+      // members in files written by this library when no member has the
+      // expected name (some legacy files use different member names)
+      const auto author_index = v.getMemberIndexOr("author", 0);
+      const auto date_index = v.getMemberIndexOr("date", 1);
+      const auto command_line_index = v.getMemberIndexOr("command_line", 2);
+      const auto script_version_index = v.getMemberIndexOr("script_version", 3);
       for (size_type i = 0; i != v.size(); ++i) {
         const auto d = v[i];
         Script ec;
-        extract(ec.author, d, size_type(0));
-        extract(ec.date, d, size_type(1));
-        extract(ec.command_line, d, size_type(2));
-        extract(ec.script_version, d, size_type(3));
+        extract(ec.author, d, author_index);
+        extract(ec.date, d, date_index);
+        extract(ec.command_line, d, command_line_index);
+        extract(ec.script_version, d, script_version_index);
         o.emplace_back(std::move(ec));
       }
     } catch (H5::Exception& e) {
