@@ -63,17 +63,24 @@ namespace madnex {
             const Group& g,
             const std::string& n) {
     try {
-      using size_type = decltype(o.size());
       o.clear();
       CompoundDataArrayView a(openDataSet(g, n));
+      // resolve the members by name, falling back to the position of the
+      // members in files written by this library when no member has the
+      // expected name (some legacy files use different member names)
+      const auto code_index = a.getMemberIndexOr("code", 0);
+      const auto name_index = a.getMemberIndexOr("name", 1);
+      const auto type_index = a.getMemberIndexOr("type", 2);
+      const auto value_index = a.getMemberIndexOr("value", 3);
+      const auto unit_index = a.getMemberIndexOr("unit", 4);
       for (decltype(a.size()) i = 0; i != a.size(); ++i) {
         const auto v = a[i];
         MFrontParameter r;
-        extract(r.code, v, size_type(0));
-        extract(r.name, v, size_type(1));
-        extract(r.type, v, size_type(2));
-        extract(r.value, v, size_type(3));
-        extract(r.unit, v, size_type(4));
+        extract(r.code, v, code_index);
+        extract(r.name, v, name_index);
+        extract(r.type, v, type_index);
+        extract(r.value, v, value_index);
+        extract(r.unit, v, unit_index);
         o.emplace_back(std::move(r));
       }
     } catch (H5::Exception& e) {
@@ -161,16 +168,22 @@ namespace madnex {
             const Group& g,
             const std::string& n) {
     try {
-      using size_type = decltype(o.size());
       o.clear();
       CompoundDataArrayView a(openDataSet(g, n));
+      // resolve the members by name, falling back to the position of the
+      // members in files written by this library when no member has the
+      // expected name (some legacy files use different member names)
+      const auto name_index = a.getMemberIndexOr("name", 0);
+      const auto min_value_index = a.getMemberIndexOr("min_value", 1);
+      const auto max_value_index = a.getMemberIndexOr("max_value", 2);
+      const auto unit_index = a.getMemberIndexOr("unit", 3);
       for (decltype(a.size()) i = 0; i != a.size(); ++i) {
         const auto v = a[i];
         MFrontBounds r;
-        extract(r.name, v, size_type(0));
-        extract(r.min_value, v, size_type(1));
-        extract(r.max_value, v, size_type(2));
-        extract(r.unit, v, size_type(3));
+        extract(r.name, v, name_index);
+        extract(r.min_value, v, min_value_index);
+        extract(r.max_value, v, max_value_index);
+        extract(r.unit, v, unit_index);
         o.emplace_back(std::move(r));
       }
     } catch (H5::Exception& e) {

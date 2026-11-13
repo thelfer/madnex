@@ -420,26 +420,16 @@ namespace madnex {
   template <typename T>
   void read(std::vector<T>&, const Group&, const std::string&);
 
-  MADNEX_HDF5_VECTOR_DECLARATION(bool);
+  // \note this list must be identical to the list of types handled by
+  // `MADNEX_HDF5_VECTOR_IMPLEMENTATION` in `src/HDF5.cxx`. Types such as
+  // `int` or `long` are covered on platforms where they respectively
+  // have the same size as `std::int32_t` and `std::int64_t`.
   MADNEX_HDF5_VECTOR_DECLARATION(char);
-  MADNEX_HDF5_VECTOR_DECLARATION(short);
-  MADNEX_HDF5_VECTOR_DECLARATION(int);
-  MADNEX_HDF5_VECTOR_DECLARATION(long);
-  MADNEX_HDF5_VECTOR_DECLARATION(unsigned short);
-  MADNEX_HDF5_VECTOR_DECLARATION(unsigned int);
-  MADNEX_HDF5_VECTOR_DECLARATION(unsigned long);
+  MADNEX_HDF5_VECTOR_DECLARATION(std::int32_t);
+  MADNEX_HDF5_VECTOR_DECLARATION(std::int64_t);
   MADNEX_HDF5_VECTOR_DECLARATION(float);
   MADNEX_HDF5_VECTOR_DECLARATION(double);
-
-  /*!
-   * \brief write a string
-   * \param[out] g: group
-   * \param[in]  n: name of the data
-   * \param[in]  o: object to be written
-   * \param[in]  a: object value and name
-   */
-  template <typename... Args>
-  void writeCompoundData(Group&, const std::string&, const Args&...);
+  MADNEX_HDF5_VECTOR_DECLARATION(long double);
 
 }  // end of namespace madnex
 

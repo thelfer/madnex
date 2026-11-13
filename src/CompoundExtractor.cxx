@@ -42,7 +42,10 @@ namespace madnex{
     try {
       auto strnlen = [](const char* s, const size_t m) {
         auto r = size_t{};
-        while ((s[r] != '\0') && (r < m)) {
+        // the boundary is tested before the character is read:
+        // evaluating `s[r]` first would read `s[m]`, which may be
+        // out of bounds
+        while ((r < m) && (s[r] != '\0')) {
           ++r;
         }
         return r;
