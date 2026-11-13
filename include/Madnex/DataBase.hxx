@@ -131,22 +131,26 @@ namespace madnex {
    * \param[in] m: regex filtering the materials
    * \param[in] mp: regex filtering the material propertiess
    */
-  MADNEX_EXPORT std::vector<std::string> getMatchingMaterialProperties(
-      const DataBase&, const std::string&);
+  MADNEX_EXPORT std::map<std::string, std::vector<std::string>>
+  getMatchingMaterialProperties(const DataBase&,
+                                const std::string&,
+                                const std::string&);
   /*!
    * \return the list of behaviours matching the given regular expressions.
    * \param[in] m: regex filtering the materials
    * \param[in] mp: regex filtering the behaviours
    */
-  MADNEX_EXPORT std::vector<std::string> getMatchingBehaviours(
-      const DataBase&, const std::string&);
+  MADNEX_EXPORT std::map<std::string, std::vector<std::string>>
+  getMatchingBehaviours(const DataBase&,
+                        const std::string&,
+                        const std::string&);
   /*!
    * \return the list of models matching the given regular expressions.
    * \param[in] m: regex filtering the materials
    * \param[in] mp: regex filtering the models
    */
-  MADNEX_EXPORT std::vector<std::string> getMatchingModels(const DataBase&,
-                                                           const std::string&);
+  MADNEX_EXPORT std::map<std::string, std::vector<std::string>>
+  getMatchingModels(const DataBase&, const std::string&, const std::string&);
 
 }  // end of namespace madnex
 

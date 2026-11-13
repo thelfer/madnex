@@ -104,6 +104,7 @@ namespace madnex {
       }
       hsize_t dims[1];
       dspace.getSimpleExtentDims(dims);
+      checkAllocationSize(dims[0], sizeof(CExperimentalCondition<char>));
       // the data set may contain less records than the rows already
       // stored in the out paramter: clear it first, like all the other
       // `read` functions of the library

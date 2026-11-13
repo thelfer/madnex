@@ -18,7 +18,7 @@ namespace madnex {
 
   template <typename ExceptionType, typename... Args>
   MADNEX_NORETURN void raise(Args&&... a) {
-    ExceptionType e(std::forward<Args...>(a...));
+    ExceptionType e(std::forward<Args>(a)...);
     throw(std::move(e));
   }  // end of raise
 
@@ -32,7 +32,7 @@ namespace madnex {
   template <typename ExceptionType, typename... Args>
   void raise_if(const bool c, Args&&... a) {
     if (c) {
-      raise<ExceptionType>(std::forward<Args...>(a...));
+      raise<ExceptionType>(std::forward<Args>(a)...);
     }
   }  // end of raise
 

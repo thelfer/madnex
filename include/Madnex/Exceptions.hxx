@@ -16,8 +16,13 @@ namespace madnex {
 
   /*!
    * \brief base class for all exception throw by the `Madnex` library
+   *
+   * \note this class derives from `std::runtime_error` so that the
+   * exceptions thrown by the library can still be caught by the code
+   * written against the previous versions of the library, which used to
+   * throw `std::runtime_error` objects.
    */
-  struct MADNEX_EXPORT Exception : public std::exception {
+  struct MADNEX_EXPORT Exception : public std::runtime_error {
     //! default constructor
     Exception();
     //! copy constructor
@@ -32,6 +37,8 @@ namespace madnex {
    * \brief a generic exception
    */
   struct MADNEX_EXPORT RuntimeError : public Exception {
+    //! default constructor
+    RuntimeError();
     /*!
      * \brief constructor from std::string
      * \param[in] m: error message
@@ -48,6 +55,10 @@ namespace madnex {
     RuntimeError(const RuntimeError&);
     //! destructor
     virtual ~RuntimeError();
+    /*!
+     * \return the error message
+     */
+    const char* what() const noexcept override;
 
    private:
     std::string msg;

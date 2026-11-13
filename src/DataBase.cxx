@@ -274,11 +274,11 @@ namespace madnex {
 
   std::vector<std::string> DataBase::getAvailableMTestTests(
       const std::string& b) const {
-    const auto r = this->file.getRoot();
     try {
       if (!checkMFrontGroup(this->file)) {
         return {};
       }
+      const auto r = this->file.getRoot();
       if (!subGroupExists(r, "MFront/Behaviours")) {
         raise(
             "DataBase::getAvailableMTestTests: "
@@ -300,7 +300,7 @@ namespace madnex {
   void DataBase::checkIfMaterialExists(const std::string& m) const {
     if (!checkMFrontGroup(this->file)) {
       raise(
-          "DataBase::getAvailableBehaviours: no material "
+          "DataBase::checkIfMaterialExists: no material "
           "named '" +
           m + "' (no material defined)");
     }
@@ -309,7 +309,7 @@ namespace madnex {
       return;
     }
     auto msg =
-        "DataBase::getAvailableBehaviours: no material "
+        "DataBase::checkIfMaterialExists: no material "
         "named '" +
         m + "'";
     const auto materials = this->getMaterialsList();
@@ -331,10 +331,18 @@ namespace madnex {
     static std::vector<std::string> filter(
         const std::vector<std::string>& names, const std::string& p) {
       auto res = std::vector<std::string>{};
-      std::regex r(p);
-      std::copy_if(
-          names.begin(), names.end(), std::back_inserter(res),
-          [&r](const std::string& n) { return std::regex_match(n, r); });
+      try {
+        const auto r = std::regex(p);
+        std::copy_if(
+            names.begin(), names.end(), std::back_inserter(res),
+            [&r](const std::string& n) { return std::regex_match(n, r); });
+      } catch (const std::regex_error& e) {
+        // a `std::regex_error` escaping here could even reach the
+        // destructor of some objects, where it would trigger
+        // `std::terminate`: translate it into an error of the library
+        raise("madnex::filter: invalid regular expression '" + p +
+              "': " + e.what());
+      }
       return res;
     };  // end of filter
 
