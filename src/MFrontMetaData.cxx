@@ -70,7 +70,6 @@ try{
                    const Group& g,
                    const std::string& n) {
     try {
-      using size_type = size_t;
       if (subGroupExists(g, n)) {
         return;
       }
@@ -78,12 +77,20 @@ try{
       if (a.size() != 1u) {
         raise("invalid number of metadata");
       }
+      // resolve the members by name, falling back to the position of the
+      // members in files written by this library when no member has the
+      // expected name (some legacy files use different member names)
+      const auto author_index = a.getMemberIndexOr("author", 0);
+      const auto date_index = a.getMemberIndexOr("date", 1);
+      const auto status_index = a.getMemberIndexOr("status", 2);
+      const auto description_index = a.getMemberIndexOr("description", 3);
+      const auto uuid_index = a.getMemberIndexOr("uuid", 4);
       const auto v = a[0];
-      extract(o.author, v, size_type(0));
-      extract(o.date, v, size_type(1));
-      extract(o.status, v, size_type(2));
-      extract(o.description, v, size_type(3));
-      extract(o.uuid, v, size_type(4));
+      extract(o.author, v, author_index);
+      extract(o.date, v, date_index);
+      extract(o.status, v, status_index);
+      extract(o.description, v, description_index);
+      extract(o.uuid, v, uuid_index);
     } catch (H5::Exception& e) {
       raise(e.getDetailMsg());
     }
