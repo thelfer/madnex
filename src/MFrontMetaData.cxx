@@ -1,6 +1,6 @@
 /*!
  * \file   src/MFrontMetaData.cxx
- * \brief    
+ * \brief
  * \author Thomas Helfer
  * \date   27/08/2020
  */
@@ -8,7 +8,7 @@
 #include "Madnex/CompoundDataArrayView.hxx"
 #include "Madnex/MFrontMetaData.hxx"
 
-namespace madnex{
+namespace madnex {
 
   MFrontMetaData::MFrontMetaData() = default;
   MFrontMetaData::MFrontMetaData(MFrontMetaData&&) = default;
@@ -28,6 +28,8 @@ namespace madnex{
     fcstring<512> description;
     //! \brief universally unique identifier
     fcstring<36> uuid;
+    //! \brief unit system (empty when the default unit system is used)
+    fcstring<32> unit_system;
   };
 
   static H5::CompType getMFrontMetaDataWrapperCompType() {
@@ -43,24 +45,33 @@ namespace madnex{
                      StrType(0, 512));
       c.insertMember("uuid", HOFFSET(MFrontMetaDataWrapper, uuid),
                      StrType(0, 36));
+      // `unit_system` is added at the end: files written by previous
+      // versions of the library do not contain this member and it is
+      // therefore not affected by the positional fallback used when
+      // reading legacy files
+      c.insertMember("unit_system", HOFFSET(MFrontMetaDataWrapper, unit_system),
+                     StrType(0, 32));
       return c;
     } catch (H5::Exception& e) {
       raise(e.getDetailMsg());
     }
   }  // end of getMFrontMetaDataWrapperCompType
 
-  static void write(Group& g, const std::string& n, const MFrontMetaDataWrapper& o, const bool b) {
-try{
-    if(b){
-      unlinkIfExists(g,n);
-    }
-    const auto c = getMFrontMetaDataWrapperCompType();
-    if(contains(g,n)){
-      removeDataSet(g,n);
-    }
-    hsize_t dim[] = {1}; /* Dataspace dimensions */
-    const auto d = g.createDataSet(n, c, DataSpace(1, dim));
-    d.write(&o, c);
+  static void write(Group& g,
+                    const std::string& n,
+                    const MFrontMetaDataWrapper& o,
+                    const bool b) {
+    try {
+      if (b) {
+        unlinkIfExists(g, n);
+      }
+      const auto c = getMFrontMetaDataWrapperCompType();
+      if (contains(g, n)) {
+        removeDataSet(g, n);
+      }
+      hsize_t dim[] = {1}; /* Dataspace dimensions */
+      const auto d = g.createDataSet(n, c, DataSpace(1, dim));
+      d.write(&o, c);
     } catch (H5::Exception& e) {
       raise(e.getDetailMsg());
     }
@@ -91,6 +102,15 @@ try{
       extract(o.status, v, status_index);
       extract(o.description, v, description_index);
       extract(o.uuid, v, uuid_index);
+      // `unit_system` is optional: it is missing in the files written by
+      // previous versions of the library, in which case the default unit
+      // system is used (i.e. an empty `unit_system`). No positional
+      // fallback is possible for this member.
+      try {
+        extract(o.unit_system, v, a.getMemberIndex("unit_system"));
+      } catch (const madnex::Exception&) {
+      } catch (const H5::Exception&) {
+      }
     } catch (H5::Exception& e) {
       raise(e.getDetailMsg());
     }
@@ -107,6 +127,7 @@ try{
       w.status = o.status;
       w.description = o.description;
       w.uuid = o.uuid;
+      w.unit_system = o.unit_system;
       write(g, n, w, b);
     } catch (H5::Exception& e) {
       raise(e.getDetailMsg());
@@ -122,9 +143,10 @@ try{
       o.status = static_cast<std::string>(w.status);
       o.description = static_cast<std::string>(w.description);
       o.uuid = static_cast<std::string>(w.uuid);
+      o.unit_system = static_cast<std::string>(w.unit_system);
     } catch (H5::Exception& e) {
       raise(e.getDetailMsg());
     }
   }
 
-} // end of namespace madnex
+}  // end of namespace madnex

@@ -39,7 +39,8 @@ namespace madnex {
     std::string status;
     //! \brief description of the implemnetation
     std::string description;
-    //! \brief unit system
+    //! \brief unit system (an empty string when the default unit system
+    //! is used)
     std::string unit_system;
     //! \brief universally unique identifier
     std::string uuid;
@@ -59,8 +60,10 @@ namespace madnex {
    * \param[in]  d: metadata
    * \param[in]  b: allow overwrite
    */
-  MADNEX_EXPORT void write(Group&, const std::string&, const MFrontMetaData&,
-			   const bool = false);
+  MADNEX_EXPORT void write(Group&,
+                           const std::string&,
+                           const MFrontMetaData&,
+                           const bool = false);
 
 }  // end of namespace madnex
 
