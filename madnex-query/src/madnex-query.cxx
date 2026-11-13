@@ -93,11 +93,11 @@ static std::map<std::string, CallBack> getCallBacks() {
               material == "<none>" ? "" : material);
           if (!mps.empty()) {
             if (material == "<none>") {
-              std::cout << "- material properties associated with material '" +
-                               material + "':\n";
-            } else {
               std::cout
                   << "- material properties associated with no material:\n";
+            } else {
+              std::cout << "- material properties associated with material '" +
+                               material + "':\n";
             }
             for (const auto& mp : mps) {
               std::cout << "    - " << mp << '\n';
@@ -219,7 +219,7 @@ static std::map<std::string, CallBack> getCallBacks() {
   return call_backs;
 }  // end of getCallBacks
 
-int main(const int argc, const char* const* const argv) {
+static int run(const int argc, const char* const* const argv) {
   auto input_file = std::string{};
   const auto available_call_backs = getCallBacks();
   auto call_backs = std::vector<CallBack::Function>();
@@ -287,4 +287,19 @@ int main(const int argc, const char* const* const argv) {
     c(input_file);
   }
   return EXIT_SUCCESS;
-}
+}  // end of run
+
+int main(const int argc, const char* const* const argv) {
+  // no exception is allowed to escape: the library may raise
+  // `std::runtime_error` objects and the HDF5 C++ library may raise
+  // `H5::Exception` objects, which do not derive from `std::exception`.
+  try {
+    return run(argc, argv);
+  } catch (const H5::Exception& e) {
+    std::cerr << "madnex-query: " << e.getDetailMsg() << '\n';
+    return EXIT_FAILURE;
+  } catch (const std::exception& e) {
+    std::cerr << "madnex-query: " << e.what() << '\n';
+    return EXIT_FAILURE;
+  }
+}  // end of main

@@ -88,8 +88,10 @@ namespace madnex {
   template <std::size_t N2>
   basic_fcstring<N, CharT, Traits>& basic_fcstring<N, CharT, Traits>::operator=(
       const CStringNarrowedView<N2, CharT>& rhs) {
-    const auto s1 = basic_fcstring<N2, CharT, Traits>::strnlen(rhs.value);
-    const auto s = (s1 > N2) ? N2 : s1;
+    // `rhs.value` is a view over `N2` characters, which are not
+    // necessarily null terminated: the scan is bounded by `N2` so that
+    // no character beyond the view is read.
+    const auto s = basic_fcstring::strnlen(rhs.value, N2);
     madnex::raise_if<std::length_error>(s > N,
                                       "basic_fcstring::operator = "
                                       "rhs too long");
@@ -97,6 +99,21 @@ namespace madnex {
     std::array<CharT, N + 1>::operator[](s) = '\0';
     return *this;
   }  // end of basic_fcstring<N,CharT,Traits>::operator =
+
+  template <std::size_t N, typename CharT, typename Traits>
+  basic_fcstring<N, CharT, Traits>& basic_fcstring<N, CharT, Traits>::assign(
+      const CharT* rhs, const std::size_t len) {
+    // the buffer is not required to be null terminated: the scan is
+    // bounded by `len`, the number of characters guaranteed to be
+    // readable
+    const auto s = basic_fcstring::strnlen(rhs, len);
+    madnex::raise_if<std::length_error>(s > N,
+                                      "basic_fcstring::assign: "
+                                      "source too long");
+    std::copy(rhs, rhs + s, this->begin());
+    std::array<CharT, N + 1>::operator[](s) = '\0';
+    return *this;
+  }  // end of basic_fcstring<N,CharT,Traits>::assign
 
   template <std::size_t N, typename CharT, typename Traits>
   basic_fcstring<N, CharT, Traits>& basic_fcstring<N, CharT, Traits>::operator=(
@@ -272,9 +289,17 @@ namespace madnex {
 
   template <std::size_t N, typename CharT, typename Traits>
   std::size_t basic_fcstring<N, CharT, Traits>::strnlen(const CharT* s) {
+    return basic_fcstring::strnlen(s, N + 1);
+  }
+
+  template <std::size_t N, typename CharT, typename Traits>
+  std::size_t basic_fcstring<N, CharT, Traits>::strnlen(
+      const CharT* s, const std::size_t max_size) {
     constexpr const auto e = '\0';
     auto i = size_t{};
-    while ((s[i] != e) && (i != N + 1)) {
+    // the boundary is tested before the character is read: evaluating
+    // `s[i]` first would read `s[max_size]`, which may be out of bounds
+    while ((i != max_size) && (s[i] != e)) {
       ++i;
     }
     return i;

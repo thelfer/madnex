@@ -40,7 +40,7 @@ namespace madnex {
 
   MADNEX_TYPENAME_STDTYPE(char, "@c");
   MADNEX_TYPENAME_STDTYPE(std::int32_t, "@i32");
-  MADNEX_TYPENAME_STDTYPE(std::int64_t, "@i32");
+  MADNEX_TYPENAME_STDTYPE(std::int64_t, "@i64");
   MADNEX_TYPENAME_STDTYPE(float, "@f");
   MADNEX_TYPENAME_STDTYPE(double, "@d");
   MADNEX_TYPENAME_STDTYPE(long double, "@ld");
@@ -48,7 +48,7 @@ namespace madnex {
 
   MADNEX_TYPENAME_STDTYPE(std::vector<char>, "@vector@c");
   MADNEX_TYPENAME_STDTYPE(std::vector<std::int32_t>, "@vector@i32");
-  MADNEX_TYPENAME_STDTYPE(std::vector<std::int64_t>, "@vector@i32");
+  MADNEX_TYPENAME_STDTYPE(std::vector<std::int64_t>, "@vector@i64");
   MADNEX_TYPENAME_STDTYPE(std::vector<float>, "@vector@f");
   MADNEX_TYPENAME_STDTYPE(std::vector<double>, "@vector@d");
   MADNEX_TYPENAME_STDTYPE(std::vector<long double>, "@vector@ld");

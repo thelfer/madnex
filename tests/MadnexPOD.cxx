@@ -55,6 +55,8 @@ static void write_file() {
   write(r, "double_value", 12.);
   write(r, "long_double_value", static_cast<long double>(12));
   write(r, "string_value", "lorem ipsum");
+  write(r, "integer_vector", std::vector<std::int32_t>{1, 2, 3});
+  write(r, "long_double_vector", std::vector<long double>{1., 2., 3.});
 }
 
 /*!
@@ -67,6 +69,21 @@ static void read_file() {
   const auto r = f.getRoot();
   assert(read<char>(r, "char_value") == 'c');
   assert(read<std::int32_t>(r, "integer_value") == 12);
+  // check the attribute accessors associated with data sets
+  // (regression test for issue #7: `getAttributeValue<T>(const
+  // DataSet&, ...)` used to call a non-existent `getAttribute`
+  // function, which prevented any instantiation from compiling)
+  {
+    const auto d = openDataSet(r, "integer_value");
+    assert(getAttributeValue<std::string>(d, "type") == "@i32");
+    auto catched = false;
+    try {
+      getAttributeValue<std::int32_t>(d, "no_such_attribute");
+    } catch (std::runtime_error&) {
+      catched = true;
+    }
+    assert(catched);
+  }
   {
     auto catched = false;
     try {
@@ -80,6 +97,14 @@ static void read_file() {
   read_floatting_point_number<double>(r, "double_value", 12.);
   read_floatting_point_number<long double>(r, "long_double_value", 12.);
   assert(read<std::string>(r, "string_value") == "lorem ipsum");
+  // check the `std::vector` overloads: the list of usable types used to
+  // differ from the list of types defined by the library (regression
+  // test for issue #8: `std::vector<long double>` was defined but not
+  // declared, while several declared types were not defined)
+  assert((read<std::vector<std::int32_t>>(r, "integer_vector") ==
+          std::vector<std::int32_t>{1, 2, 3}));
+  assert((read<std::vector<long double>>(r, "long_double_vector") ==
+          std::vector<long double>{1., 2., 3.}));
   {
     auto catched = false;
     try {

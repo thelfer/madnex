@@ -30,7 +30,12 @@ namespace madnex {
           i, N, s);
     }
     const auto o = this->cview.getMemberOffset(i);
-    return {d + o, true};
+    // a fixed length string stored in a HDF5 file is not necessarily
+    // null terminated: the scan is bounded by the member size so that
+    // neither the subsequent members nor the end of the buffer are read
+    auto r = madnex::fcstring<N>{};
+    r.assign(d + o, s);
+    return r;
   }  // end of CompoundExtractor
 
 }  // end of namespace madnex
