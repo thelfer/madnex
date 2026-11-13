@@ -14,6 +14,7 @@
 
 #include <cstdlib>
 #include <cassert>
+#include <cstring>
 #include <iostream>
 #include <string>
 
@@ -50,6 +51,7 @@ namespace {
       m.status = "stable";
       m.description = "a behaviour used for testing purposes";
       m.uuid = "256d09a1-1277-4b85-a2ad-a91d97846cda";
+      m.unit_system = "IEEE";
       write(r, "mfront_metadata", m);
       auto m2 = MFrontMetaData{};
       read(m2, r, "mfront_metadata");
@@ -58,6 +60,54 @@ namespace {
       assert(m2.status == m.status);
       assert(m2.description == m.description);
       assert(m2.uuid == m.uuid);
+      assert(m2.unit_system == m.unit_system);
+      // an empty unit system means: use the default unit system
+      m.unit_system = {};
+      write(r, "mfront_metadata", m, true);
+      read(m2, r, "mfront_metadata");
+      assert(m2.unit_system.empty());
+      // files written by previous versions of the library do not have
+      // the `unit_system` member: reading them shall not fail and the
+      // default unit system is reported (i.e. an empty unit system)
+      {
+        struct LegacyMFrontMetaData {
+          char author[32];
+          char date[32];
+          char status[32];
+          char description[512];
+          char uuid[36];
+        };
+        const auto c = H5::CompType{sizeof(LegacyMFrontMetaData)};
+        c.insertMember("author", HOFFSET(LegacyMFrontMetaData, author),
+                       StrType(0, 32));
+        c.insertMember("date", HOFFSET(LegacyMFrontMetaData, date),
+                       StrType(0, 32));
+        c.insertMember("status", HOFFSET(LegacyMFrontMetaData, status),
+                       StrType(0, 32));
+        c.insertMember("description",
+                       HOFFSET(LegacyMFrontMetaData, description),
+                       StrType(0, 512));
+        c.insertMember("uuid", HOFFSET(LegacyMFrontMetaData, uuid),
+                       StrType(0, 36));
+        auto legacy = LegacyMFrontMetaData{};
+        std::strncpy(legacy.author, "legacy author", sizeof(legacy.author) - 1);
+        std::strncpy(legacy.date, "yesterday", sizeof(legacy.date) - 1);
+        std::strncpy(legacy.status, "testing", sizeof(legacy.status) - 1);
+        std::strncpy(legacy.description, "written without a unit system",
+                     sizeof(legacy.description) - 1);
+        // the `uuid` member is stored on 36 bytes: a canonical uuid has
+        // exactly 36 characters and is not null terminated in the file
+        std::memcpy(legacy.uuid, "256d09a1-1277-4b85-a2ad-a91d97846cda", 36);
+        const hsize_t dim[] = {1};
+        const auto d = r.createDataSet("legacy_metadata", c, DataSpace(1, dim));
+        d.write(&legacy, c);
+        auto m3 = MFrontMetaData{};
+        read(m3, r, "legacy_metadata");
+        assert(m3.author == "legacy author");
+        assert(m3.status == "testing");
+        assert(m3.uuid == "256d09a1-1277-4b85-a2ad-a91d97846cda");
+        assert(m3.unit_system.empty());
+      }
     }
     //
     // `MTestTestMetaData`
