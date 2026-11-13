@@ -11,6 +11,7 @@
 #include <utility>
 #include <stdexcept>
 #include "Madnex/Config.hxx"
+#include "Madnex/Exceptions.hxx"
 
 namespace madnex {
 
@@ -22,7 +23,7 @@ namespace madnex {
    * is not nothrow copy constructible).
    * \tparam ExceptionType: type of the exception to be thrown.
    */
-  template <typename ExceptionType = std::runtime_error>
+  template <typename ExceptionType = RuntimeError>
   MADNEX_NORETURN MADNEX_VISIBILITY_LOCAL MADNEX_INLINE void raise();
 
   /*!
@@ -36,7 +37,7 @@ namespace madnex {
    * constructor.
    * \param[in] a: arguments passed to the exception' constructor.
    */
-  template <typename ExceptionType = std::runtime_error, typename... Args>
+  template <typename ExceptionType = RuntimeError, typename... Args>
   MADNEX_NORETURN MADNEX_VISIBILITY_LOCAL MADNEX_INLINE void raise(Args&&...);
 
   /*!
@@ -45,7 +46,7 @@ namespace madnex {
    * \param[in] b: condition to be checked. If `true`, an exception is
    * thrown.
    */
-  template <typename ExceptionType = std::runtime_error>
+  template <typename ExceptionType = RuntimeError>
   MADNEX_VISIBILITY_LOCAL MADNEX_INLINE void raise_if(const bool);
 
   /*!
@@ -57,7 +58,7 @@ namespace madnex {
    * thrown.
    * \param[in] a: arguments passed to the exception' constructor.
    */
-  template <typename ExceptionType = std::runtime_error, typename... Args>
+  template <typename ExceptionType = RuntimeError, typename... Args>
   MADNEX_VISIBILITY_LOCAL MADNEX_INLINE void raise_if(const bool, Args&&...);
 
 }  // end of namespace madnex
