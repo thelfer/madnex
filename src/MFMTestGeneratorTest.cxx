@@ -48,6 +48,10 @@ namespace madnex {
   void read(MFMTestGeneratorTest& i, const Group& g, const std::string& n) {
     try {
       auto impl = openGroup(g, n);
+      // clear the out parameter, like all the other `read` functions of
+      // the library: `metadata` is optional and would otherwise keep
+      // stale values when the same object is reused
+      i = MFMTestGeneratorTest{};
       i.name = n;
       read(i.test, impl, "test");
       if (exists(impl, "metadata")) {
