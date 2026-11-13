@@ -18,6 +18,7 @@ madnex_test(MadnexTestAPI
 madnex_test(MadnexCompoundDataArrayView
   ${PROJECT_SOURCE_DIR}/data/ref_test_api_macroResuWrite_00.madnex)
 madnex_test(MadnexExperimentalConditions)
+madnex_test(MadnexDataBase)
 madnex_test(MadnexExceptions)
 madnex_test(MadnexHygiene)
 madnex_test(MadnexMFrontImplementation)
@@ -27,4 +28,4 @@ madnex_test(MadnexScripts)
 madnex_test(WriteReadFile ${PROJECT_SOURCE_DIR}/data/Plasticity.mfront)
 
 set_directory_properties(PROPERTIES
-  ADDITIONAL_MAKE_CLEAN_FILES "CompType.xml;DataSetWithString.xml;DataSetWithString.madnex;CompoundDataSetWithString.xml;CompoundDataSetWithString.madnex;CompoundDataSetWithString2.xml;CompoundDataSetWithString2.madnex;MadnexPOD.madnex;MadnexPOD.xml;MadnexPODHugeExtent.madnex;MadnexCompoundDataView.madnex;MadnexCompoundDataView.xml;MadnexReferenceFile.xml;MadnexExperimentalConditions.xml;MadnexExperimentalConditions.madnex;MadnexExceptions.madnex;MadnexHygiene.madnex;MadnexMFrontImplementation.madnex;MadnexFCString.madnex;MadnexReorderedMembers.madnex;MadnexScripts.xml;MadnexScripts.madnex;MadnexWriteCompoundData.xml;MadnexWriteCompoundData.madnex")
+  ADDITIONAL_MAKE_CLEAN_FILES "CompType.xml;DataSetWithString.xml;DataSetWithString.madnex;CompoundDataSetWithString.xml;CompoundDataSetWithString.madnex;CompoundDataSetWithString2.xml;CompoundDataSetWithString2.madnex;MadnexPOD.madnex;MadnexPOD.xml;MadnexPODHugeExtent.madnex;MadnexCompoundDataView.madnex;MadnexCompoundDataView.xml;MadnexReferenceFile.xml;MadnexExperimentalConditions.xml;MadnexExperimentalConditions.madnex;MadnexDataBase.madnex;MadnexDataBaseEmpty.madnex;MadnexExceptions.madnex;MadnexHygiene.madnex;MadnexMFrontImplementation.madnex;MadnexFCString.madnex;MadnexReorderedMembers.madnex;MadnexScripts.xml;MadnexScripts.madnex;MadnexWriteCompoundData.xml;MadnexWriteCompoundData.madnex")
