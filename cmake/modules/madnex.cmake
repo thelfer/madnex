@@ -7,9 +7,9 @@ macro(madnex_project madnex_version_major madnex_version_minor madnex_version_pa
   set(MADNEX_VERSION_MAJOR "${madnex_version_major}")
   set(MADNEX_VERSION_MINOR "${madnex_version_minor}")
   set(MADNEX_VERSION_PATCH "${madnex_version_patch}")
-  add_definitions("-DVERSION=\\\"\"${MADNEX_VERSION}\"\\\"")
+  add_definitions("-DVERSION=\"${MADNEX_VERSION}\"")
   if(LIB_SUFFIX)
-    add_definitions("-DLIB_SUFFIX=\\\"\"${LIB_SUFFIX}\"\\\"")
+    add_definitions("-DLIB_SUFFIX=\"${LIB_SUFFIX}\"")
   endif(LIB_SUFFIX)
 endmacro(madnex_project)
 
