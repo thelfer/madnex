@@ -34,12 +34,7 @@ namespace madnex{
   bool File::checkIfGroupIsWritable(const std::string& p) const {
     try {
       // check that the file is open in read/write mode.
-#if ((H5_VERS_MAJOR == 1) && (H5_VERS_MINOR <= 10))
-      // up to HDF5 1.10, `H5Fget_intent` takes an `unsigned`
       auto intent = unsigned{};
-#else   // HDF5 version
-      auto intent = H5F_intent_t{};
-#endif  // HDF5 version
       if (H5Fget_intent(this->getId(), &intent) < 0) {
         raise("madnex::File::checkIfGroupIsWritable: can't get the intent "
               "of the file associated with group '" +
